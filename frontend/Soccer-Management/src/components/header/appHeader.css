@@ -1,0 +1,14 @@
+.custom-navbar {
+  background-color: #d75252; /* Màu nền navbar */
+  margin-bottom: 20px;
+}
+
+.custom-navbar .nav-link,
+.custom-navbar .navbar-brand {
+  color: white; /* Màu chữ */
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .navbar-brand:hover {
+  color: #ffcccc; /* Màu chữ khi hover */
+}
