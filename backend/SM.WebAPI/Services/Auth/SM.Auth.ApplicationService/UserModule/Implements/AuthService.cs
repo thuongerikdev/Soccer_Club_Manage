@@ -33,11 +33,11 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                     username = authRegisterDto.username,
                     password = authRegisterDto.password,
                     email = authRegisterDto.email,
-                    age = authRegisterDto.age,
-                    address = authRegisterDto.address,
-                    gender = authRegisterDto.gender,
-                    phone = authRegisterDto.phone,
-                    name = authRegisterDto.name
+                    age = 0,
+                    address = "",
+                    gender =  "",
+                    phone = 0,
+                    name = ""
                 };
 
                 _dbContext.AuthUsers.Add(user);
@@ -150,7 +150,6 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                     address = x.address,
                     gender = x.gender,
                     phone = x.phone,
-                    name = x.name
                 }).ToList();
 
                 return userDtos;

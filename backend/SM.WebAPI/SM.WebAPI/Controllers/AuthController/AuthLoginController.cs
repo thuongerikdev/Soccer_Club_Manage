@@ -48,9 +48,9 @@ namespace SM.WebAPI.Controllers
 
                 return Ok(new AuthResponeDto
                 {
-                    EM = "Login successful.",
-                    EC = 0,
-                    DT = result // hoặc bất kỳ dữ liệu nào bạn muốn trả về
+                    EM = result.EM,
+                    EC = result.EC,
+                    DT = result.DT
                 });
             }
             catch (Exception ex)

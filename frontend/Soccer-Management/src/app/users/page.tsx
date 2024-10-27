@@ -2,11 +2,14 @@
 import Link from "next/link";
 import UserTable from "@/components/table/app.usertable";
 import useSWR from 'swr';
-
+import { useRouter } from 'next/navigation';
+require('dotenv').config()
 const UserPage = () => {
+    const router = useRouter()
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
     const { data, error ,isLoading} = useSWR(
-        "http://localhost:3001/api/auth/getall",
+        process.env.NEXT_PUBLIC_USER_GETALL,
         fetcher,
         {
             revalidateIfStale: false,
@@ -25,7 +28,7 @@ const UserPage = () => {
 
     return (
         <>
-            <UserTable user={data.sort((a: any, b: any) => b.userId - a.userId)} />
+            <UserTable users ={data.sort((a: any, b: any) => b.userId - a.userId)} />
         </>
     );
 }

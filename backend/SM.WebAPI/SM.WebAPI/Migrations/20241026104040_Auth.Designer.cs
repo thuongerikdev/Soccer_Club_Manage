@@ -11,7 +11,7 @@ using SM.Auth.Infrastructure;
 namespace SM.WebAPI.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20241025031456_Auth")]
+    [Migration("20241026104040_Auth")]
     partial class Auth
     {
         /// <inheritdoc />

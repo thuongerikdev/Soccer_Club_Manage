@@ -1,7 +1,7 @@
 'use client';
 import { Inter } from 'next/font/google';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AppFooter from '@/components/app.footer';
+import AppFooter from '@/components/footer/app.footer';
 import Container from 'react-bootstrap/Container';
 import 'react-toastify/dist/ReactToastify.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import AppHeader from '@/components/header/app.header';
 import { useRouter } from 'next/router';
 import store from '../lib/store';
+import { Provider } from 'react-redux';
 
 // Định nghĩa font
 const inter = Inter({ subsets: ['latin'] });
@@ -27,25 +28,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <AppHeader />
-  
-        {children}
-        
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-      </body>
-    </html>
+    <Provider store={store}>
+      <html lang="en">
+        <body className={inter.className} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <AppHeader />
+          <Container>
+            {children}
+          </Container>
+
+
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+        </body>
+      </html>
+    </Provider>
+
   );
 }

@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Services\Club\SM.Club.Dtos\SM.Club.Dtos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
