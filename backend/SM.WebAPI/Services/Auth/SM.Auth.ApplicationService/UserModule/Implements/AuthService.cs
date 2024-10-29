@@ -101,7 +101,12 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                 var existingUser = await _dbContext.AuthUsers.FirstOrDefaultAsync(x => x.userId == userId);
                 if (existingUser == null)
                 {
-                    throw new Exception("User not found");
+                    return new AuthResponeDto
+                    {
+                        EM = "User not found",
+                        EC = 1,
+                        DT = null
+                    };
                 }
 
                 existingUser.username = authUpdateDto.username;

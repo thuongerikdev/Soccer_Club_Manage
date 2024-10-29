@@ -24,12 +24,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Services\Auth\SM.Auth.ApplicationService\SM.Auth.ApplicationService.csproj" />
     <ProjectReference Include="..\Services\Auth\SM.Auth.Dtos\SM.Auth.Dtos.csproj" />
-    <ProjectReference Include="..\Services\Club\SM.Club.ApplicationService\SM.Club.ApplicationService.csproj" />
-    <ProjectReference Include="..\Services\Club\SM.Club.Dtos\SM.Club.Dtos.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Services\Tournament\SM.Tournament.ApplicationService\SM.Tournament.ApplicationService.csproj" />
+    <ProjectReference Include="..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

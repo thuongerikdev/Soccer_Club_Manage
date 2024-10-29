@@ -35,24 +35,27 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
             // Check if the user exists and validate the password
             if (user == null)
             {
-                _logger.LogWarning("Invalid login attempt for username: {Username}", loginUserDto.username);
-                throw new UnauthorizedAccessException("Invalid username or password");
+                return new AuthResponeDto
+                {
+                    EM = "Invalid Username or password ",
+                    EC = 1,
+                    DT = ""
+                };
             }
 
-            string? token = GenerateToken( user.name , user.userId);
+            string? token = GenerateToken(user.name, user.userId);
 
             return new AuthResponeDto
             {
                 EM = "success",
                 EC = 0,
                 DT = token 
-            }; ;
+            }; 
         }
         private string SecretKey => _configuration["Jwt:SecretKey"];
 
         private string GenerateToken(string name , int userId)
         {
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>

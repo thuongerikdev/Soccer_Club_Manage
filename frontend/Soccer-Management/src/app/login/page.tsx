@@ -43,6 +43,9 @@ const LoginPage = () => {
         dispatch(login(data.dt))
         router.push('/');
       }
+      if(data.ec != 0) {
+        toast.error(data.em)
+      }
       console.log(data)
 
 
