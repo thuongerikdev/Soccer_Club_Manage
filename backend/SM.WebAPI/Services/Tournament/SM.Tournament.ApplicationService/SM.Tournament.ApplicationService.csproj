@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
     <ProjectReference Include="..\..\Shared\SM.Constant\SM.Constant.csproj" />
     <ProjectReference Include="..\SM.Tournament.Domain\SM.Tournament.Domain.csproj" />
+    <ProjectReference Include="..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
     <ProjectReference Include="..\SM.Tournament.Infrastructure\SM.Tournament.Infrastructure.csproj" />
   </ItemGroup>
 	<ItemGroup>

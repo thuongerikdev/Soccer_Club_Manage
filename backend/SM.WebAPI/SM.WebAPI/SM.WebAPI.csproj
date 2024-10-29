@@ -25,6 +25,7 @@
     <ProjectReference Include="..\Services\Auth\SM.Auth.ApplicationService\SM.Auth.ApplicationService.csproj" />
     <ProjectReference Include="..\Services\Auth\SM.Auth.Dtos\SM.Auth.Dtos.csproj" />
     <ProjectReference Include="..\Services\Tournament\SM.Tournament.ApplicationService\SM.Tournament.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\Tournament\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
     <ProjectReference Include="..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
   </ItemGroup>
 

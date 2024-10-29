@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Tournament.Domain", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Tournament.Infrastructure", "Services\Tournament\SM.Tournament.Infrastructure\SM.Tournament.Infrastructure.csproj", "{CA23E7A6-7C29-4C0E-A8B9-F81C50B81DE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Tournament.Dtos", "SM.Tournament.Dtos\SM.Tournament.Dtos.csproj", "{A5305E28-EB0E-4DA8-9EF6-FCA42E425E2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Tournament.Dtos", "Services\Tournament\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj", "{306A1067-8F28-434C-8A89-38C59FE4CDC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +79,10 @@ Global
 		{CA23E7A6-7C29-4C0E-A8B9-F81C50B81DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA23E7A6-7C29-4C0E-A8B9-F81C50B81DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA23E7A6-7C29-4C0E-A8B9-F81C50B81DE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5305E28-EB0E-4DA8-9EF6-FCA42E425E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5305E28-EB0E-4DA8-9EF6-FCA42E425E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5305E28-EB0E-4DA8-9EF6-FCA42E425E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5305E28-EB0E-4DA8-9EF6-FCA42E425E2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,7 +100,7 @@ Global
 		{8F612652-2139-4EBE-8E65-77DE520A4537} = {4C4B430C-E179-4FE8-8D77-7557CB851518}
 		{64D2A405-0468-4924-A9C8-922464F0B963} = {4C4B430C-E179-4FE8-8D77-7557CB851518}
 		{CA23E7A6-7C29-4C0E-A8B9-F81C50B81DE6} = {4C4B430C-E179-4FE8-8D77-7557CB851518}
-		{A5305E28-EB0E-4DA8-9EF6-FCA42E425E2C} = {4C4B430C-E179-4FE8-8D77-7557CB851518}
+		{306A1067-8F28-434C-8A89-38C59FE4CDC9} = {4C4B430C-E179-4FE8-8D77-7557CB851518}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2DD33CE-8C22-49F7-9150-3B2C27E1DA45}

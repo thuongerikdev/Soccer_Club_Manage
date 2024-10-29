@@ -2,8 +2,6 @@
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.Domain.Club;
 using SM.Tournament.Infrastructure;
-
-using SM.Tournament.ApplicationService.Module.ClubModule.Abtracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +10,17 @@ using System.Threading.Tasks;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.PlayerDto;
 using SM.Tournament.Domain.Players;
+using SM.Tournament.ApplicationService.Module.PlayerModule.Abtracts;
+using SM.Tournament.ApplicationService.Module.ClubModule.Implements;
 
-namespace SM.Tournament.ApplicationService.Module.ClubModule.Implements
+namespace SM.Tournament.ApplicationService.Module.PlayerModule.Implements
 {
     public class PlayerService : ClubServiceBase, IPlayerService
     {
         public PlayerService(ILogger<ClubTeamService> logger, TournamentDBContext dbContext) : base(logger, dbContext)
         {
         }
-        public async  Task<TournamentResponeDto> CreatePlayer(CreatePlayerDto createPlayerDto)
+        public async Task<TournamentResponeDto> CreatePlayer(CreatePlayerDto createPlayerDto)
         {
             try
             {
@@ -45,7 +45,8 @@ namespace SM.Tournament.ApplicationService.Module.ClubModule.Implements
                     DT = ""
                 };
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new TournamentResponeDto
                 {
                     EC = -1,
@@ -53,9 +54,9 @@ namespace SM.Tournament.ApplicationService.Module.ClubModule.Implements
                     DT = ""
                 };
             }
-           
+
         }
-        public  async Task<TournamentResponeDto> UpdatePlayer(UpdatePlayerDto updatePlayerDto)
+        public async Task<TournamentResponeDto> UpdatePlayer(UpdatePlayerDto updatePlayerDto)
         {
             try
             {
@@ -143,8 +144,8 @@ namespace SM.Tournament.ApplicationService.Module.ClubModule.Implements
         {
             try
             {
-                var players =  _dbContext.Players.ToList();
-              
+                var players = _dbContext.Players.ToList();
+
                 var PlayerList = players.Select(x => new ClubPlayers
                 {
                     PlayerId = x.PlayerId,
@@ -157,16 +158,16 @@ namespace SM.Tournament.ApplicationService.Module.ClubModule.Implements
                     PlayerSalary = x.PlayerSalary,
                     PlayerSkill = x.PlayerSkill,
                     PlayerValue = x.PlayerValue,
-                    ClubId  = x.ClubId,
+                    ClubId = x.ClubId,
                 }).ToList();
-                return PlayerList; 
+                return PlayerList;
             }
             catch (Exception ex)
             {
-                return null; 
+                return null;
             }
         }
-        public async  ValueTask<TournamentResponeDto> GetPlayerById(int PlayerId)
+        public async ValueTask<TournamentResponeDto> GetPlayerById(int PlayerId)
         {
             try
             {

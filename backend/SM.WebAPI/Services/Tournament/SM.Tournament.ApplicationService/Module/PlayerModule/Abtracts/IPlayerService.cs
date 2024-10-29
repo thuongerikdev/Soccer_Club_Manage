@@ -9,15 +9,15 @@ using SM.Tournament.Domain.Club;
 using SM.Tournament.Dtos.PlayerDto;
 using SM.Tournament.Domain.Players;
 
-namespace SM.Tournament.ApplicationService.Module.ClubModule.Abtracts
+namespace SM.Tournament.ApplicationService.Module.PlayerModule.Abtracts
 {
     public interface IPlayerService
     {
-        public Task<TournamentResponeDto> CreatePlayer (CreatePlayerDto createPlayerDto);   
-        public Task<TournamentResponeDto> UpdatePlayer (UpdatePlayerDto updatePlayerDto);
-        public Task<TournamentResponeDto>  DeletePlayer (int PlayerId);
+        public Task<TournamentResponeDto> CreatePlayer(CreatePlayerDto createPlayerDto);
+        public Task<TournamentResponeDto> UpdatePlayer(UpdatePlayerDto updatePlayerDto);
+        public Task<TournamentResponeDto> DeletePlayer(int PlayerId);
         public ValueTask<IEnumerable<ClubPlayers>> GetAllPlayer();
-        public ValueTask<TournamentResponeDto>  GetPlayerById (int PlayerId);
+        public ValueTask<TournamentResponeDto> GetPlayerById(int PlayerId);
 
     }
 }
