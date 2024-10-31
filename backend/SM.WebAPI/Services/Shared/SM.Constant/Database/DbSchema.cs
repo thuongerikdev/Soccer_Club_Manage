@@ -11,9 +11,11 @@ namespace SM.Constant.Database
         public const string TableMigrationsHistory = "__EFMigrationsHistory";
         public const string Default = "dbo";
         public const string Auth = "auth";
+        public const string Tournament = "tournament";
         public const string Club = "club";
         public const string Player = "player";
         public const string Match = "match";
         public const string LineUp = "lineup";
+        public const string Statistic = "statistic";
     }
 }

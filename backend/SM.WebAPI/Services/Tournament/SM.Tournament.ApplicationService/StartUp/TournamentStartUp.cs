@@ -10,8 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using SM.Tournament.Infrastructure;
-using SM.Tournament.ApplicationService.Module.ClubModule.Abtracts;
-using SM.Tournament.ApplicationService.Module.ClubModule.Implements;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -19,7 +17,7 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
         public static void ConfigureTournament(this WebApplicationBuilder builder, string? assemblyName)
         {
 
-            builder.Services.AddDbContext<TournamentDBContext>(
+            builder.Services.AddDbContext<TournamentDbContext>(
                 options =>
                 {
                     options.UseSqlServer(
@@ -29,14 +27,14 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
                             options.MigrationsAssembly(assemblyName);
                             options.MigrationsHistoryTable(
                                 DbSchema.TableMigrationsHistory,
-                                DbSchema.Auth
+                                DbSchema.Tournament
                             );
                         }
                     );
                 },
                 ServiceLifetime.Scoped
             );
-            builder.Services.AddScoped<IClubTeamService, ClubTeamService>();
+            
   
 
 

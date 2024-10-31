@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using SM.Auth.ApplicationService.Common;
 using SM.Auth.ApplicationService.UserModule.Abtracts;
 using SM.Auth.Domain;
+using SM.Auth.Dtos;
 using SM.Auth.Dtos.CRUDModule;
 using SM.Auth.Dtos.LoginModule;
 using SM.Auth.Infrastructure;

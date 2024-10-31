@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SM.Auth.ApplicationService.UserModule.Abtracts;
 using SM.Auth.ApplicationService.UserModule.Implements;
+using SM.Auth.Dtos;
 using SM.Auth.Dtos.CRUDModule;
 using SM.Auth.Dtos.LoginModule;
 using System;

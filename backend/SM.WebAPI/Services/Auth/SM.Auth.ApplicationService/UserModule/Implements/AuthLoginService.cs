@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using SM.Auth.Dtos;
 
 namespace SM.Auth.ApplicationService.UserModule.Implements
 {

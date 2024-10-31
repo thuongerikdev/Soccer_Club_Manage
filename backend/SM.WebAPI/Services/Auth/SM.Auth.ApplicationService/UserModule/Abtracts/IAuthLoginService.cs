@@ -1,4 +1,5 @@
-﻿using SM.Auth.Dtos.LoginModule;
+﻿using SM.Auth.Dtos;
+using SM.Auth.Dtos.LoginModule;
 using System;
 using System.Collections.Generic;
 using System.Linq;

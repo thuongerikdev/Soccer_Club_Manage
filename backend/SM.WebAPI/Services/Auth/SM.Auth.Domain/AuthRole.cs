@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SM.Constant.Database;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SM.Auth.Domain
 {
-    [Table(nameof(AuthRole))]
+    [Table(nameof(AuthRole) ,Schema = DbSchema.Auth) ]
     public class AuthRole
     {
         [Key]
@@ -17,9 +18,15 @@ namespace SM.Auth.Domain
 
         [MaxLength(50)]
         public string roleName { get; set; }
-
         [MaxLength(50)]
         public string description { get; set; }
+        [MaxLength(50)]
+        public string roleType { get; set; }
+        public int roleCode { get; set; }
+        public DateTime Created { get; set; }
+        [MaxLength(50)]
+        public string status { get; set; }
+
 
     }
 }

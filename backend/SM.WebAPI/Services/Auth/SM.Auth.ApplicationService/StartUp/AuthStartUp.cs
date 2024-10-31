@@ -13,6 +13,8 @@ using SM.Auth.ApplicationService.UserModule.Abtracts;
 using SM.Auth.ApplicationService.UserModule.Implements;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SM.Auth.ApplicationService.RoleModule.Abtracts;
+using SM.Auth.ApplicationService.RoleModule.Implements;
 
 namespace SM.Auth.ApplicationService.StartUp
 {
@@ -40,8 +42,11 @@ namespace SM.Auth.ApplicationService.StartUp
             );
             builder.Services.AddScoped<IAuthService , AuthService >();
             builder.Services.AddScoped<IAuthLoginService, AuthLoginService>();
+            builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+            builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+            builder.Services.AddScoped<IRoleService, RoleSerivce>();
 
-            var secretKey = builder.Configuration["Jwt:SecretKey"];
+           var secretKey = builder.Configuration["Jwt:SecretKey"];
             var key = Encoding.UTF8.GetBytes(secretKey);
           // Thay đổi secret key của bạn
 

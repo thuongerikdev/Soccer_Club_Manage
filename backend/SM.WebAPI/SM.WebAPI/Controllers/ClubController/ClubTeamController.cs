@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.Tournament.ApplicationService.Module.ClubModule.Abtracts;
-using SM.Tournament.Dtos;
-using SM.Tournament.Dtos.ClubTeamDtos;
+using SM.Club.ApplicationService.Module.ClubModule.Abtracts;
+using SM.Club.Dtos;
+using SM.Club.Dtos.ClubTeamDtos;
 
 namespace SM.WebAPI.Controllers.ClubController
 {
@@ -21,7 +21,7 @@ namespace SM.WebAPI.Controllers.ClubController
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new TournamentResponeDto
+                return BadRequest(new ClubResponeDto
                 {
                     EM = "Invalid input data.",
                     EC = 1,
@@ -34,7 +34,7 @@ namespace SM.WebAPI.Controllers.ClubController
                 var result = await _clubTeamService.CreateClubTeam(createClubTeamDto);
                 if (result == null)
                 {
-                    return BadRequest(new TournamentResponeDto
+                    return BadRequest(new ClubResponeDto
                     {
                         EM = "Invalid credentials.",
                         EC = 1,
@@ -42,7 +42,7 @@ namespace SM.WebAPI.Controllers.ClubController
                     });
                 }
 
-                return Ok(new TournamentResponeDto
+                return Ok(new ClubResponeDto
                 {
                     EM = result.EM,
                     EC = result.EC,
@@ -51,7 +51,7 @@ namespace SM.WebAPI.Controllers.ClubController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new TournamentResponeDto
+                return StatusCode(500, new ClubResponeDto
                 {
                     EM = "Internal server error: " + ex.Message,
                     EC = 1,
@@ -64,7 +64,7 @@ namespace SM.WebAPI.Controllers.ClubController
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new TournamentResponeDto
+                return BadRequest(new ClubResponeDto
                 {
                     EM = "Invalid input data.",
                     EC = 1,
@@ -77,7 +77,7 @@ namespace SM.WebAPI.Controllers.ClubController
                 var result = await _clubTeamService.UpdateClubTeam(updateClubTeamDto);
                 if (result == null)
                 {
-                    return BadRequest(new TournamentResponeDto
+                    return BadRequest(new ClubResponeDto
                     {
                         EM = "Invalid credentials.",
                         EC = 1,
@@ -85,7 +85,7 @@ namespace SM.WebAPI.Controllers.ClubController
                     });
                 }
 
-                return Ok(new TournamentResponeDto
+                return Ok(new ClubResponeDto
                 {
                     EM = result.EM,
                     EC = result.EC,
@@ -94,7 +94,7 @@ namespace SM.WebAPI.Controllers.ClubController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new TournamentResponeDto
+                return StatusCode(500, new ClubResponeDto
                 {
                     EM = "Internal server error: " + ex.Message,
                     EC = 1,
@@ -107,7 +107,7 @@ namespace SM.WebAPI.Controllers.ClubController
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new TournamentResponeDto
+                return BadRequest(new ClubResponeDto
                 {
                     EM = "Invalid input data.",
                     EC = 1,
@@ -120,7 +120,7 @@ namespace SM.WebAPI.Controllers.ClubController
                 var result = await _clubTeamService.RemoveClubTeam(clubTeamId);
                 if (result == null)
                 {
-                    return BadRequest(new TournamentResponeDto
+                    return BadRequest(new ClubResponeDto
                     {
                         EM = "Invalid credentials.",
                         EC = 1,
@@ -128,7 +128,7 @@ namespace SM.WebAPI.Controllers.ClubController
                     });
                 }
 
-                return Ok(new TournamentResponeDto
+                return Ok(new ClubResponeDto
                 {
                     EM = result.EM,
                     EC = result.EC,
@@ -137,7 +137,7 @@ namespace SM.WebAPI.Controllers.ClubController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new TournamentResponeDto
+                return StatusCode(500, new ClubResponeDto
                 {
                     EM = "Internal server error: " + ex.Message,
                     EC = 1,
@@ -167,7 +167,7 @@ namespace SM.WebAPI.Controllers.ClubController
                 var result = await _clubTeamService.GetClubTeamById(clubTeamId);
                 if (result == null)
                 {
-                    return NotFound(new TournamentResponeDto
+                    return NotFound(new ClubResponeDto
                     {
                         EM = "Tournament not found.",
                         EC = 1,
@@ -179,7 +179,7 @@ namespace SM.WebAPI.Controllers.ClubController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new TournamentResponeDto
+                return StatusCode(500, new ClubResponeDto
                 {
                     EM = "Internal server error: " + ex.Message,
                     EC = 1,

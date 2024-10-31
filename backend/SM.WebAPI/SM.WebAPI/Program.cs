@@ -1,7 +1,8 @@
 
 using SM.Auth.ApplicationService.StartUp;
 using SM.Tournament.ApplicationService.Module.StartUp;
-
+using SM.Club.ApplicationService.Module.StartUp;
+using SM.Player.ApplicationService.Module.StartUp;
 
 namespace SM.WebAPI
 {
@@ -18,7 +19,8 @@ namespace SM.WebAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.ConfigureAuth(typeof(Program).Namespace);
-            builder.ConfigureTournament(typeof(Program).Namespace);
+            builder.ConfigureClub(typeof(Program).Namespace);
+            builder.ConfigurePlayer(typeof(Program).Namespace);
        
            
 

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\SM.Constant\SM.Constant.csproj" />
+    <ProjectReference Include="..\..\Shared\SM.Shared.ApplicationService\SM.Shared.ApplicationService.csproj" />
+    <ProjectReference Include="..\SM.Statistic.Domain\SM.Statistic.Domain.csproj" />
+    <ProjectReference Include="..\SM.Statistic.Dtos\SM.Statistic.Dtos.csproj" />
+    <ProjectReference Include="..\SM.Statistic.Infrastructure\SM.Statistic.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
     <ProjectReference Include="..\..\Shared\SM.Constant\SM.Constant.csproj" />
     <ProjectReference Include="..\SM.Tournament.Domain\SM.Tournament.Domain.csproj" />
     <ProjectReference Include="..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
@@ -16,6 +15,11 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="TournamentModule\Abtracts\" />
+	  <Folder Include="TournamentModule\Implements\" />
+	</ItemGroup>
+
 	
 
 </Project>

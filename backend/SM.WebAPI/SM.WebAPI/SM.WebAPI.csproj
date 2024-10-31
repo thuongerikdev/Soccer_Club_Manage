@@ -24,9 +24,20 @@
   <ItemGroup>
     <ProjectReference Include="..\Services\Auth\SM.Auth.ApplicationService\SM.Auth.ApplicationService.csproj" />
     <ProjectReference Include="..\Services\Auth\SM.Auth.Dtos\SM.Auth.Dtos.csproj" />
+    <ProjectReference Include="..\Services\Club\SM.Club.ApplicationService\SM.Club.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\Club\SM.Club.Dtos\SM.Club.Dtos.csproj" />
+    <ProjectReference Include="..\Services\LineUp\SM.LineUp.ApplicationService\SM.LineUp.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\LineUp\SM.LineUp.Dtos\SM.LineUp.Dtos.csproj" />
+    <ProjectReference Include="..\Services\Match\SM.Match.ApplicationService\SM.Match.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\Match\SM.Match.Dtos\SM.Match.Dtos.csproj" />
+    <ProjectReference Include="..\Services\Player\SM.Player.ApplicationService\SM.Player.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\Player\SM.Player.Dtos\SM.Player.Dtos.csproj" />
+    <ProjectReference Include="..\Services\Shared\SM.Constant\SM.Constant.csproj" />
+    <ProjectReference Include="..\Services\Shared\SM.Shared.ApplicationService\SM.Shared.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\Statistic\SM.Statistic.ApplicationService\SM.Statistic.ApplicationService.csproj" />
+    <ProjectReference Include="..\Services\Statistic\SM.Statistic.Dtos\SM.Statistic.Dtos.csproj" />
     <ProjectReference Include="..\Services\Tournament\SM.Tournament.ApplicationService\SM.Tournament.ApplicationService.csproj" />
     <ProjectReference Include="..\Services\Tournament\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
-    <ProjectReference Include="..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
   </ItemGroup>
 
 </Project>
