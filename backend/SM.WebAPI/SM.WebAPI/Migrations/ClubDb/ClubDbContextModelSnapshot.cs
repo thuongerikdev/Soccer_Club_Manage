@@ -21,7 +21,7 @@ namespace SM.WebAPI.Migrations.ClubDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SM.Club.Domain.ClubTeam", b =>
+            modelBuilder.Entity("SM.Club.Domain.Club.ClubTeam", b =>
                 {
                     b.Property<int>("ClubId")
                         .ValueGeneratedOnAdd()
@@ -32,6 +32,10 @@ namespace SM.WebAPI.Migrations.ClubDb
                     b.Property<double>("Budget")
                         .HasColumnType("float");
 
+                    b.Property<string>("ClubAge")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ClubBanner")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -41,6 +45,9 @@ namespace SM.WebAPI.Migrations.ClubDb
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("ClubLevel")
+                        .HasColumnType("int");
 
                     b.Property<string>("ClubLogo")
                         .IsRequired()

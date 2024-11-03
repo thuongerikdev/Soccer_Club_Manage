@@ -21,7 +21,7 @@ namespace SM.Player.Domain.Players
         public string PlayerPosition { get; set; }
         [MaxLength(50)]
         public string PlayerNationality { get; set; }
-        [MaxLength(50)]
+        [MaxLength(5000000)]
         public string PlayerImage { get; set; }
         public int ClubId { get; set; }
         public int PlayerAge { get; set; }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.LineUp.Domain
+namespace SM.LineUp.Domain.LineUp
 {
-    public  class PlayerLineUp
+    public class PlayerLineUp
     {
         public int PlayerLineUpId { get; set; }
         public int LineUpId { get; set; }

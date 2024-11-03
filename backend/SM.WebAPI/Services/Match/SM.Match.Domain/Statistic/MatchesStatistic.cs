@@ -1,4 +1,4 @@
-﻿using SM.Match.Domain.Matches;
+﻿using SM.Match.Domain.Statistic;
 
 public class MatchStatistic : Statistic
 {

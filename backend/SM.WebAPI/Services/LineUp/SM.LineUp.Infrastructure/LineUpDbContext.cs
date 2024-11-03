@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SM.LineUp.Domain;
+using SM.LineUp.Domain.LineUp;
 namespace SM.LineUp.Infrastructure
 {
     public class LineUpDbContext : DbContext

@@ -13,6 +13,7 @@ namespace SM.Player.Dtos.PlayerDto
         public string PlayerPosition { get; set; }
         public string PlayerNationality { get; set; }
         public string PlayerImage { get; set; }
+        public int ClubId { get; set; }
         public int PlayerAge { get; set; }
         public double PlayerValue { get; set; }
         public int PlayerHealth { get; set; }

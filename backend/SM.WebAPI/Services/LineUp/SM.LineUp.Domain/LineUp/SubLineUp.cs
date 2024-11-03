@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.LineUp.Domain
+namespace SM.LineUp.Domain.LineUp
 {
-    public class MainLineUp
+    public class SubLineUp
     {
     }
 }

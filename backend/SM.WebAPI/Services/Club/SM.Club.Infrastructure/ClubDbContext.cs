@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SM.Club.Domain;
+using SM.Club.Domain.Club;
 using System;
 using System.Collections.Generic;
 using System.Linq;

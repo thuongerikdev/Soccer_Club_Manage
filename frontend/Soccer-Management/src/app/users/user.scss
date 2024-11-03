@@ -1,0 +1,14 @@
+/* userPage.css */
+.user-page {
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh; /* Chiều cao tối thiểu để phủ toàn bộ màn hình */
+    padding: 20px; /* Padding cho nội dung */
+    color: #fff; /* Màu chữ */
+}
+
+.user-table {
+    background-color: rgba(0, 0, 0, 0.7); /* Nền bảng với độ trong suốt */
+    border-radius: 8px; /* Bo góc bảng */
+    padding: 20px; /* Padding cho bảng */
+}

@@ -12,7 +12,7 @@ namespace SM.Match.Infrastructure
     {
      
         public DbSet<Matches> Matches { get; set; }
-        public DbSet <MatchesStatistic> MatchesStatistic { get; set; }
+      
         public MatchDbContext(DbContextOptions<MatchDbContext> options) : base(options)
         {
 

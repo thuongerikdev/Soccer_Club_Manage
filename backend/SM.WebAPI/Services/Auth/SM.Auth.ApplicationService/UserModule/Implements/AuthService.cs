@@ -38,7 +38,7 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                     address = "",
                     gender =  "",
                     phone = 0,
-                    name = ""
+                    name = authRegisterDto.name
                 };
 
                 _dbContext.AuthUsers.Add(user);
@@ -117,6 +117,7 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                 existingUser.address = authUpdateDto.address;
                 existingUser.gender = authUpdateDto.gender;
                 existingUser.phone = authUpdateDto.phone;
+                existingUser.name = authUpdateDto.name;
 
                 await _dbContext.SaveChangesAsync();
 
@@ -156,6 +157,7 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                     address = x.address,
                     gender = x.gender,
                     phone = x.phone,
+                    name = x.name
                 }).ToList();
 
                 return userDtos;

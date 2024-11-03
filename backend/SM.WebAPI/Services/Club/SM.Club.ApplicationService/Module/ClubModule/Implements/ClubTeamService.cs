@@ -12,6 +12,7 @@ using SM.Club.Dtos;
 using SM.Club.Dtos.ClubTeamDtos;
 using SM.Club.Domain;
 using SM.Club.ApplicationService.Common;
+using SM.Club.Domain.Club;
 
 
 
@@ -32,9 +33,11 @@ namespace SM.Club.ApplicationService.Module.ClubModule.Implements
                     ClubName = createClubTeamDto.ClubName,
                     ClubDescription = createClubTeamDto.ClubDescription,
                     UserId = createClubTeamDto.UserId,
-                    ClubLogo = "",
-                    ClubBanner = "",
-                    Budget = 0
+                    ClubLogo = createClubTeamDto.ClubLogo,
+                    ClubAge = createClubTeamDto.ClubAge,
+                    ClubBanner = createClubTeamDto.ClubBanner,
+                    ClubLevel = createClubTeamDto.ClubLevel,
+                    Budget = createClubTeamDto.Budget,
                 };
                 _dbContext.Clubs.Add(club);
                 await _dbContext.SaveChangesAsync();
@@ -78,6 +81,8 @@ namespace SM.Club.ApplicationService.Module.ClubModule.Implements
                 existClub.ClubBanner = updateClubTeamDto.ClubBanner;
                 existClub.ClubLogo = updateClubTeamDto.ClubLogo;
                 existClub.Budget = updateClubTeamDto.Budget;
+                existClub.ClubLevel = updateClubTeamDto.ClubLevel;
+                existClub.ClubAge = updateClubTeamDto.ClubAge;
 
                 await _dbContext.SaveChangesAsync();
 
@@ -147,6 +152,8 @@ namespace SM.Club.ApplicationService.Module.ClubModule.Implements
                     ClubLogo = x.ClubLogo,
                     ClubBanner = x.ClubBanner,
                     Budget = x.Budget,
+                    ClubLevel = x.ClubLevel,
+                    ClubAge = x.ClubAge,
                 }).ToList();
 
                 return new ClubResponeDto

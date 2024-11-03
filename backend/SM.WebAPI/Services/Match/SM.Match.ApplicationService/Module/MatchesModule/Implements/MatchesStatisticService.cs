@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿/*using Microsoft.Extensions.Logging;
 using SM.Match.ApplicationService.Common;
 using SM.Match.ApplicationService.Module.MatchesModule.Abtracts;
 using SM.Match.Domain.Matches;
@@ -262,3 +262,4 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
         }
     }
 }
+*/

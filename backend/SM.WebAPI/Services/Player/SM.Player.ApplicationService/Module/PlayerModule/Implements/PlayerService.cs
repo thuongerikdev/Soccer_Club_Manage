@@ -36,6 +36,7 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Implements
                     PlayerSalary = createPlayerDto.PlayerSalary,
                     PlayerStatus = createPlayerDto.PlayerStatus,
                     Shirtnumber = createPlayerDto.Shirtnumber,
+                    ClubId = createPlayerDto.ClubId,
                     height = createPlayerDto.height,
                     weight = createPlayerDto.weight,
                     leg = createPlayerDto.leg,

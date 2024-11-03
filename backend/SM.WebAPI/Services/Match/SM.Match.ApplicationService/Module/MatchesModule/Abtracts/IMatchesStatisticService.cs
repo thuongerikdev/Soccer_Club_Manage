@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using SM.Match.Dtos;
 using SM.Match.Dtos.MatchesDto.MatchesStatistic;
 using System;
@@ -18,3 +18,4 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Abtracts
         public ValueTask<MatchResponeDto> GetMatchStatisticById(int matchStatisticId);
     }
 }
+*/

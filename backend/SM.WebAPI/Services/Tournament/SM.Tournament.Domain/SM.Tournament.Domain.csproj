@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\Shared\SM.Constant\SM.Constant.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TournamentMemberClub\" />
+  </ItemGroup>
+
 </Project>

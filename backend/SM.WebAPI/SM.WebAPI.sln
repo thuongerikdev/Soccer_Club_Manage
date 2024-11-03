@@ -75,13 +75,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.LineUp.Dtos", "Services\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Statistic", "Statistic", "{6C85CD86-6CF2-46D3-A4CF-F9C30743C69D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM.Statistic.ApplicationService", "Services\Statistic\SM.Statistic.ApplicationService\SM.Statistic.ApplicationService.csproj", "{F37ABB9F-4ED1-4DD7-8E9E-B5308C44260E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Statistic.ApplicationService", "Services\Statistic\SM.Statistic.ApplicationService\SM.Statistic.ApplicationService.csproj", "{F37ABB9F-4ED1-4DD7-8E9E-B5308C44260E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM.Statistic.Domain", "Services\Statistic\SM.Statistic.Domain\SM.Statistic.Domain.csproj", "{2793B9E3-CAAF-4DCC-8723-1BE3BFCB7891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Statistic.Domain", "Services\Statistic\SM.Statistic.Domain\SM.Statistic.Domain.csproj", "{2793B9E3-CAAF-4DCC-8723-1BE3BFCB7891}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM.Statistic.Infrastructure", "Services\Statistic\SM.Statistic.Infrastructure\SM.Statistic.Infrastructure.csproj", "{00066591-3EE2-45B0-A645-885E48B3A954}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Statistic.Infrastructure", "Services\Statistic\SM.Statistic.Infrastructure\SM.Statistic.Infrastructure.csproj", "{00066591-3EE2-45B0-A645-885E48B3A954}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM.Statistic.Dtos", "Services\Statistic\SM.Statistic.Dtos\SM.Statistic.Dtos.csproj", "{06892B14-8244-4A5B-A93B-9C865213A36C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Statistic.Dtos", "Services\Statistic\SM.Statistic.Dtos\SM.Statistic.Dtos.csproj", "{06892B14-8244-4A5B-A93B-9C865213A36C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{69793332-49B2-41A1-8BCA-0C1CD618057D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -256,6 +258,7 @@ Global
 		{2793B9E3-CAAF-4DCC-8723-1BE3BFCB7891} = {6C85CD86-6CF2-46D3-A4CF-F9C30743C69D}
 		{00066591-3EE2-45B0-A645-885E48B3A954} = {6C85CD86-6CF2-46D3-A4CF-F9C30743C69D}
 		{06892B14-8244-4A5B-A93B-9C865213A36C} = {6C85CD86-6CF2-46D3-A4CF-F9C30743C69D}
+		{69793332-49B2-41A1-8BCA-0C1CD618057D} = {97F30DA5-ED85-47D0-9FFE-77DFAD54BE90}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2DD33CE-8C22-49F7-9150-3B2C27E1DA45}

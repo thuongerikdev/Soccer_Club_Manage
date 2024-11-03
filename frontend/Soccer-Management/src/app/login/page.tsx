@@ -1,30 +1,43 @@
 'use client';
 import Image from "next/image";
 import './page.scss';
-import React, { useState } from "react";
-import { Button, Form } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import useSWR, { mutate } from 'swr';
 import { useSelector, useDispatch } from 'react-redux'
 import { login, logout } from "@/lib/features/loginSlice";
 import { toast } from "react-toastify";
+import { decodeToken } from "@/lib/decode/decodeToken";
+import { saveToLocalStorage } from "@/lib/ReloginAction";
+import withAuth from '../../components/middleware/withAuth';
+import { RootState } from "@/lib/store";
+import { Button, Container, Row, Col, Card, Spinner, Form } from 'react-bootstrap';
 
 const LoginPage = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
+  const router = useRouter();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const [loading, setLoading] = useState(true);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  
 
-  const togglePanel = () => {
-    setIsSignUp(!isSignUp);
-  };
+  useEffect(() => {
+    const storedAuth = localStorage.getItem('isAuthenticated') === 'true';
+    if (isLoggedIn || storedAuth) {
+      router.push('/'); // Redirect to home if logged in
+    } else {
+      setLoading(false); // No need for loading anymore if not authenticated
+    }
+  }, [isLoggedIn, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_USER}/login`, {
         method: 'POST',
@@ -35,57 +48,85 @@ const LoginPage = () => {
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // Get the response as text
+        const errorText = await response.text();
         throw new Error(`Login failed: ${errorText}`);
       }
+
       const data = await response.json();
       if (data.ec === 0) {
-        dispatch(login(data.dt))
-        router.push('/');
-      }
-      if(data.ec != 0) {
-        toast.error(data.em)
-      }
-      console.log(data)
+        const token = data.dt;
+        // Assuming decodeToken is defined elsewhere to decode JWT
+        const user = decodeToken(token);
 
+        if (user) {
+          const userPayload = {
+            name: user.name,
+            userId: user.userId.toString(),
+            exp: user.exp,
+          };
 
+          dispatch(login(userPayload));
+          // Assuming saveToLocalStorage is defined elsewhere
+          saveToLocalStorage(userPayload);
+          router.push('/');
+        } else {
+          toast.error("Failed to decode user information.");
+        }
+      } else {
+        toast.error(data.em);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error during login:", error);
+      toast.error("An error occurred during login. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
   const Register = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_USER}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password, email }),
+        body: JSON.stringify({ username, password, email  ,name }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // Get the response as text
-        throw new Error(`Login failed: ${errorText}`);
+        const errorText = await response.text();
+        throw new Error(`Registration failed: ${errorText}`);
       }
+
       const data = await response.json();
       if (data.ec === 0) {
-        toast.success(data.em)
+        toast.success(data.em);
+      } else {
+        toast.error(data.em);
       }
-      if(data.ec !=0) {
-        toast.error(data.em)
-      }
-
-
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Show loading spinner while loading
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <Spinner animation="border" variant="primary" />
+        <span className="ml-3">Loading...</span>
+      </div>
+    );
   }
+
+  const togglePanel = () => {
+    setIsSignUp(!isSignUp);
+  };
 
   return (
     <div className="LoginPage">
@@ -100,8 +141,10 @@ const LoginPage = () => {
             </div>
             <span>or use your email for registration</span>
             <input type="text" placeholder="Username" value={username} onChange={(event) => setUsername(event.target.value)} />
+            <input type="text" placeholder="name" value={name} onChange={(event) => setName(event.target.value)} />
             <input type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} />
             <input type="email" placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)} />
+          
             <button type="submit">Sign Up</button>
           </form>
         </div>

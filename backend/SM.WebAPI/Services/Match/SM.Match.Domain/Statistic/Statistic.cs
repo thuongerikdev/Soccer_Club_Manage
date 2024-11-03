@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.Match.Domain.Matches
+namespace SM.Match.Domain.Statistic
 {
     public abstract class Statistic
     {

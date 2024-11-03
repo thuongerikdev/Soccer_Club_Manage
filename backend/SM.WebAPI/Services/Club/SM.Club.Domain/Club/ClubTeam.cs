@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.Club.Domain
+namespace SM.Club.Domain.Club
 {
-    [Table(nameof(ClubTeam) , Schema = DbSchema.Club)]
+    [Table(nameof(ClubTeam), Schema = DbSchema.Club)]
     public class ClubTeam
     {
         [Key]
@@ -26,6 +26,8 @@ namespace SM.Club.Domain
         public string ClubBanner { get; set; }
         public int UserId { get; set; }
         public double Budget { get; set; }
+        public int ClubLevel { get; set; } //trình độ đội : vui , chuyên nghiejp , bán chuyên
+        public string ClubAge { get; set; } // độ tuổi đội : 15-20 , 20-25 , 25-30
 
 
 
