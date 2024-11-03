@@ -28,22 +28,22 @@ interface IClub {
 }
 
 interface IPlayer {
-    PlayerId: number;               // ID của cầu thủ
-    PlayerName: string;             // Tên cầu thủ
-    PlayerPosition: string;         // Vị trí cầu thủ
-    PlayerNationality: string;      // Quốc tịch cầu thủ
-    PlayerImage: string;            // URL của hình ảnh cầu thủ
-    ClubId: number;                 // ID của câu lạc bộ mà cầu thủ thuộc về
-    PlayerAge: number;              // Tuổi cầu thủ
-    PlayerValue: number;            // Giá trị cầu thủ
-    PlayerHealth: number;           // Sức khỏe cầu thủ
-    PlayerSkill: number;            // Kỹ năng cầu thủ
-    PlayerSalary: number;           // Lương cầu thủ
-    Shirtnumber: number;            // Số áo cầu thủ
-    PlayerStatus: number;           // Trạng thái cầu thủ (có thể là 0 cho không hoạt động, 1 cho hoạt động, v.v.)
-    leg: string;                    // Chân thuận của cầu thủ (ví dụ: "right", "left")
-    height: number;                 // Chiều cao cầu thủ (tính bằng mét hoặc cm)
-    weight: number;                 // Cân nặng cầu thủ (tính bằng kg)
+    playerId: number;
+    playerName: string;
+    playerPosition: string;
+    playerNationality: string;
+    playerImage: string;
+    clubId: number;
+    height: number;
+    leg: string;
+    playerAge: number;
+    playerHealth: number;
+    playerSalary: number;
+    playerSkill: number;
+    playerStatus: number;
+    playerValue: number;
+    shirtNumber: number;
+    weight: number;
 }
 interface IPlayer {
     playerId: number;

@@ -1,17 +1,14 @@
 import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import Link from 'next/link';
 import CreateModal from '../modals/players/createPlayer.modal';
 import DeleteModal from '../modals/players/deletePlayer.modal';
-import UpdateModals from '../modals/players/updatePlayer.modal';
+import UpdateModal from '../modals/players/updatePlayer.modal';
 import { useState } from 'react';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
-
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 
 interface IProps {
     players: IPlayer[];
-    
 }
 
 const PlayerTable = ({ players }: IProps) => {
@@ -71,13 +68,27 @@ const PlayerTable = ({ players }: IProps) => {
                                 <td>{item.playerName}</td>
                                 <td>{item.playerPosition}</td>
                                 <td>{item.playerNationality}</td>
-                                <td><img alt={item.playerName} style={{ width: '50px', borderRadius: '50%' }} /></td>
+                                <td>
+                                    {item.playerImage ? (
+                                        <img 
+                                            alt={item.playerName} 
+                                            src="/cardData10.png"
+                                            style={{ width: '50px', borderRadius: '50%' }} 
+                                        />
+                                    ) : (
+                                        <img 
+                                            alt="Placeholder" 
+                                            src="/cardData12.png" // Replace with your placeholder image path
+                                            style={{ width: '50px', borderRadius: '50%' }} 
+                                        />
+                                    )}
+                                </td>
                                 <td>{item.playerAge}</td>
                                 <td>{item.playerValue}</td>
                                 <td>{item.playerHealth}</td>
                                 <td>{item.playerSkill}</td>
                                 <td>{item.playerSalary}</td>
-                                <td>{item.ClubId}</td>
+                                <td>{item.clubId}</td>
                                 <td>{item.shirtnumber}</td>
                                 <td>{item.playerStatus}</td>
                                 <td>{item.leg}</td>
@@ -85,10 +96,18 @@ const PlayerTable = ({ players }: IProps) => {
                                 <td>{item.weight} kg</td>
                                 <td>
                                     <div className="d-flex justify-content-around">
-                                        <Button variant='warning' className='mx-2 btn-sm' onClick={() => handleUpdate(item)}>
+                                        <Button 
+                                            variant='warning' 
+                                            className='mx-2 btn-sm' 
+                                            onClick={() => handleUpdate(item)}
+                                        >
                                             <FaEdit /> Update
                                         </Button>
-                                        <Button variant='danger' className='btn-sm' onClick={() => handleDelete(item.playerId)}>
+                                        <Button 
+                                            variant='danger' 
+                                            className='btn-sm' 
+                                            onClick={() => handleDelete(item.playerId)}
+                                        >
                                             <FaTrash /> Delete
                                         </Button>
                                     </div>
@@ -104,7 +123,7 @@ const PlayerTable = ({ players }: IProps) => {
                 setShowModalCreate={setShowModalCreate}
             />
 
-            <UpdateModals
+            <UpdateModal
                 showModalUpdate={showModalUpdate}
                 setShowModalUpdate={setShowModalUpdate}
                 player={player}

@@ -20,7 +20,7 @@ function DeletePlayerModal(props: IProps) {
     }, [playerId]);
 
     const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/remove/${id}`, {
+        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/delete/${id}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

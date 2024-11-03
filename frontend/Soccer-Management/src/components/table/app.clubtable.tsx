@@ -78,12 +78,15 @@ const ClubTable = ({ clubs }: IProps) => {
                                 <td>{item.clubDescription}</td>
                                 <td>
                                     {item.clubLogo ? (
-                                        <img alt={item.clubName} style={{ width: '50px', borderRadius: '50%' }} />
+                                        <img alt={item.clubName}
+                                        src="/cardData2.png" style={{ width: '50px', borderRadius: '50%' }} />
                                     ) : null}
                                 </td>
                                 <td>
                                     {item.clubBanner ? (
-                                        <img alt={item.clubName} style={{ width: '100px', borderRadius: '5%' }} />
+                                        <img alt={item.clubName} 
+                                        src="/cardData1.png"
+                                        style={{ width: '100px', borderRadius: '5%' }} />
                                     ) : null}
                                 </td>
                                 <td>{item.userId}</td>
