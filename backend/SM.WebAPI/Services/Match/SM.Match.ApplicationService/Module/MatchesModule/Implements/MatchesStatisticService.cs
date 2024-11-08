@@ -1,7 +1,8 @@
-﻿/*using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SM.Match.ApplicationService.Common;
 using SM.Match.ApplicationService.Module.MatchesModule.Abtracts;
-using SM.Match.Domain.Matches;
+using SM.Match.Domain;
+using SM.Match.Domain.Statistic;
 using SM.Match.Dtos;
 using SM.Match.Dtos.MatchesDto.MatchesStatistic;
 using SM.Match.Infrastructure;
@@ -29,44 +30,30 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
                 {
                     MatchesId = createMatchStatisticDto.MatchesId,
                     ClubId = createMatchStatisticDto.ClubId,
-                    goal   = createMatchStatisticDto.goal,
-                    yellowCard = createMatchStatisticDto.yellowCard,
-                    redCard = createMatchStatisticDto.redCard,
-                    assist = createMatchStatisticDto.assist,
-                    penalty = createMatchStatisticDto.penalty,
-                    goalAgainst = createMatchStatisticDto.goalAgainst,
-                    cleanSheet = createMatchStatisticDto.cleanSheet,
-                    ownGoal = createMatchStatisticDto.ownGoal,
-                    penaltySaved = createMatchStatisticDto.penaltySaved,
-                    penaltyMissed = createMatchStatisticDto.penaltyMissed,
-                    matchPlayed = createMatchStatisticDto.matchPlayed,
-                    Corner = createMatchStatisticDto.Corner,
-                    Offside = createMatchStatisticDto.Offside,
+                    PlayerId = createMatchStatisticDto.PlayerId,
+                    Score = createMatchStatisticDto.Score,
+                    Shot = createMatchStatisticDto.Shot,
+                    Pass = createMatchStatisticDto.Pass,
                     Fouls = createMatchStatisticDto.Fouls,
-                    Shots = createMatchStatisticDto.Shots,
-                    ShotsOnTarget = createMatchStatisticDto.ShotsOnTarget,
-                    ShotsOffTarget = createMatchStatisticDto.ShotsOffTarget,
-                    Possession = createMatchStatisticDto.Possession,
-                    Passes = createMatchStatisticDto.Passes,
-                    PassesCompleted = createMatchStatisticDto.PassesCompleted,
-                    Tackles = createMatchStatisticDto.Tackles
+                    LineUpId = createMatchStatisticDto.LineUpId,
+
 
 
                 };
-                 _dbContext.MatchesStatistic.Add(matchesStatistic);
+                 _dbContext.MatchesStatistics.Add(matchesStatistic);
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Success",
-                    DT = ""
+                    ErrorCode = 0,
+                    ErrorMessage = "Success",
+                    Data = ""
                 };
             }
             catch (Exception e) {           
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = e.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = e.Message,
+                    Data = ""
                 };
             }
         }
@@ -74,46 +61,31 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
         {
             try
             {
-                var matchStatistic = await _dbContext.MatchesStatistic.FindAsync(updateMatchStatisticDto.MatchesStatisticId);
+                var matchStatistic = await _dbContext.MatchesStatistics.FindAsync(updateMatchStatisticDto.MatchesStatisticId);
                 if (matchStatistic == null)
                 {
                     return new MatchResponeDto
                     {
-                        EC = 1,
-                        EM = "Match Statistic not found",
-                        DT = ""
+                        ErrorCode = 1,
+                        ErrorMessage = "Match Statistic not found",
+                        Data = ""
                     };
 
                 }
                 matchStatistic.MatchesId = updateMatchStatisticDto.MatchesId;
                 matchStatistic.ClubId = updateMatchStatisticDto.ClubId;
-                matchStatistic.goal= updateMatchStatisticDto.goal;
-                matchStatistic.yellowCard = updateMatchStatisticDto.yellowCard;
-                matchStatistic.redCard = updateMatchStatisticDto.redCard;
-                matchStatistic.assist = updateMatchStatisticDto.assist;
-                matchStatistic.penalty = updateMatchStatisticDto.penalty;
-                matchStatistic.goalAgainst = updateMatchStatisticDto.goalAgainst;
-                matchStatistic.cleanSheet = updateMatchStatisticDto.cleanSheet;
-                matchStatistic.ownGoal = updateMatchStatisticDto.ownGoal;
-                matchStatistic.penaltySaved = updateMatchStatisticDto.penaltySaved;
-                matchStatistic.penaltyMissed = updateMatchStatisticDto.penaltyMissed;
-                matchStatistic.matchPlayed = updateMatchStatisticDto.matchPlayed;
-                matchStatistic.Corner = updateMatchStatisticDto.Corner;
-                matchStatistic.Offside = updateMatchStatisticDto.Offside;
+                matchStatistic.PlayerId = updateMatchStatisticDto.PlayerId;
                 matchStatistic.Fouls = updateMatchStatisticDto.Fouls;
-                matchStatistic.Shots = updateMatchStatisticDto.Shots;
-                matchStatistic.ShotsOnTarget = updateMatchStatisticDto.ShotsOnTarget;
-                matchStatistic.ShotsOffTarget = updateMatchStatisticDto.ShotsOffTarget;
-                matchStatistic.Passes = updateMatchStatisticDto.Passes;
-                matchStatistic.PassesCompleted = updateMatchStatisticDto.PassesCompleted;
-                matchStatistic.Tackles = updateMatchStatisticDto.Tackles;
-
+                matchStatistic.Pass = updateMatchStatisticDto.Pass;
+                matchStatistic.Score = updateMatchStatisticDto.Score;
+                matchStatistic.Shot = updateMatchStatisticDto.Shot;
+                matchStatistic.LineUpId = updateMatchStatisticDto.LineUpId;
                 await _dbContext.SaveChangesAsync();
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Update Match Statistic Success",
-                    DT = ""
+                    ErrorCode = 0,
+                    ErrorMessage = "Update Match Statistic Success",
+                    Data = ""
                 };
             }
 
@@ -121,9 +93,9 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = e.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = e.Message,
+                    Data = ""
                 };
             }
         }
@@ -131,70 +103,61 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
         {
             try
             {
-                var matchStatistic = await _dbContext.MatchesStatistic.FindAsync(matchStatisticId);
+                var matchStatistic = await _dbContext.MatchesStatistics.FindAsync(matchStatisticId);
                 if (matchStatistic == null)
                 {
                     return new MatchResponeDto
                     {
-                        EC = 1,
-                        EM = "Match Statistic not found",
-                        DT = ""
+                        ErrorCode = 1,
+                        ErrorMessage = "Match Statistic not found",
+                        Data = ""
                     };
                 }
-                _dbContext.MatchesStatistic.Remove(matchStatistic);
+                _dbContext.MatchesStatistics.Remove(matchStatistic);
                 await _dbContext.SaveChangesAsync();
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Remove Match Statistic Success",
-                    DT = ""
+                    ErrorCode = 0,
+                    ErrorMessage = "Remove Match Statistic Success",
+                    Data = ""
                 };
             }
             catch (Exception e)
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = e.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = e.Message,
+                    Data = ""
                 };
 
             }
         }
-        public async  ValueTask<IEnumerable<GetMatchesStatisticDto>> GetAllMatchStatistic()
+        public async  ValueTask<MatchResponeDto> GetAllMatchStatistic()
         {
             try
             {
-                var matchStatistic = _dbContext.MatchesStatistic.ToList();
+                var matchStatistic = _dbContext.MatchesStatistics.ToList();
                 var matchStatisticDto = matchStatistic.Select(x => new GetMatchesStatisticDto
                 {
                     MatchesStatisticId = x.MatchesStatisticId,
                     MatchesId = x.MatchesId,
                     ClubId = x.ClubId,
-                    goal   = x.goal,
-                    yellowCard = x.yellowCard,
-                    redCard = x.redCard,
-                    assist = x.assist,
-                    penalty = x.penalty,
-                    goalAgainst = x.goalAgainst,
-                    cleanSheet = x.cleanSheet,
-                    ownGoal = x.ownGoal,
-                    penaltySaved = x.penaltySaved,
-                    penaltyMissed = x.penaltyMissed,
-                    matchPlayed = x.matchPlayed,
-                    Corner = x.Corner,
-                    Offside = x.Offside,
-                    Fouls = x.Fouls,
-                    Shots = x.Shots,
-                    ShotsOnTarget = x.ShotsOnTarget,
-                    ShotsOffTarget = x.ShotsOffTarget,
-                    Possession = x.Possession,
-                    Passes = x.Passes,
-                    PassesCompleted = x.PassesCompleted,
-                    Tackles = x.Tackles
+                    PlayerId = x.PlayerId,
+                    Score= x.Score,
+                    Fouls= x.Fouls,
+                    Shot= x.Shot,
+                    Pass= x.Pass,
+                    LineUpId= x.LineUpId,
+
 
                 });
-                return matchStatisticDto;
+                return new MatchResponeDto
+                {
+                    ErrorCode = 0 ,
+                    ErrorMessage = "Find sucess",
+                    Data = matchStatisticDto
+                };
             }
             catch (Exception e)
             {
@@ -205,14 +168,14 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
         {
             try
             {
-                var matchStatistic = await _dbContext.MatchesStatistic.FindAsync(matchStatisticId);
+                var matchStatistic = await _dbContext.MatchesStatistics.FindAsync(matchStatisticId);
                 if (matchStatistic == null)
                 {
                     return new MatchResponeDto
                     {
-                        EC = 1,
-                        EM = "Match Statistic not found",
-                        DT = ""
+                        ErrorCode = 1,
+                        ErrorMessage = "Match Statistic not found",
+                        Data = ""
                     };
                 }
                 var matchStatisticDto = new GetMatchesStatisticDto
@@ -220,46 +183,30 @@ namespace SM.Tournament.ApplicationService.Module.MatchesModule.Implements
                     MatchesStatisticId = matchStatistic.MatchesStatisticId,
                     MatchesId = matchStatistic.MatchesId,
                     ClubId = matchStatistic.ClubId,
-                    goal = matchStatistic.goal,
-                    yellowCard = matchStatistic.yellowCard,
-                    redCard = matchStatistic.redCard,
-                    assist = matchStatistic.assist,
-                    penalty = matchStatistic.penalty,
-                    goalAgainst = matchStatistic.goalAgainst,
-                    cleanSheet = matchStatistic.cleanSheet,
-                    ownGoal = matchStatistic.ownGoal,
-                    penaltySaved = matchStatistic.penaltySaved,
-                    penaltyMissed = matchStatistic.penaltyMissed,
-                    matchPlayed = matchStatistic.matchPlayed,
-                    Corner = matchStatistic.Corner,
-                    Offside = matchStatistic.Offside,
+                    Pass = matchStatistic.Pass,
+                    Shot = matchStatistic.Shot,
+                    Score = matchStatistic.Score,
                     Fouls = matchStatistic.Fouls,
-                    Shots = matchStatistic.Shots,
-                    ShotsOnTarget = matchStatistic.ShotsOnTarget,
-                    ShotsOffTarget = matchStatistic.ShotsOffTarget,
-                    Possession = matchStatistic.Possession,
-                    Passes = matchStatistic.Passes,
-                    PassesCompleted = matchStatistic.PassesCompleted,
-                    Tackles = matchStatistic.Tackles
+                    LineUpId= matchStatistic.LineUpId,
+                    PlayerId= matchStatistic.PlayerId,
 
                 };
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Find sucess",
-                    DT = matchStatisticDto
+                    ErrorCode = 0,
+                    ErrorMessage = "Find sucess",
+                    Data = matchStatisticDto
                 };
             }
             catch (Exception e)
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = e.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = e.Message,
+                    Data = ""
                 };
             }
         }
     }
 }
-*/

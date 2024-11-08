@@ -37,18 +37,18 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
                 await _dbContext.SaveChangesAsync();
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Create Matches Success",
-                    DT = ""
+                    ErrorCode = 0,
+                    ErrorMessage = "Create Matches Success",
+                    Data = ""
                 };
             }
             catch (Exception ex)
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = ex.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = ex.Message,
+                    Data = ""
                 };
             }
             
@@ -61,9 +61,9 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
                 {
                     return new MatchResponeDto
                     {
-                        EC = 1,
-                        EM = "Matches not found",
-                        DT = ""
+                        ErrorCode = 1,
+                        ErrorMessage = "Matches not found",
+                        Data = ""
                     };
                 }
                 existmatches.MatchesName = updateMatchesDto.MatchesName;
@@ -77,9 +77,9 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
                 await _dbContext.SaveChangesAsync();
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Update Matches Success",
-                    DT = ""
+                    ErrorCode = 0,
+                    ErrorMessage = "Update Matches Success",
+                    Data = ""
                 };
                 
             }
@@ -87,9 +87,9 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = ex.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = ex.Message,
+                    Data = ""
                 };
             }
 
@@ -103,34 +103,34 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
                 {
                     return new MatchResponeDto
                     {
-                        EC = 1,
-                        EM = "Matches not found",
-                        DT = ""
+                        ErrorCode = 1,
+                        ErrorMessage = "Matches not found",
+                        Data = ""
                     };
                 }
                 _dbContext.Matches.Remove(matches);
                 await _dbContext.SaveChangesAsync();
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Remove Matches Success",
-                    DT = ""
+                    ErrorCode = 0,
+                    ErrorMessage = "Remove Matches Success",
+                    Data = ""
                 };
             }
             catch (Exception ex)
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = ex.Message,
-                    DT = ""
+                    ErrorCode = -1,
+                    ErrorMessage = ex.Message,
+                    Data = ""
                 };
 
             }
          
 
         }
-        public async ValueTask<IEnumerable<GetMatchesDto>> GetAllMatches()
+        public async ValueTask<MatchResponeDto> GetAllMatches()
         {
             try
             {
@@ -146,7 +146,12 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
                     TeamWin = x.TeamWin,
                     TeamLose = x.TeamLose
                 }).ToList();
-                return matches;
+                return new MatchResponeDto
+                {
+                    ErrorCode = 0 ,
+                    ErrorMessage = "Get Matches Success",
+                    Data = matches
+                };
             }
             catch (Exception ex)
             {
@@ -164,16 +169,16 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
                 {
                     return new MatchResponeDto
                     {
-                        EC = 1,
-                        EM = "Matches not found",
-                        DT = null
+                        ErrorCode = 1,
+                        ErrorMessage = "Matches not found",
+                        Data = null
                     };
                 }
                 return new MatchResponeDto
                 {
-                    EC = 0,
-                    EM = "Get Matches Success",
-                    DT = new GetMatchesDto
+                    ErrorCode = 0,
+                    ErrorMessage = "Get Matches Success",
+                    Data = new GetMatchesDto
                     {
                         MatchesId = matches.MatchesId,
                         MatchesName = matches.MatchesName,
@@ -191,9 +196,9 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Implements
             {
                 return new MatchResponeDto
                 {
-                    EC = -1,
-                    EM = ex.Message,
-                    DT = null
+                    ErrorCode = -1,
+                    ErrorMessage = ex.Message,
+                    Data = null
                 };
             }
         }

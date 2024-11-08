@@ -48,6 +48,9 @@ const AppHeader = () => {
             <Link href={'/users'} className='nav-link'> Users</Link>
             <Link href={'/players'} className='nav-link'> Players</Link>
             <Link href={'/club'} className='nav-link'> Club</Link>
+            <Link href={'/lineup'} className='nav-link'> Line Up</Link>
+            <Link href={'/playerLineup'} className='nav-link'> PlayerLineUp</Link>
+            <Link href={'/matches'} className='nav-link'> Matches</Link>
           </Nav>
           <Nav>
             {isAuthenticated ? (

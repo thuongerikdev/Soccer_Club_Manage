@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SM.Club.Domain.ClubFund
 {
-    internal class ClubSpendingFund
+    public class ClubSpendingFund
     {
     }
 }

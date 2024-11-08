@@ -27,13 +27,8 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Implements
                 {
                     PlayerName = createPlayerDto.PlayerName,
                     PlayerPosition = createPlayerDto.PlayerPosition,
-                    PlayerNationality = createPlayerDto.PlayerNationality,
                     PlayerImage = createPlayerDto.PlayerImage,
                     PlayerAge = createPlayerDto.PlayerAge,
-                    PlayerValue = createPlayerDto.PlayerValue,
-                    PlayerHealth = createPlayerDto.PlayerHealth,
-                    PlayerSkill = createPlayerDto.PlayerSkill,
-                    PlayerSalary = createPlayerDto.PlayerSalary,
                     PlayerStatus = createPlayerDto.PlayerStatus,
                     Shirtnumber = createPlayerDto.Shirtnumber,
                     ClubId = createPlayerDto.ClubId,
@@ -62,11 +57,11 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Implements
             }
 
         }
-        public async Task<PlayerResponeDto> UpdatePlayer(UpdatePlayerDto updatePlayerDto)
+        public async Task<PlayerResponeDto> UpdatePlayer(int PlayerId, UpdatePlayerDto updatePlayerDto)
         {
             try
             {
-                var existPlayer = _dbContext.Players.FindAsync(updatePlayerDto.PlayerId);
+                var existPlayer = _dbContext.Players.FirstOrDefault(x => x.PlayerId == PlayerId);
                 if (existPlayer == null)
                 {
                     return new PlayerResponeDto
@@ -76,24 +71,18 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Implements
                         DT = ""
                     };
                 }
-                var player = new ClubPlayers
-                {
-                    PlayerName = updatePlayerDto.PlayerName,
-                    PlayerPosition = updatePlayerDto.PlayerPosition,
-                    PlayerNationality = updatePlayerDto.PlayerNationality,
-                    PlayerImage = updatePlayerDto.PlayerImage,
-                    PlayerAge = updatePlayerDto.PlayerAge,
-                    PlayerValue = updatePlayerDto.PlayerValue,
-                    PlayerHealth = updatePlayerDto.PlayerHealth,
-                    PlayerSkill = updatePlayerDto.PlayerSkill,
-                    PlayerSalary = updatePlayerDto.PlayerSalary,
-                    ClubId = updatePlayerDto.ClubId,
-                    PlayerStatus = updatePlayerDto.PlayerStatus,
-                    Shirtnumber = updatePlayerDto.Shirtnumber,
-                    height = updatePlayerDto.height,
-                    weight = updatePlayerDto.weight,
-                    leg = updatePlayerDto.leg,
-                };
+
+                existPlayer.PlayerName = updatePlayerDto.PlayerName;
+                existPlayer.PlayerPosition = updatePlayerDto.PlayerPosition;
+                existPlayer.PlayerImage = updatePlayerDto.PlayerImage;
+                existPlayer.PlayerAge = updatePlayerDto.PlayerAge;
+                existPlayer.ClubId = updatePlayerDto.ClubId;
+                existPlayer.PlayerStatus = updatePlayerDto.PlayerStatus;
+                existPlayer.Shirtnumber = updatePlayerDto.Shirtnumber;
+                existPlayer.height = updatePlayerDto.height;
+                existPlayer.weight = updatePlayerDto.weight;
+                existPlayer.leg = updatePlayerDto.leg;
+
                 await _dbContext.SaveChangesAsync();
                 return new PlayerResponeDto
                 {
@@ -163,15 +152,10 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Implements
                     var PlayerRespone = new ReadPlayerDto
                     {
                         PlayerAge = player.PlayerAge,
-                        PlayerId = player.PlayerId,
-                        PlayerHealth = player.PlayerHealth,
-                        PlayerImage = player.PlayerImage,
-                        PlayerNationality = player.PlayerNationality,
+                        PlayerId = player.PlayerId,                 
+                       PlayerImage = player.PlayerImage,                     
                         PlayerName = player.PlayerName,
                         PlayerPosition = player.PlayerPosition,
-                        PlayerSalary = player.PlayerSalary,
-                        PlayerSkill = player.PlayerSkill,
-                        PlayerValue = player.PlayerValue,
                         ClubId = player.ClubId,
                         PlayerStatus = player.PlayerStatus,
                         Shirtnumber = player.Shirtnumber,
@@ -218,14 +202,11 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Implements
                 {
                     PlayerAge = player.PlayerAge,
                     PlayerId = player.PlayerId,
-                    PlayerHealth = player.PlayerHealth,
+                   
                     PlayerImage = player.PlayerImage,
-                    PlayerNationality = player.PlayerNationality,
+                
                      PlayerName = player.PlayerName,
-                    PlayerPosition = player.PlayerPosition,
-                    PlayerSalary = player.PlayerSalary,
-                    PlayerSkill = player.PlayerSkill,
-                    PlayerValue = player.PlayerValue,
+                    PlayerPosition = player.PlayerPosition,                 
                     ClubId = player.ClubId,
                     PlayerStatus = player.PlayerStatus,
                     Shirtnumber = player.Shirtnumber,

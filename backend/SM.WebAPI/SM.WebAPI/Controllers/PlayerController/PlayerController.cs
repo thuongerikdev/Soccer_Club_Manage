@@ -58,8 +58,8 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
-        [HttpPut("update/{updatePlayerDto.PlayerId}")]
-        public async Task<IActionResult> UpdatePlayer(int playerId, UpdatePlayerDto updatePlayerDto)
+        [HttpPut("update/{playerId}")]
+        public async Task<IActionResult> UpdatePlayer(int playerId , UpdatePlayerDto updatePlayerDto)
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace SM.WebAPI.Controllers.PlayerController
 
             try
             {
-                var result = await _playerService.UpdatePlayer(updatePlayerDto);
+                var result = await _playerService.UpdatePlayer(playerId ,updatePlayerDto);
                 if (result == null)
                 {
                     return BadRequest(new PlayerResponeDto

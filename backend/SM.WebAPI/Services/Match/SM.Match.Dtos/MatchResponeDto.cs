@@ -8,8 +8,8 @@ namespace SM.Match.Dtos
 {
     public class MatchResponeDto
     {
-        public string EM { get; set; } // Error Message
-        public int EC { get; set; }     // Error Code
-        public object DT { get; set; }  // Data (Token or Array)
+        public string ErrorMessage { get; set; } // Error Message
+        public int ErrorCode { get; set; }     // Error Code
+        public object Data { get; set; }  // Data (Token or Array)
     }
 }

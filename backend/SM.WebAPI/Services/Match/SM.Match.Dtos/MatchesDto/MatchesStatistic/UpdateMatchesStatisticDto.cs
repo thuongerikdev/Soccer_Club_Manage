@@ -8,29 +8,14 @@ namespace SM.Match.Dtos.MatchesDto.MatchesStatistic
 {
     public class UpdateMatchesStatisticDto
     {
-        public int MatchesStatisticId { get; set; }
-        public int MatchesId { get; set; }
+        public int MatchesStatisticId { get; set; } // Khóa chính cho thống kê trận đấu
+        public int PlayerId { get; set; }
+        public int LineUpId { get; set; }
         public int ClubId { get; set; }
-        public int redCard { get; set; }
-        public int yellowCard { get; set; }
-        public int goal { get; set; }
-        public int assist { get; set; }
-        public int penalty { get; set; }
-        public int goalAgainst { get; set; }
-        public int cleanSheet { get; set; }
-        public int ownGoal { get; set; }
-        public int penaltySaved { get; set; }
-        public int penaltyMissed { get; set; }
-        public int matchPlayed { get; set; }
-        public int Corner { get; set; }
-        public int Offside { get; set; }
-        public int Fouls { get; set; }
-        public int Shots { get; set; }
-        public int ShotsOnTarget { get; set; }
-        public int ShotsOffTarget { get; set; }
-        public int Possession { get; set; }
-        public int Passes { get; set; }
-        public int PassesCompleted { get; set; }
-        public int Tackles { get; set; }
+        public int Score { get; set; }
+        public int MatchesId { get; set; }           // ID của trận đấu
+        public int Shot { get; set; }              // Số lần phạt góc
+        public int Pass { get; set; }             // Số lần việt vị
+        public int Fouls { get; set; }               // Số lỗi
     }
 }

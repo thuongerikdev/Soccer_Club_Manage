@@ -12,7 +12,7 @@ namespace SM.Player.ApplicationService.Module.PlayerModule.Abtracts
     public interface IPlayerService
     {
         public Task<PlayerResponeDto> CreatePlayer(CreatePlayerDto createPlayerDto);
-        public Task<PlayerResponeDto> UpdatePlayer(UpdatePlayerDto updatePlayerDto);
+        public Task<PlayerResponeDto> UpdatePlayer(int PlayerId ,UpdatePlayerDto updatePlayerDto);
         public Task<PlayerResponeDto> DeletePlayer(int PlayerId);
         public ValueTask<PlayerResponeDto> GetAllPlayer();
         public ValueTask<PlayerResponeDto> GetPlayerById(int PlayerId);

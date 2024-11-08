@@ -8,10 +8,14 @@ namespace SM.LineUp.Dtos.LineUpDtos
 {
     public class CreateLineUpDto
     {
-        public int ClubId { get; set; }
-        public int TournamentId { get; set; }
+      
         public int MatchId { get; set; }
-        public string formation { get; set; }
-        public DateTime StartTime { get; set; }
+        public int ClubId { get; set; }
+        public string LineUpName { get; set; }
+        public string LineUpType { get; set; } // chế đọ : công khai / nội bộ / riêng tue
+        public string MatchType { get; set; } // loại trận đấu : 1 - trận đấu thường, 2 - trận đấu tập huấn, 3 - trận đấu giao hữu
+
+        public string StadiumBackGroud { get; set; } // loại sân : sân 5 người , sân 7 người 
+
     }
 }

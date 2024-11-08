@@ -14,7 +14,7 @@ namespace SM.Club.ApplicationService.Module.ClubModule.Abtracts
     public interface IClubTeamService
     {
         public Task<ClubResponeDto> CreateClubTeam(CreateClubTeamDto createClubTeamDto);
-        public Task<ClubResponeDto> UpdateClubTeam(UpdateClubTeamDto updateClubTeamDto);
+        public Task<ClubResponeDto> UpdateClubTeam(int CLubId , UpdateClubTeamDto updateClubTeamDto);
         public Task<ClubResponeDto> RemoveClubTeam(int clubTeamId);
         public ValueTask<ClubResponeDto> GetAllClubTeam();
         public ValueTask<ClubResponeDto> GetClubTeamById(int clubTeamId);

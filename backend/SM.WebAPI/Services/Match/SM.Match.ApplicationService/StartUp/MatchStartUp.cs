@@ -10,13 +10,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using SM.Match.Infrastructure;
+using SM.Match.ApplicationService.Module.MatchesModule.Abtracts;
+using SM.Match.ApplicationService.Module.MatchesModule.Implements;
+using SM.Tournament.ApplicationService.Module.MatchesModule.Implements;
 
 
 namespace SM.Match.ApplicationService.Module.StartUp
 {
     public static class MatchStartUp
     {
-        public static void ConfigureTournament(this WebApplicationBuilder builder, string? assemblyName)
+        public static void ConfigureMatches(this WebApplicationBuilder builder, string? assemblyName)
         {
 
             builder.Services.AddDbContext<MatchDbContext>(
@@ -34,10 +37,13 @@ namespace SM.Match.ApplicationService.Module.StartUp
                         }
                     );
                 },
-                ServiceLifetime.Scoped
+                
+            ServiceLifetime.Scoped
             );
-            
-  
+            builder.Services.AddScoped<IMatchesService, MatchesService>();
+            builder.Services.AddScoped<IMatchesStatisticService, MatchesStatisticService>();
+
+
 
 
         }

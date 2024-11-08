@@ -1,4 +1,4 @@
-﻿/*
+﻿
 using SM.Match.Dtos;
 using SM.Match.Dtos.MatchesDto.MatchesStatistic;
 using System;
@@ -14,8 +14,7 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Abtracts
         public Task<MatchResponeDto> CreateMatchStatistic(CreateMatchesStatisticDto createMatchStatisticDto);
         public Task<MatchResponeDto> UpdateMatchStatistic(UpdateMatchesStatisticDto updateMatchStatisticDto);
         public Task<MatchResponeDto> RemoveMatchStatistic(int matchStatisticId);
-        public ValueTask<IEnumerable<GetMatchesStatisticDto>> GetAllMatchStatistic();
+        public ValueTask<MatchResponeDto> GetAllMatchStatistic();
         public ValueTask<MatchResponeDto> GetMatchStatisticById(int matchStatisticId);
     }
 }
-*/

@@ -61,11 +61,11 @@ namespace SM.Club.ApplicationService.Module.ClubModule.Implements
 
             }
         }
-        public async Task<ClubResponeDto> UpdateClubTeam(UpdateClubTeamDto updateClubTeamDto)
+        public async Task<ClubResponeDto> UpdateClubTeam(int ClubId , UpdateClubTeamDto updateClubTeamDto)
         {
             try
             {
-                var existClub = await _dbContext.Clubs.FindAsync(updateClubTeamDto.ClubId);
+                var existClub = _dbContext.Clubs.FirstOrDefault(x => x.ClubId == ClubId);
                 if (existClub == null)
                 {
                     return new ClubResponeDto

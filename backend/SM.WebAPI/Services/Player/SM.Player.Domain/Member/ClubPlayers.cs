@@ -19,16 +19,10 @@ namespace SM.Player.Domain.Players
         public string PlayerName { get; set; }
         [MaxLength(50)]
         public string PlayerPosition { get; set; }
-        [MaxLength(50)]
-        public string PlayerNationality { get; set; }
         [MaxLength(5000000)]
         public string PlayerImage { get; set; }
         public int ClubId { get; set; }
         public int PlayerAge { get; set; }
-        public double PlayerValue { get; set; }
-        public int PlayerHealth { get; set; }
-        public int PlayerSkill { get; set; }
-        public double PlayerSalary { get; set; }
         public int Shirtnumber { get; set; }
         public int PlayerStatus { get; set; }
         [MaxLength(50)]

@@ -8,7 +8,6 @@ namespace SM.Club.Dtos.ClubTeamDtos
 {
     public class UpdateClubTeamDto
     {
-        public int ClubId { get; set; }
         public string ClubName { get; set; }
         public string ClubDescription { get; set; }
         public string ClubLogo { get; set; }

@@ -59,23 +59,13 @@ namespace SM.WebAPI.Controllers.ClubController
                 });
             }
         }
-        [HttpPut("update/{updateClubTeamDto.ClubId}")]
-        public async Task<IActionResult> UpdateClubTeam(UpdateClubTeamDto updateClubTeamDto)
+        [HttpPut("update/{ClubId}")]
+        public async Task<IActionResult> UpdateClubTeam(int ClubId ,UpdateClubTeamDto updateClubTeamDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new ClubResponeDto
-                {
-                    EM = "Invalid input data.",
-                    EC = 1,
-                    DT = ModelState
-                });
-            }
-
             try
             {
-                var result = await _clubTeamService.UpdateClubTeam(updateClubTeamDto);
-                if (result == null)
+                var result = await _clubTeamService.UpdateClubTeam(ClubId ,updateClubTeamDto);
+                if (result.EC !=  0)
                 {
                     return BadRequest(new ClubResponeDto
                     {

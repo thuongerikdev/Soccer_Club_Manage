@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.LineUp.Domain.LineUp
+namespace SM.Club.Domain.ClubFund
 {
-    public class MainLineUp
+    internal class PlayerFund
     {
     }
 }

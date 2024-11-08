@@ -6,17 +6,7 @@ import UpdateModals from '../modals/clubs/updateClub.modal';
 import { useState } from 'react';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
-interface IClub {
-    clubId: number;
-    clubName: string;
-    clubDescription: string;
-    clubLogo: string;
-    clubBanner: string;
-    userId: number;
-    budget: number;
-    clubLevel: string;
-    clubAge: string;
-}
+
 
 interface IProps {
     clubs: IClub[];

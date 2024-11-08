@@ -24,7 +24,7 @@ function UpdateModals(props: IProps) {
     const [clubBanner, setClubBanner] = useState<string>('');
     const [boss, setBoss] = useState<number | ''>(0);
     const [budget, setBudget] = useState<number | ''>(0);
-    const [clubLevel, setClubLevel] = useState<string | ''>('');
+    const [clubLevel, setClubLevel] = useState<number | 0>(0);
     const [clubAge, setClubAge] = useState<string | ''>('');
 
     useEffect(() => {
@@ -35,8 +35,8 @@ function UpdateModals(props: IProps) {
             setClubLogo(club.clubLogo || '');
             setClubBanner(club.clubBanner || '');
             setBoss(club.userId || '');
-            setBudget(club.budget || '');
-            setClubLevel(club.clubLevel || '');
+            setBudget(club.budget || 0.0);
+            setClubLevel(club.clubLevel || 0.0);
             setClubAge(club.clubAge || '');
         }
     }, [club]);
@@ -165,7 +165,7 @@ function UpdateModals(props: IProps) {
                         type="text" 
                         placeholder="Enter club level" 
                         value={clubLevel}
-                        onChange={(e) => setClubLevel(e.target.value)} 
+                        onChange={(e) => setClubLevel(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
 

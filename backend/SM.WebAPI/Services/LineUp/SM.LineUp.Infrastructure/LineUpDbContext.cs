@@ -10,8 +10,8 @@ namespace SM.LineUp.Infrastructure
     public class LineUpDbContext : DbContext
     {
 
-        public DbSet<LineUpBase> Clubs { get; set; }
-        public DbSet<PlayerLineUp> LineUps { get; set; }
+        public DbSet<LineUpBase> LineUps { get; set; }
+        public DbSet<PlayerLineUp> PlayerLineUps { get; set; }
 
         public LineUpDbContext(DbContextOptions<LineUpDbContext> options) : base(options)
         {

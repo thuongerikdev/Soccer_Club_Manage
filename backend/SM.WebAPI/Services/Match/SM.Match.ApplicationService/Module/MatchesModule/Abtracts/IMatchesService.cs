@@ -14,7 +14,7 @@ namespace SM.Match.ApplicationService.Module.MatchesModule.Abtracts
         public Task<MatchResponeDto> CreateMatches(CreateMatchesDto createMatchesDto);
         public Task<MatchResponeDto> UpdateMatches(UpdateMatchesDto updateMatchesDto);
         public Task<MatchResponeDto> RemoveMatches(int matchesId);
-        public ValueTask<IEnumerable<GetMatchesDto>> GetAllMatches();
+        public ValueTask<MatchResponeDto> GetAllMatches();
         public ValueTask<MatchResponeDto> GetMatchesById(int matchesId);
     }
 }

@@ -19,7 +19,7 @@ function CreateModal(props: IProps) {
     const [clubBanner, setClubBanner] = useState<string>('');
     const [boss, setBoss] = useState<number | ''>(0);
     const [budget, setBudget] = useState<number | ''>(0);
-    const [clubLevel, setClubLevel] = useState<string | ''>('');
+    const [clubLevel, setClubLevel] = useState<number | ''>('');
     const [clubAge, setClubAge] = useState<number | ''>(0);
 
     const handleSubmit = () => {
@@ -70,7 +70,7 @@ function CreateModal(props: IProps) {
         setClubBanner('');
         setBoss(0);
         setBudget(0);
-        setClubLevel('');
+        setClubLevel(0.0);
         setClubAge(0);
         setShowModalCreate(false); // Đóng modal sau khi hoàn tất
     };
@@ -147,7 +147,7 @@ function CreateModal(props: IProps) {
                         type="text" 
                         placeholder="Enter club level" 
                         value={clubLevel}
-                        onChange={(e) => setClubLevel(e.target.value)} 
+                        onChange={(e) => setClubLevel(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
