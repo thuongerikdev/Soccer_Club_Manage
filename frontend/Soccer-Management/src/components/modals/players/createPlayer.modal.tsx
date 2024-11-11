@@ -13,19 +13,14 @@ interface IProps {
 function CreatePlayerModal(props: IProps) {
     const { showModalCreate, setShowModalCreate } = props;
 
-    // Khai báo trạng thái cho các thuộc tính của cầu thủ
+    // State for player attributes
     const [playerName, setPlayerName] = useState<string>('');
     const [playerPosition, setPlayerPosition] = useState<string>('');
-    const [playerNationality, setPlayerNationality] = useState<string>('');
     const [playerImage, setPlayerImage] = useState<string>('');
     const [clubId, setClubId] = useState<number | ''>(0);
     const [playerAge, setPlayerAge] = useState<number | ''>(0);
-    const [playerValue, setPlayerValue] = useState<number | ''>(0);
-    const [playerHealth, setPlayerHealth] = useState<number | ''>(100);
-    const [playerSkill, setPlayerSkill] = useState<number | ''>(50);
-    const [playerSalary, setPlayerSalary] = useState<number | ''>(0);
     const [shirtNumber, setShirtNumber] = useState<number | ''>(0);
-    const [playerStatus, setPlayerStatus] = useState<number | ''>(1);
+    const [playerStatus, setPlayerStatus] = useState<number | ''>(0);
     const [leg, setLeg] = useState<string>('');
     const [height, setHeight] = useState<number | ''>(0);
     const [weight, setWeight] = useState<number | ''>(0);
@@ -35,9 +30,9 @@ function CreatePlayerModal(props: IProps) {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPlayerImage(reader.result as string); // Lưu chuỗi Base64 vào state
+                setPlayerImage(reader.result as string); // Save Base64 string
             };
-            reader.readAsDataURL(file); // Đọc file và chuyển đổi thành Base64
+            reader.readAsDataURL(file);
         }
     };
 
@@ -49,21 +44,16 @@ function CreatePlayerModal(props: IProps) {
             },
             method: "POST",
             body: JSON.stringify({
-                PlayerName: playerName,
-                PlayerPosition: playerPosition,
-                PlayerNationality: playerNationality,
-                PlayerImage: playerImage, // Sử dụng chuỗi Base64
-                ClubId: clubId,
-                PlayerAge: playerAge,
-                PlayerValue: playerValue,
-                PlayerHealth: playerHealth,
-                PlayerSkill: playerSkill,
-                PlayerSalary: playerSalary,
-                Shirtnumber: shirtNumber,
-                PlayerStatus: playerStatus,
-                leg: leg,
-                height: height,
-                weight: weight,
+                playerName,
+                playerPosition,
+                playerImage, // Base64 string
+                clubId,
+                playerAge,
+                shirtnumber: shirtNumber,
+                playerStatus,
+                leg,
+                height,
+                weight,
             }),
         })
         .then(res => res.json())
@@ -81,20 +71,14 @@ function CreatePlayerModal(props: IProps) {
     };
 
     const handleCloseModal = () => {
-        // Đặt lại các trường nhập liệu
-        console.log(playerImage)
+        // Reset input fields
         setPlayerName('');
         setPlayerPosition('');
-        setPlayerNationality('');
         setPlayerImage('');
         setClubId(0);
         setPlayerAge(0);
-        setPlayerValue(0);
-        setPlayerHealth(100);
-        setPlayerSkill(50);
-        setPlayerSalary(0);
         setShirtNumber(0);
-        setPlayerStatus(1);
+        setPlayerStatus(0);
         setLeg('');
         setHeight(0);
         setWeight(0);
@@ -132,15 +116,6 @@ function CreatePlayerModal(props: IProps) {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Nationality</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter player nationality" 
-                        value={playerNationality}
-                        onChange={(e) => setPlayerNationality(e.target.value)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
                     <Form.Label>Image</Form.Label>
                     <Form.Control 
                         type="file" 
@@ -167,42 +142,6 @@ function CreatePlayerModal(props: IProps) {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Value</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter player value" 
-                        value={playerValue === 0 ? '' : playerValue}
-                        onChange={(e) => setPlayerValue(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Health</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter player health" 
-                        value={playerHealth === 0 ? '' : playerHealth}
-                        onChange={(e) => setPlayerHealth(e.target.value ? Number(e.target.value) : 100)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Skill</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter player skill" 
-                        value={playerSkill === 0 ? '' : playerSkill}
-                        onChange={(e) => setPlayerSkill(e.target.value ? Number(e.target.value) : 50)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Salary</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter player salary" 
-                        value={playerSalary === 0 ? '' : playerSalary}
-                        onChange={(e) => setPlayerSalary(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
                     <Form.Label>Shirt Number</Form.Label>
                     <Form.Control 
                         type="number" 
@@ -217,7 +156,7 @@ function CreatePlayerModal(props: IProps) {
                         type="number" 
                         placeholder="Enter player status" 
                         value={playerStatus === 0 ? '' : playerStatus}
-                        onChange={(e) => setPlayerStatus(e.target.value ? Number(e.target.value) : 1)} 
+                        onChange={(e) => setPlayerStatus(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -230,19 +169,19 @@ function CreatePlayerModal(props: IProps) {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Height</Form.Label>
+                    <Form.Label>Height (cm)</Form.Label>
                     <Form.Control 
                         type="number" 
-                        placeholder="Enter height in cm" 
+                        placeholder="Enter height" 
                         value={height === 0 ? '' : height}
                         onChange={(e) => setHeight(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Weight</Form.Label>
+                    <Form.Label>Weight (kg)</Form.Label>
                     <Form.Control 
                         type="number" 
-                        placeholder="Enter weight in kg" 
+                        placeholder="Enter weight" 
                         value={weight === 0 ? '' : weight}
                         onChange={(e) => setWeight(e.target.value ? Number(e.target.value) : 0)} 
                     />

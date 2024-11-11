@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.LineUp.ApplicationService.Module.Abtracts;
-using SM.LineUp.Dtos;
-using SM.LineUp.Dtos.LineUpDtos;
+using SM.Tournament.ApplicationService.TournamentModule.LineUpModule.Abtracts;
+using SM.Tournament.Dtos;
+using SM.Tournament.Dtos.LineUpDto.LineUp;
 
 namespace SM.WebAPI.Controllers.LineUpController
 {
-    [Route("api/lineup")]
+    [Route("api/LineUp")]
     [ApiController]
     public class LineUpController : Controller
     {
-        protected ILineUpService LineUpService;
+        private readonly ILineUpService _lineUpService;
         public LineUpController(ILineUpService lineUpService)
         {
-            LineUpService = lineUpService;
+            _lineUpService = lineUpService;
         }
-        [HttpPost("create")]
+        [HttpPost("createLineUp")]
         public async Task<IActionResult> CreateLineUp(CreateLineUpDto createLineUpDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new LineUpResponeDto
+                return BadRequest(new TournamentResponeDto
                 {
                     ErrorMessage = "Invalid input data.",
                     ErrorCode = 1,
@@ -29,10 +29,10 @@ namespace SM.WebAPI.Controllers.LineUpController
 
             try
             {
-                var result = await LineUpService.CreateLineUp(createLineUpDto);
-                if (result.ErrorCode!=0)
+                var result = await _lineUpService.CreateLineUp(createLineUpDto);
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new LineUpResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
                         ErrorMessage = "Invalid credentials.",
                         ErrorCode = 1,
@@ -40,7 +40,7 @@ namespace SM.WebAPI.Controllers.LineUpController
                     });
                 }
 
-                return Ok(new LineUpResponeDto
+                return Ok(new TournamentResponeDto
                 {
                     ErrorMessage = result.ErrorMessage,
                     ErrorCode = result.ErrorCode,
@@ -49,7 +49,7 @@ namespace SM.WebAPI.Controllers.LineUpController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new LineUpResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
                     ErrorMessage = "Internal server error: " + ex.Message,
                     ErrorCode = 1,
@@ -57,12 +57,12 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
-        [HttpPut("update")]
+        [HttpPut("updateLineUp")]
         public async Task<IActionResult> UpdateLineUp(UpdateLineUpDto updateLineUpDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new LineUpResponeDto
+                return BadRequest(new TournamentResponeDto
                 {
                     ErrorMessage = "Invalid input data.",
                     ErrorCode = 1,
@@ -72,10 +72,10 @@ namespace SM.WebAPI.Controllers.LineUpController
 
             try
             {
-                var result = await LineUpService.UpdateLineUp(updateLineUpDto);
-                if (result == null)
+                var result = await _lineUpService.UpdateLineUp(updateLineUpDto);
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new LineUpResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
                         ErrorMessage = "Invalid credentials.",
                         ErrorCode = 1,
@@ -83,7 +83,7 @@ namespace SM.WebAPI.Controllers.LineUpController
                     });
                 }
 
-                return Ok(new LineUpResponeDto
+                return Ok(new TournamentResponeDto
                 {
                     ErrorMessage = result.ErrorMessage,
                     ErrorCode = result.ErrorCode,
@@ -92,7 +92,7 @@ namespace SM.WebAPI.Controllers.LineUpController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new LineUpResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
                     ErrorMessage = "Internal server error: " + ex.Message,
                     ErrorCode = 1,
@@ -100,25 +100,15 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
-        [HttpDelete("remove/{lineUpId}")]
-        public async Task<IActionResult> RemoveLineUp(int lineUpId)
+        [HttpDelete("deleteLineUp")]
+        public async Task<IActionResult> DeleteLineUp(int lineUpID)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new LineUpResponeDto
-                {
-                    ErrorMessage = "Invalid input data.",
-                    ErrorCode = 1,
-                    Data = ModelState
-                });
-            }
-
             try
             {
-                var result = await LineUpService.RemoveLineUp(lineUpId);
-                if (result == null)
+                var result = await _lineUpService.DeleteLineUp(lineUpID);
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new LineUpResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
                         ErrorMessage = "Invalid credentials.",
                         ErrorCode = 1,
@@ -126,7 +116,7 @@ namespace SM.WebAPI.Controllers.LineUpController
                     });
                 }
 
-                return Ok(new LineUpResponeDto
+                return Ok(new TournamentResponeDto
                 {
                     ErrorMessage = result.ErrorMessage,
                     ErrorCode = result.ErrorCode,
@@ -135,7 +125,7 @@ namespace SM.WebAPI.Controllers.LineUpController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new LineUpResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
                     ErrorMessage = "Internal server error: " + ex.Message,
                     ErrorCode = 1,
@@ -143,15 +133,48 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
-        [HttpGet("getall")]
+        [HttpGet("getLineUpById")]
+        public async Task<IActionResult> GetLineUpById(int lineUpID)
+        {
+            try
+            {
+                var result = await _lineUpService.GetLineUpById(lineUpID);
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("getAllLineUp")]
         public async Task<IActionResult> GetAllLineUp()
         {
             try
             {
-                var result = await LineUpService.GetAllLineUp();
-                if (result == null)
+                var result = await _lineUpService.GetAllLineUp();
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new LineUpResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
                         ErrorMessage = "Invalid credentials.",
                         ErrorCode = 1,
@@ -159,7 +182,7 @@ namespace SM.WebAPI.Controllers.LineUpController
                     });
                 }
 
-                return Ok(new LineUpResponeDto
+                return Ok(new TournamentResponeDto
                 {
                     ErrorMessage = result.ErrorMessage,
                     ErrorCode = result.ErrorCode,
@@ -168,7 +191,7 @@ namespace SM.WebAPI.Controllers.LineUpController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new LineUpResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
                     ErrorMessage = "Internal server error: " + ex.Message,
                     ErrorCode = 1,
@@ -176,49 +199,5 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
-        [HttpGet("get/{lineUpId}")]
-        public async Task<IActionResult> GetLineUpById(int lineUpId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new LineUpResponeDto
-                {
-                    ErrorMessage = "Invalid input data.",
-                    ErrorCode = 1,
-                    Data = ModelState
-                });
-            }
-
-            try
-            {
-                var result = await LineUpService.GetLineUpById(lineUpId);
-                if (result == null)
-                {
-                    return BadRequest(new LineUpResponeDto
-                    {
-                        ErrorMessage = "Invalid credentials.",
-                        ErrorCode = 1,
-                        Data = null
-                    });
-                }
-
-                return Ok(new LineUpResponeDto
-                {
-                    ErrorMessage = result.ErrorMessage,
-                    ErrorCode = result.ErrorCode,
-                    Data = result.Data
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new LineUpResponeDto
-                {
-                    ErrorMessage = "Internal server error: " + ex.Message,
-                    ErrorCode = 1,
-                    Data = null
-                });
-            }
         }
-
-    }
 }

@@ -11,42 +11,36 @@ interface IProps {
 }
 
 interface Matches {
-    matchesName: string; // Changed to string based on API input
+    matchesName: number; // Updated to number
     matchesDescription: string;
     tournamentId: number;
     stadium: string;
-    startTime: string; // Ensure these are formatted correctly
+    startTime: string; 
     endTime: string;
-    teamWin: number; // Optional based on your requirements
-    teamLose: number; // Optional based on your requirements
 }
 
 function CreateMatchModal({ showModalCreate, setShowModalCreate }: IProps) {
-    const [matchesName, setMatchesName] = useState<string>('');
+    const [matchesName, setMatchesName] = useState<number | ''>(0); // Changed to number
     const [matchesDescription, setMatchesDescription] = useState<string>('');
     const [tournamentId, setTournamentId] = useState<number | ''>(0);
     const [stadium, setStadium] = useState<string>('');
     const [startTime, setStartTime] = useState<string>('');
     const [endTime, setEndTime] = useState<string>('');
-    const [teamWin, setTeamWin] = useState<number | ''>(0);
-    const [teamLose, setTeamLose] = useState<number | ''>(0);
 
     const handleSubmit = () => {
         // Input validation
-        if (!matchesName || !matchesDescription || tournamentId === 0 || !stadium || !startTime || !endTime) {
+        if (matchesName === 0 || !matchesDescription || tournamentId === 0 || !stadium || !startTime || !endTime) {
             toast.error("All fields are required.");
             return;
         }
 
         const matchData: Matches = {
-            matchesName, // Ensure this is a string
+            matchesName: Number(matchesName), // Ensure this is a number
             matchesDescription,
             tournamentId: Number(tournamentId),
             stadium,
             startTime: new Date(startTime).toISOString(), // Ensure proper formatting
             endTime: new Date(endTime).toISOString(),     // Ensure proper formatting
-            teamWin: Number(teamWin), // Optional if needed
-            teamLose: Number(teamLose), // Optional if needed
         };
 
         console.log("Submitting match data:", matchData); // Log the data being sent
@@ -70,7 +64,7 @@ function CreateMatchModal({ showModalCreate, setShowModalCreate }: IProps) {
             if (res) {
                 toast.success("Create successful");
                 handleCloseModal();
-                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getall`); // Adjust API endpoint as needed
+                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getall`); 
             }
         })
         .catch(err => {
@@ -80,14 +74,12 @@ function CreateMatchModal({ showModalCreate, setShowModalCreate }: IProps) {
     };
 
     const handleCloseModal = () => {
-        setMatchesName('');
+        setMatchesName(0);
         setMatchesDescription('');
         setTournamentId(0);
         setStadium('');
         setStartTime('');
         setEndTime('');
-        setTeamWin(0);
-        setTeamLose(0);
         setShowModalCreate(false); // Close modal after submission
     };
 
@@ -104,12 +96,12 @@ function CreateMatchModal({ showModalCreate, setShowModalCreate }: IProps) {
             </Modal.Header>
             <Modal.Body>
                 <Form.Group className="mb-3">
-                    <Form.Label>Match Name</Form.Label>
+                    <Form.Label>Match Name (ID)</Form.Label>
                     <Form.Control 
-                        type="text" 
-                        placeholder="Enter match name" 
-                        value={matchesName}
-                        onChange={(e) => setMatchesName(e.target.value)} 
+                        type="number" // Changed to number input
+                        placeholder="Enter match ID" 
+                        value={matchesName === 0 ? '' : matchesName}
+                        onChange={(e) => setMatchesName(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -155,24 +147,6 @@ function CreateMatchModal({ showModalCreate, setShowModalCreate }: IProps) {
                         placeholder="Enter end time" 
                         value={endTime}
                         onChange={(e) => setEndTime(e.target.value)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Team Win</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter winning team ID" 
-                        value={teamWin === 0 ? '' : teamWin}
-                        onChange={(e) => setTeamWin(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Team Lose</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter losing team ID" 
-                        value={teamLose === 0 ? '' : teamLose}
-                        onChange={(e) => setTeamLose(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
             </Modal.Body>

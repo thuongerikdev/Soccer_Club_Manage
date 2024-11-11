@@ -4,7 +4,7 @@ import CreateModal from '../modals/lineups/createLineup.modal'; // Ensure you ha
 import DeleteModal from '../modals/lineups/deleteLineup.modal'; // Ensure you have this modal
 import UpdateModal from '../modals/lineups/updateLineup.modal'; // Ensure you have this modal
 import { useEffect, useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaAd, FaEdit, FaTrash } from 'react-icons/fa';
 
 
 
@@ -81,6 +81,13 @@ const LineupsTable = ({ lineUps }: IProps) => {
                             <td>{new Date(item.createAt).toLocaleString()}</td>
                             <td>
                                 <div className="d-flex justify-content-around">
+                                {/* <Button
+                                        variant='warning'
+                                        className='mx-2 btn-sm'
+                                        onClick={() => handleUpdate(item)}
+                                    >
+                                        <FaAd /> View
+                                    </Button> */}
                                     <Button
                                         variant='warning'
                                         className='mx-2 btn-sm'

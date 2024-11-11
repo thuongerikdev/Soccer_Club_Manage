@@ -1,181 +1,203 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.Club.ApplicationService.Module.ClubModule.Abtracts;
-using SM.Club.Dtos;
-using SM.Club.Dtos.ClubTeamDtos;
+using SM.Tournament.ApplicationService.TournamentModule.ClubModule.Abtracts;
+using SM.Tournament.Dtos;
+using SM.Tournament.Dtos.ClubDto.Club;
 
 namespace SM.WebAPI.Controllers.ClubController
 {
-    [Route("api/clubs")]
+    [Route("api/clubTeam")]
     [ApiController]
     public class ClubTeamController : Controller
     {
-
-        public readonly IClubTeamService _clubTeamService;
-
-        public ClubTeamController(IClubTeamService clubService)
+        private readonly IClubService clubTeamService;
+        public ClubTeamController(IClubService clubTeamService)
         {
-            _clubTeamService = clubService;
+            this.clubTeamService = clubTeamService;
         }
         [HttpPost("create")]
-        public async Task<IActionResult> CreateClubTeam(CreateClubTeamDto createClubTeamDto)
+        public async Task<IActionResult> CreateClub(CreateClubDto createClubDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ClubResponeDto
+                return BadRequest(new TournamentResponeDto
                 {
-                    EM = "Invalid input data.",
-                    EC = 1,
-                    DT = ModelState
+                    ErrorMessage = "Invalid input data.",
+                    ErrorCode = 1,
+                    Data = ModelState
                 });
             }
 
             try
             {
-                var result = await _clubTeamService.CreateClubTeam(createClubTeamDto);
+                var result = await clubTeamService.CreateClubTeam(createClubDto);
                 if (result == null)
                 {
-                    return BadRequest(new ClubResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = "Invalid credentials.",
-                        EC = 1,
-                        DT = null
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(new ClubResponeDto
+                return Ok(new TournamentResponeDto
                 {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ClubResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
-        [HttpPut("update/{ClubId}")]
-        public async Task<IActionResult> UpdateClubTeam(int ClubId ,UpdateClubTeamDto updateClubTeamDto)
-        {
-            try
-            {
-                var result = await _clubTeamService.UpdateClubTeam(ClubId ,updateClubTeamDto);
-                if (result.EC !=  0)
-                {
-                    return BadRequest(new ClubResponeDto
-                    {
-                        EM = "Invalid credentials.",
-                        EC = 1,
-                        DT = null
-                    });
-                }
-
-                return Ok(new ClubResponeDto
-                {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ClubResponeDto
-                {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
-                });
-            }
-        }
-        [HttpDelete("remove/{clubTeamId}")]
-        public async Task<IActionResult> RemoveClubTeam(int clubTeamId)
+        [HttpPut("update/{updateClubDto.ClubID}")]
+        public async Task<IActionResult> UpdateClub(UpdateClubDto updateClubDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ClubResponeDto
+                return BadRequest(new TournamentResponeDto
                 {
-                    EM = "Invalid input data.",
-                    EC = 1,
-                    DT = ModelState
+                    ErrorMessage = "Invalid input data.",
+                    ErrorCode = 1,
+                    Data = ModelState
                 });
             }
 
             try
             {
-                var result = await _clubTeamService.RemoveClubTeam(clubTeamId);
+                var result = await clubTeamService.UpdateClubTeam(updateClubDto);
                 if (result == null)
                 {
-                    return BadRequest(new ClubResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = "Invalid credentials.",
-                        EC = 1,
-                        DT = null
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(new ClubResponeDto
+                return Ok(new TournamentResponeDto
                 {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ClubResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpDelete("delete/{clubID}")]
+        public async Task<IActionResult> DeleteClub(int clubID)
+        {
+            try
+            {
+                var result = await clubTeamService.RemoveClubTeam(clubID);
+                if (result == null)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("get/{clubID}")]
+        public async Task<IActionResult> GetClub(int clubID)
+        {
+            try
+            {
+                var result = await clubTeamService.GetClubTeamById(clubID);
+                if (result == null)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllClubTeam()
+        public async Task<IActionResult> GetAllClub()
         {
             try
             {
-                var result = await _clubTeamService.GetAllClubTeam();
-                return Ok(result); // Return 200 OK with user list
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (if needed)
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-        [HttpGet("get/{clubTeamId}")]
-        public async Task<IActionResult> GetClubTeamById(int clubTeamId)
-        {
-            try
-            {
-                var result = await _clubTeamService.GetClubTeamById(clubTeamId);
+                var result = await clubTeamService.GetAllClubTeam();
                 if (result == null)
                 {
-                    return NotFound(new ClubResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = "Tournament not found.",
-                        EC = 1,
-                        DT = null
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(result);
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ClubResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
-    }
+    } 
 }

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.Auth.Dtos;
-using SM.Player.ApplicationService.Module.PlayerModule.Abtracts;
-using SM.Player.Dtos;
-using SM.Player.Dtos.PlayerDto;
+using SM.Tournament.ApplicationService.TournamentModule.PlayerModule.Abtracts;
+using SM.Tournament.Dtos;
+using SM.Tournament.Dtos.PlayerDto.Player;
 
 namespace SM.WebAPI.Controllers.PlayerController
 {
-    [Route("api/players")]
+    [Route("api/Player")]
     [ApiController]
     public class PlayerController : Controller
     {
@@ -15,190 +14,190 @@ namespace SM.WebAPI.Controllers.PlayerController
         {
             _playerService = playerService;
         }
-        [HttpPost("create")]
+        [HttpPost("createPlayer")]
         public async Task<IActionResult> CreatePlayer(CreatePlayerDto createPlayerDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new PlayerResponeDto
+                return BadRequest(new TournamentResponeDto
                 {
-                    EM = "Invalid input data.",
-                    EC = 1,
-                    DT = ModelState
+                    ErrorMessage = "Invalid input data.",
+                    ErrorCode = 1,
+                    Data = ModelState
                 });
             }
 
             try
             {
                 var result = await _playerService.CreatePlayer(createPlayerDto);
-                if (result == null)
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new PlayerResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = "Invalid credentials.",
-                        EC = 1,
-                        DT = null
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(new PlayerResponeDto
+                return Ok(new TournamentResponeDto
                 {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new PlayerResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
-        [HttpPut("update/{playerId}")]
-        public async Task<IActionResult> UpdatePlayer(int playerId , UpdatePlayerDto updatePlayerDto)
+        [HttpPost("updatePlayer")]
+        public async Task<IActionResult> UpdatePlayer(UpdatePlayerDto updatePlayerDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new PlayerResponeDto
+                return BadRequest(new TournamentResponeDto
                 {
-                    EM = "Invalid input data.",
-                    EC = 1,
-                    DT = ModelState
+                    ErrorMessage = "Invalid input data.",
+                    ErrorCode = 1,
+                    Data = ModelState
                 });
             }
 
             try
             {
-                var result = await _playerService.UpdatePlayer(playerId ,updatePlayerDto);
-                if (result == null)
+                var result = await _playerService.UpdatePlayer(updatePlayerDto);
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new PlayerResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = "Invalid credentials.",
-                        EC = 1,
-                        DT = null
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(new PlayerResponeDto
+                return Ok(new TournamentResponeDto
                 {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new PlayerResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
-        [HttpDelete("delete/{playerId}")]
-        public async Task<IActionResult> DeletePlayer(int playerId)
+        [HttpPost("deletePlayer")]
+        public async Task<IActionResult> DeletePlayer(int playerID)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new PlayerResponeDto
-                {
-                    EM = "Invalid input data.",
-                    EC = 1,
-                    DT = ModelState
-                });
-            }
-
             try
             {
-                var result = await _playerService.DeletePlayer(playerId);
-                if (result.EC != 0)
+                var result = await _playerService.DeletePlayer(playerID);
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new PlayerResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = result.EM,
-                        EC = result.EC,
-                        DT = result.DT
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(new PlayerResponeDto
+                return Ok(new TournamentResponeDto
                 {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new PlayerResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("getPlayerById")]
+        public async Task<IActionResult> GetPlayerById(int playerID)
+        {
+            try
+            {
+                var result = await _playerService.GetPlayerById(playerID);
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllPlayer()
+        public async Task <IActionResult> GetAllPlayer ()
         {
             try
             {
                 var result = await _playerService.GetAllPlayer();
-                if (result == null)
+                if (result.ErrorCode != 0)
                 {
-                    return BadRequest(new PlayerResponeDto
+                    return BadRequest(new TournamentResponeDto
                     {
-                        EM = "Invalid credentials.",
-                        EC = 1,
-                        DT = null
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
                     });
                 }
 
-                return Ok(new PlayerResponeDto
+                return Ok(new TournamentResponeDto
                 {
-                    EM = result.EM,
-                    EC = result.EC,
-                    DT = result.DT
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new PlayerResponeDto
+                return StatusCode(500, new TournamentResponeDto
                 {
-                    EM = "Internal server error: " + ex.Message,
-                    EC = 1,
-                    DT = null
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
                 });
             }
         }
-        [HttpGet("getById/{PlayerId}")]
-        public async  ValueTask<PlayerResponeDto> GetPlayerById(int PlayerId)
-        {
-            var result = await _playerService.GetPlayerById(PlayerId);
-
-            if(result.EC != 0)
-            {
-                return new PlayerResponeDto
-                {
-                    EC = result.EC,
-                    EM = result.EM,
-                    DT = result.DT
-                };
-            }
-            return new PlayerResponeDto
-            {
-                EC = result.EC,
-                EM = result.EM,
-                DT = result.DT
-            };
-        }
-
-
     }
 }
