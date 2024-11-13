@@ -42,15 +42,7 @@ const PlayerPage = () => {
             <Row className="mb-4">
                 <Col className="d-flex justify-content-between">
                    
-                    <Form className="d-flex" style={{ width: '300px' }}>
-                        <Form.Control
-                            type="search"
-                            placeholder="Search players..."
-                            className="me-2"
-                            aria-label="Search"
-                        />
-                        <Button variant="outline-success">Search</Button>
-                    </Form>
+                  
                 </Col>
             </Row>
             <Row>

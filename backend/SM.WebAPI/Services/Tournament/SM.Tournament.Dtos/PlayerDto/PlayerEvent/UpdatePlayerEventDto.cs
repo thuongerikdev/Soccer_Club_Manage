@@ -10,7 +10,6 @@ namespace SM.Tournament.Dtos.PlayerDto.PlayerEvent
     {
         public int PlayerEventID { get; set; }
         public int PlayerID { get; set; }
-        public int ClubID { get; set; }
         public int EventID { get; set; }
     }
 }

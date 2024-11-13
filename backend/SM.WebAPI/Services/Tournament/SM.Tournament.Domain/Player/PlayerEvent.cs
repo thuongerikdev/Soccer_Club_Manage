@@ -16,7 +16,6 @@ namespace SM.Tournament.Domain.Player
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PlayerEventID { get; set; }
         public int PlayerID { get; set; }
-        public int ClubID { get; set; }
         public int EventID { get; set; }
     }
 }

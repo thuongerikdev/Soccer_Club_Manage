@@ -14,7 +14,6 @@ namespace SM.Tournament.Domain.Club.ClubEvent
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EventID { get; set; }
-        public int ClubID { get; set; }
         [MaxLength(50)]
         public string EventName { get; set; }
         [MaxLength(50)]

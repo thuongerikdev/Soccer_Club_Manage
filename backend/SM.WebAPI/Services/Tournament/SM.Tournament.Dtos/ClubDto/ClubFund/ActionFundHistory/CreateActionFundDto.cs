@@ -9,7 +9,6 @@ namespace SM.Tournament.Dtos.ClubDto.ClubFund.ActionFundHistory
     public  class CreateActionFundDto
     {
         public int FundID { get; set; }
-        public int ClubID { get; set; }
         public decimal Amount { get; set; }
         public DateTime ActionDate { get; set; }
         public string Description { get; set; }

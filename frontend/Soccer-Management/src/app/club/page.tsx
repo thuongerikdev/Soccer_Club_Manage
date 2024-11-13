@@ -81,17 +81,7 @@ const ClubPage = () => {
             </Row>
             <Row className="mb-4">
                 <Col>
-                    <InputGroup className="mb-3">
-                        <FormControl
-                            placeholder="Search Clubs"
-                            aria-label="Search Clubs"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                        <Button variant="outline-secondary" onClick={() => setSearchQuery('')}>
-                            Clear
-                        </Button>
-                    </InputGroup>
+                   
                 </Col>
             </Row>
             <Row>

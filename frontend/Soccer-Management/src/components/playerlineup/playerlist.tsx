@@ -1,6 +1,12 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
+interface IPlayer {
+  playerId: number; // or string
+  playerName: string;
+  playerPosition: string;
+}
+
 interface PlayerListProps {
   players: IPlayer[];
 }
@@ -65,12 +71,15 @@ const PlayerItem: React.FC<{ player: IPlayer }> = ({ player }) => {
 
 const PlayerList: React.FC<PlayerListProps> = ({ players }) => {
   return (
-    <div style={{ marginBottom: '20px', maxWidth: '300px' }}>
-      {players.map(player => (
-        <PlayerItem key={player.playerId} player={player} />
+    <ul>
+      {players.map((player, index) => (
+        <li key={`${player.playerId}-${index}`}> {/* Combined playerId and index */}
+          <PlayerItem player={player} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
+
 
 export default PlayerList;

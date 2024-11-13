@@ -9,7 +9,6 @@ namespace SM.Tournament.Dtos.PlayerDto.PlayerLineUp
     public  class CreatePlayerLineUpDto
     {
         public int PlayerID { get; set; }
-        public int ClubID { get; set; }
         public int LineUpID { get; set; }
         public string Status { get; set; }
         public DateTime CreatedDate { get; set; }

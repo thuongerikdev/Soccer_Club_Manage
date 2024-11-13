@@ -1,11 +1,9 @@
-import { Button, Table, Card, Spinner, Form, Container, Row, Col } from 'react-bootstrap';
+import { Button, Table, Card, Container, Row, Col, Form } from 'react-bootstrap';
 import CreateModal from '../modals/users/createUser.modal';
 import DeleteModal from '../modals/users/deleteUser.modal';
 import UpdateModals from '../modals/users/updateUser.modal';
 import { useState } from 'react';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
-import Link from 'next/link';
-
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface IProps {
     users: IUser[];
@@ -18,6 +16,7 @@ const UserTable = ({ users, className }: IProps) => {
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [user, setUser] = useState<IUser | null>(null);
     const [userId, setUserId] = useState<number>(0);
+    const [searchId, setSearchId] = useState<number | ''>('');
 
     const handleUpdate = (item: IUser) => {
         setUser(item);
@@ -33,6 +32,11 @@ const UserTable = ({ users, className }: IProps) => {
         setShowModalCreate(true);
     };
 
+    // Filter users based on search ID
+    const filteredUsers = users.filter(user => 
+        searchId === '' || user.userId === searchId
+    );
+
     return (
         <Container className={`mt-4 ${className}`}>
             <Row className='mb-3 d-flex justify-content-between align-items-center'>
@@ -42,6 +46,20 @@ const UserTable = ({ users, className }: IProps) => {
                 </Col>
                 <Col xs="auto">
                     <Button variant="primary" onClick={handleCreate}>Add New User</Button>
+                </Col>
+            </Row>
+
+            <Row className="mb-3">
+                <Col>
+                    <Form.Group>
+                        <Form.Label>Search by ID</Form.Label>
+                        <Form.Control 
+                            type="number" 
+                            placeholder="Enter user ID" 
+                            value={searchId} 
+                            onChange={(e) => setSearchId(e.target.value ? parseInt(e.target.value) : '')}
+                        />
+                    </Form.Group>
                 </Col>
             </Row>
 
@@ -67,7 +85,7 @@ const UserTable = ({ users, className }: IProps) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users.map(item => (
+                                    {filteredUsers.length > 0 ? filteredUsers.map(item => (
                                         <tr key={item.userId}>
                                             <td>{item.userId}</td>
                                             <td>{item.username}</td>
@@ -79,7 +97,6 @@ const UserTable = ({ users, className }: IProps) => {
                                             <td>{item.phone}</td>
                                             <td>
                                                 <div className="d-flex justify-content-around">
-                                                   
                                                     <Button variant='warning' className='mx-2 btn-sm' onClick={() => handleUpdate(item)}>
                                                         <FaEdit /> Update  
                                                     </Button>
@@ -89,7 +106,11 @@ const UserTable = ({ users, className }: IProps) => {
                                                 </div>
                                             </td>
                                         </tr>
-                                    ))}
+                                    )) : (
+                                        <tr>
+                                            <td colSpan={9} className="text-center">No users found</td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </Table>
                         </Card.Body>

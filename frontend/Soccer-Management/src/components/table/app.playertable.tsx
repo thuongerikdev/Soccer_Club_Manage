@@ -1,11 +1,10 @@
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import CreateModal from '../modals/players/createPlayer.modal';
 import DeleteModal from '../modals/players/deletePlayer.modal';
 import UpdateModal from '../modals/players/updatePlayer.modal';
 import { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-
 
 interface IProps {
     players: IPlayer[];
@@ -17,6 +16,7 @@ const PlayerTable = ({ players }: IProps) => {
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [player, setPlayer] = useState<IPlayer | null>(null);
     const [playerId, setPlayerId] = useState<number>(0);
+    const [searchId, setSearchId] = useState<number | ''>('');
 
     const handleUpdate = (item: IPlayer) => {
         setPlayer(item);
@@ -32,12 +32,28 @@ const PlayerTable = ({ players }: IProps) => {
         setShowModalCreate(true);
     };
 
+    // Filter players based on search ID
+    const filteredPlayers = players.filter(player => 
+        searchId === '' || player.playerId === searchId
+    );
+
     return (
         <div className="container mt-5">
             <div className='mb-3 d-flex justify-content-between align-items-center'>
                 <h3>Player Table</h3>
                 <Button variant="primary" onClick={handleCreate}>Add New Player</Button>
             </div>
+            <Form className="mb-3">
+                <Form.Group>
+                    <Form.Label>Search by ID</Form.Label>
+                    <Form.Control 
+                        type="number" 
+                        placeholder="Enter player ID" 
+                        value={searchId} 
+                        onChange={(e) => setSearchId(e.target.value ? parseInt(e.target.value) : '')}
+                    />
+                </Form.Group>
+            </Form>
             <div className="card">
                 <Table striped bordered hover responsive>
                     <thead className="table-light">
@@ -62,8 +78,8 @@ const PlayerTable = ({ players }: IProps) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {players.map(item => (
-                            <tr key={item.playerId} className="table-row">
+                        {filteredPlayers.length > 0 ? filteredPlayers.map(item => (
+                            <tr key={item.playerId}>
                                 <td>{item.playerId}</td>
                                 <td>{item.playerName}</td>
                                 <td>{item.playerPosition}</td>
@@ -72,13 +88,13 @@ const PlayerTable = ({ players }: IProps) => {
                                     {item.playerImage ? (
                                         <img 
                                             alt={item.playerName} 
-                                            src="/cardData10.png"
+                                            src={item.playerImage}
                                             style={{ width: '50px', borderRadius: '50%' }} 
                                         />
                                     ) : (
                                         <img 
                                             alt="Placeholder" 
-                                            src="/cardData12.png" // Replace with your placeholder image path
+                                            src="/cardData12.png" 
                                             style={{ width: '50px', borderRadius: '50%' }} 
                                         />
                                     )}
@@ -113,7 +129,11 @@ const PlayerTable = ({ players }: IProps) => {
                                     </div>
                                 </td>
                             </tr>
-                        ))}
+                        )) : (
+                            <tr>
+                                <td colSpan={16} className="text-center">No players found</td>
+                            </tr>
+                        )}
                     </tbody>
                 </Table>
             </div>

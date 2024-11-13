@@ -3,31 +3,12 @@ import { Button } from 'react-bootstrap';
 import { useDrop } from 'react-dnd';
 import './style.scss';
 
-interface IPlayer {
-  playerId: number;
-  playerName: string;
-  playerPosition: string;
-  playerNationality: string;
-  playerImage: string;
-  clubId: number;
-  height: number;
-  leg: string;
-  playerAge: number;
-  playerHealth: number;
-  playerSalary: number;
-  playerSkill: number;
-  playerStatus: number;
-  playerValue: number;
-  shirtNumber: number;
-  weight: number;
-  shirtnumber: number;
-}
-
 interface LineupProps {
   positions: (IPlayer | null)[];
   onDropPlayer: (player: IPlayer, positionIndex: number) => void;
   onRemovePlayer: (positionIndex: number) => void;
   selectedLineupId: number | null;
+  setPositions: React.Dispatch<React.SetStateAction<(IPlayer | null)[]>>;
 }
 
 const PlayerPosition: React.FC<{
@@ -79,8 +60,7 @@ const PlayerPosition: React.FC<{
   );
 };
 
-
-const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlayer, onRemovePlayer }) => {
+const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlayer, onRemovePlayer, setPositions }) => {
   const saveLineup = async () => {
     const payload = positions
       .map((player, index) => {
@@ -89,7 +69,7 @@ const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlay
             lineUpId: selectedLineupId,
             playerId: player.playerId,
             clubId: player.clubId,
-            playerPosition: player.playerPosition,
+            playerPosition: index.toString(), // Use index as player position
             isCaptain: false,
             playTime: 0,
           };
@@ -97,30 +77,32 @@ const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlay
         return null;
       })
       .filter((item) => item !== null);
-
+  
+    console.log("API URL:", `${process.env.NEXT_PUBLIC_PLAYERLINEUP}/create`);
+    console.log("Payload:", payload);
+  
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_PLAYERLINEUP}/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Server response error:", errorText);
         throw new Error('Failed to save lineup');
       }
-
+  
       alert('Lineup saved successfully!');
     } catch (error) {
       console.error(error);
       alert('Error saving lineup');
     }
   };
-
+  
   return (
     <div className="lineup-container">
-      <div className="center-line"></div>
-      <div className="center-circle"></div>
-
       {/* Top Row - 3 Positions */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
         {[0, 1, 2].map((index) => (

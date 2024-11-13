@@ -1,12 +1,9 @@
-import { Button } from 'react-bootstrap';
-import Table from 'react-bootstrap/Table';
+import { Button, Table, Form } from 'react-bootstrap';
 import CreateModal from '../modals/clubs/createClub.modal';
 import DeleteModal from '../modals/clubs/deleteClub.modal';
 import UpdateModals from '../modals/clubs/updateClub.modal';
 import { useState } from 'react';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
-
-
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface IProps {
     clubs: IClub[];
@@ -18,6 +15,7 @@ const ClubTable = ({ clubs }: IProps) => {
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [club, setClub] = useState<IClub | null>(null);
     const [clubId, setClubId] = useState<number>(0);
+    const [searchId, setSearchId] = useState<number | ''>('');
 
     const handleUpdate = (item: IClub) => {
         setClub(item);
@@ -33,12 +31,29 @@ const ClubTable = ({ clubs }: IProps) => {
         setShowModalCreate(true);
     };
 
+    // Filter clubs based on search ID
+    const filteredClubs = clubs.filter(club => 
+        searchId === '' || club.clubId === searchId
+    );
+
     return (
         <div className="container mt-5">
             <div className='mb-3 d-flex justify-content-between align-items-center'>
                 <h3>Club Table</h3>
                 <Button variant="primary" onClick={handleCreate}>Add New Club</Button>
             </div>
+
+            <Form className="mb-3">
+                <Form.Group>
+                    <Form.Label>Search by Club ID</Form.Label>
+                    <Form.Control 
+                        type="number" 
+                        placeholder="Enter club ID" 
+                        value={searchId} 
+                        onChange={(e) => setSearchId(e.target.value ? parseInt(e.target.value) : '')}
+                    />
+                </Form.Group>
+            </Form>
 
             <Table striped bordered hover responsive>
                 <thead className="table-light">
@@ -56,7 +71,7 @@ const ClubTable = ({ clubs }: IProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {clubs.map(item => {
+                    {filteredClubs.length > 0 ? filteredClubs.map(item => {
                         if (item.clubId === undefined) {
                             console.error('Invalid club item without clubId:', item);
                             return null; // Skip rendering this item
@@ -69,13 +84,14 @@ const ClubTable = ({ clubs }: IProps) => {
                                 <td>
                                     {item.clubLogo ? (
                                         <img alt={item.clubName}
-                                        src="/cardData2.png" style={{ width: '50px', borderRadius: '50%' }} />
+                                        src={item.clubLogo} // Use actual logo URL
+                                        style={{ width: '50px', borderRadius: '50%' }} />
                                     ) : null}
                                 </td>
                                 <td>
                                     {item.clubBanner ? (
                                         <img alt={item.clubName} 
-                                        src="/cardData1.png"
+                                        src={item.clubBanner} // Use actual banner URL
                                         style={{ width: '100px', borderRadius: '5%' }} />
                                     ) : null}
                                 </td>
@@ -103,7 +119,11 @@ const ClubTable = ({ clubs }: IProps) => {
                                 </td>
                             </tr>
                         );
-                    })}
+                    }) : (
+                        <tr>
+                            <td colSpan={10} className="text-center">No clubs found</td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
 

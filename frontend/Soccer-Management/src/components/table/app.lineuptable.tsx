@@ -1,12 +1,9 @@
-import { Button } from 'react-bootstrap';
-import Table from 'react-bootstrap/Table';
-import CreateModal from '../modals/lineups/createLineup.modal'; // Ensure you have this modal
-import DeleteModal from '../modals/lineups/deleteLineup.modal'; // Ensure you have this modal
-import UpdateModal from '../modals/lineups/updateLineup.modal'; // Ensure you have this modal
+import { Button, Table, Form } from 'react-bootstrap';
+import CreateModal from '../modals/lineups/createLineup.modal';
+import DeleteModal from '../modals/lineups/deleteLineup.modal';
+import UpdateModal from '../modals/lineups/updateLineup.modal';
 import { useEffect, useState } from 'react';
-import { FaAd, FaEdit, FaTrash } from 'react-icons/fa';
-
-
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface IProps {
     lineUps: LineUp[];
@@ -18,6 +15,7 @@ const LineupsTable = ({ lineUps }: IProps) => {
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [lineUp, setLineUp] = useState<LineUp | null>(null);
     const [lineUpId, setLineUpId] = useState<number>(0);
+    const [searchId, setSearchId] = useState<number | ''>('');
 
     const handleUpdate = (item: LineUp) => {
         setLineUp(item);
@@ -32,10 +30,15 @@ const LineupsTable = ({ lineUps }: IProps) => {
     const handleCreate = () => {
         setShowModalCreate(true);
     };
+
+    // Filter lineups based on search ID
+    const filteredLineUps = lineUps.filter(lineup => 
+        searchId === '' || lineup.lineUpId === searchId
+    );
+
     useEffect(() => {
-        console.log(lineUp)
-    }
-, [])
+        console.log(lineUp);
+    }, [lineUp]);
 
     return (
         <div className="container mt-5">
@@ -43,6 +46,18 @@ const LineupsTable = ({ lineUps }: IProps) => {
                 <h3>Lineups Table</h3>
                 <Button variant="primary" onClick={handleCreate}>Add New Lineup</Button>
             </div>
+
+            <Form className="mb-3">
+                <Form.Group>
+                    <Form.Label>Search by Lineup ID</Form.Label>
+                    <Form.Control 
+                        type="number" 
+                        placeholder="Enter lineup ID" 
+                        value={searchId} 
+                        onChange={(e) => setSearchId(e.target.value ? parseInt(e.target.value) : '')}
+                    />
+                </Form.Group>
+            </Form>
 
             <Table striped bordered hover responsive>
                 <thead className="table-light">
@@ -59,7 +74,7 @@ const LineupsTable = ({ lineUps }: IProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {lineUps.map(item => (
+                    {filteredLineUps.length > 0 ? filteredLineUps.map(item => (
                         <tr key={`lineup-${item.lineUpId}`}>
                             <td>{item.lineUpId}</td>
                             <td>{item.matchId}</td>
@@ -81,13 +96,6 @@ const LineupsTable = ({ lineUps }: IProps) => {
                             <td>{new Date(item.createAt).toLocaleString()}</td>
                             <td>
                                 <div className="d-flex justify-content-around">
-                                {/* <Button
-                                        variant='warning'
-                                        className='mx-2 btn-sm'
-                                        onClick={() => handleUpdate(item)}
-                                    >
-                                        <FaAd /> View
-                                    </Button> */}
                                     <Button
                                         variant='warning'
                                         className='mx-2 btn-sm'
@@ -105,7 +113,11 @@ const LineupsTable = ({ lineUps }: IProps) => {
                                 </div>
                             </td>
                         </tr>
-                    ))}
+                    )) : (
+                        <tr>
+                            <td colSpan={9} className="text-center">No lineups found</td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
 

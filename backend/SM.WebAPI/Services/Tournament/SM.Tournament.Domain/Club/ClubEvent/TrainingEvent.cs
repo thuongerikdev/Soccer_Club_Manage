@@ -12,8 +12,8 @@ namespace SM.Tournament.Domain.Club.ClubEvent
     [Table(nameof(TrainingEvent), Schema = DbSchema.Tournament)]
     public class TrainingEvent : ClubEventBase
     {
+        public int ClubID { get; set; }
 
-    
         [MaxLength(50)]
         public string TrainingAim { get; set; }
         [MaxLength(50)]

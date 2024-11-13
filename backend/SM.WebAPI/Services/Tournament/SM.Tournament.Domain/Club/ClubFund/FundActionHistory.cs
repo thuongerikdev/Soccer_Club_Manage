@@ -17,7 +17,6 @@ namespace SM.Tournament.Domain.Club.ClubFund
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int FundActionHistoryID { get; set; }
         public int FundID { get; set; }
-        public int ClubID { get; set; }
         public decimal Amount { get; set; }
         public DateTime ActionDate { get; set; }
         public int playerMember { get; set; }

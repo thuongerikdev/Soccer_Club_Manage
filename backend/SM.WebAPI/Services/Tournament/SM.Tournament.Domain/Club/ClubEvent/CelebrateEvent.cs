@@ -12,8 +12,9 @@ namespace SM.Tournament.Domain.Club.ClubEvent
     [Table(nameof(CelebrateEvent), Schema = DbSchema.Tournament)]
     public  class CelebrateEvent : ClubEventBase
     {
+        public int ClubID { get; set; }
 
-       
+
         [MaxLength(50)]
         public string Decor { get; set; }
         [MaxLength(50)]

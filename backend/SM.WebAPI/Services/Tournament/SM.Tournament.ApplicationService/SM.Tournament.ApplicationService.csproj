@@ -16,11 +16,9 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="TournamentModule\MatchesModule\Abtracts\" />
-	  <Folder Include="TournamentModule\MatchesModule\Implements\" />
-	  <Folder Include="TournamentModule\TourModule\Abtracts\" />
-	  <Folder Include="TournamentModule\TourModule\Implements\" />
-	  <Folder Include="TournamentModule\TourModule\" />
+	  <Folder Include="TourModule\Abtracts\" />
+	  <Folder Include="TourModule\Implements\" />
+	  <Folder Include="TourModule\" />
 	</ItemGroup>
 
 	

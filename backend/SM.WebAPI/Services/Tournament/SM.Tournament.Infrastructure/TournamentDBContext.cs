@@ -37,168 +37,200 @@ namespace SM.Tournament.Infrastructure
         public DbSet<PlayerLineUp> PlayerLineUps { get; set; }
         public DbSet<TournamentBase> Tournaments { get; set; }
         public DbSet<TournamentClub> TournamentClubs { get; set; }
-        public DbSet<PlayerFund> PlayerFunds { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+       protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<TournamentBase>()
+        .Property(t => t.TournamentPrice)
+        .HasColumnType("decimal(18, 2)");
 
-            // Configure foreign keys for entities
+    modelBuilder.Entity<Orders>()
+        .Property(t => t.OrderAmount)
+        .HasColumnType("decimal(18, 2)");
 
-            // ClubTeam and ClubFunds
-            modelBuilder.Entity<ClubFunds>()
-                .HasOne<ClubTeam>()
-                .WithMany()
-                .HasForeignKey(f => f.ClubID)
-                .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<FundActionHistory>()
+        .Property(t => t.Amount)
+        .HasColumnType("decimal(18, 2)");
 
-            // ClubTeam and FundActionHistory
-            modelBuilder.Entity<FundActionHistory>()
-                .HasOne<ClubFunds>()
-                .WithMany()
-                .HasForeignKey(f => f.FundID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // Cấu hình cho ClubFunds
+    modelBuilder.Entity<ClubFunds>()
+        .Property(f => f.Expense)
+        .HasPrecision(18, 2);
+    modelBuilder.Entity<ClubFunds>()
+        .Property(f => f.Debt)
+        .HasPrecision(18, 2);
+    modelBuilder.Entity<ClubFunds>()
+        .Property(f => f.Contribution)
+        .HasPrecision(18, 2);
+    modelBuilder.Entity<ClubFunds>()
+        .Property(f => f.FundAmount)
+        .HasPrecision(18, 2);
 
-            modelBuilder.Entity<FundActionHistory>()
-                .HasOne<ClubTeam>()
-                .WithMany()
-                .HasForeignKey(f => f.ClubID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // ClubTeam
 
-            // ClubTeam and PlayerEvent
-            modelBuilder.Entity<PlayerEvent>()
-                .HasOne<ClubTeam>()
-                .WithMany()
-                .HasForeignKey(e => e.ClubID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // CelebrateEvent
+    modelBuilder.Entity<CelebrateEvent>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(e => e.ClubID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<PlayerEvent>()
-                .HasOne<ClubPlayers>()
-                .WithMany()
-                .HasForeignKey(e => e.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // ClubFunds
+    modelBuilder.Entity<ClubFunds>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(f => f.ClubID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            // PlayerLineUp and ClubTeam
-            modelBuilder.Entity<PlayerLineUp>()
-                .HasOne<ClubTeam>()
-                .WithMany()
-                .HasForeignKey(p => p.ClubID)
-                .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<FundActionHistory>()
+        .HasOne<ClubFunds>()
+        .WithMany()
+        .HasForeignKey(h => h.FundID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<PlayerLineUp>()
-                .HasOne<ClubPlayers>()
-                .WithMany()
-                .HasForeignKey(p => p.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<FundActionHistory>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(h => h.PlayerID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<PlayerLineUp>()
-                .HasOne<LineUpBase>()
-                .WithMany()
-                .HasForeignKey(p => p.LineUpID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // LineUpBase
+    modelBuilder.Entity<LineUpBase>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(l => l.ClubID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            // ClubPlayers and PlayerFund
-            modelBuilder.Entity<PlayerFund>()
-                .HasOne<ClubPlayers>()
-                .WithMany()
-                .HasForeignKey(f => f.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // Matches
+    modelBuilder.Entity<Matches>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(m => m.TeamA)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Matches>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(m => m.TeamB)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            // TournamentBase and TournamentClub
-            modelBuilder.Entity<TournamentClub>()
-                .HasOne<TournamentBase>()
-                .WithMany()
-                .HasForeignKey(c => c.TournamentID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // MatchesStatistic
+    modelBuilder.Entity<MatchesStatistic>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(s => s.PlayerID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<MatchesStatistic>()
+        .HasOne<LineUpBase>()
+        .WithMany()
+        .HasForeignKey(s => s.LineUpID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<MatchesStatistic>()
+        .HasOne<Matches>()
+        .WithMany()
+        .HasForeignKey(s => s.MatchesID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<TournamentClub>()
-                .HasOne<ClubTeam>()
-                .WithMany()
-                .HasForeignKey(c => c.ClubID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // Minigames
+    modelBuilder.Entity<Minigames>()
+        .HasOne<TournamentBase>()
+        .WithMany()
+        .HasForeignKey(m => m.TournamentID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            // Matches and Tournament
-            modelBuilder.Entity<Matches>()
-                .HasOne<TournamentBase>()
-                .WithMany()
-                .HasForeignKey(m => m.TournamentID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // Predictions
+    modelBuilder.Entity<Predictions>()
+        .HasOne<Minigames>()
+        .WithMany()
+        .HasForeignKey(p => p.MinigameID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Predictions>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(p => p.PlayerID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Predictions>()
+        .HasOne<Matches>()
+        .WithMany()
+        .HasForeignKey(p => p.MatchID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Predictions>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(p => p.UserID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            // MatchesStatistic and Player, ClubTeam, LineUp, Matches
-            modelBuilder.Entity<MatchesStatistic>()
-                .HasOne<ClubPlayers>()
-                .WithMany()
-                .HasForeignKey(s => s.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // Votes
+    modelBuilder.Entity<Votes>()
+        .HasOne<Minigames>()
+        .WithMany()
+        .HasForeignKey(v => v.MinigameID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Votes>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(v => v.PlayerID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Votes>()
+        .HasOne<Matches>()
+        .WithMany()
+        .HasForeignKey(v => v.MatchID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<Votes>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(v => v.UserID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<MatchesStatistic>()
-                .HasOne<ClubTeam>()
-                .WithMany()
-                .HasForeignKey(s => s.ClubID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // Orders
+    modelBuilder.Entity<Orders>()
+        .HasOne<TournamentBase>()
+        .WithMany()
+        .HasForeignKey(o => o.TournamentID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<MatchesStatistic>()
-                .HasOne<LineUpBase>()
-                .WithMany()
-                .HasForeignKey(s => s.LineUpID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // ClubPlayers
+    modelBuilder.Entity<ClubPlayers>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(p => p.ClubID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<MatchesStatistic>()
-                .HasOne<Matches>()
-                .WithMany()
-                .HasForeignKey(s => s.MatchesID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // PlayerEvent
+    modelBuilder.Entity<PlayerEvent>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(pe => pe.PlayerID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<PlayerEvent>()
+        .HasOne<ClubEventBase>()
+        .WithMany()
+        .HasForeignKey(pe => pe.EventID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            // Predictions and Minigames, Matches, ClubPlayers
-            modelBuilder.Entity<Predictions>()
-                .HasOne<Minigames>()
-                .WithMany()
-                .HasForeignKey(p => p.MinigameID)
-                .OnDelete(DeleteBehavior.Restrict);
+    // PlayerLineUp
+    modelBuilder.Entity<PlayerLineUp>()
+        .HasOne<ClubPlayers>()
+        .WithMany()
+        .HasForeignKey(pl => pl.PlayerID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Predictions>()
-                .HasOne<Matches>()
-                .WithMany()
-                .HasForeignKey(p => p.MatchID)
-                .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<PlayerLineUp>()
+        .HasOne<LineUpBase>()
+        .WithMany()
+        .HasForeignKey(pl => pl.LineUpID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Predictions>()
-                .HasOne<ClubPlayers>()
-                .WithMany()
-                .HasForeignKey(p => p.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Votes and Minigames, Matches, ClubPlayers
-            modelBuilder.Entity<Votes>()
-                .HasOne<Minigames>()
-                .WithMany()
-                .HasForeignKey(v => v.MinigameID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Votes>()
-                .HasOne<Matches>()
-                .WithMany()
-                .HasForeignKey(v => v.MatchID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Votes>()
-                .HasOne<ClubPlayers>()
-                .WithMany()
-                .HasForeignKey(v => v.PlayerID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // LineUpMatches and Matches, LineUp
-            modelBuilder.Entity<LineUpMatches>()
-                .HasOne<Matches>()
-                .WithMany()
-                .HasForeignKey(lm => lm.MatchID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<LineUpMatches>()
-                .HasOne<LineUpBase>()
-                .WithMany()
-                .HasForeignKey(lm => lm.LineUpID)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
+    // TournamentClub
+    modelBuilder.Entity<TournamentClub>()
+        .HasOne<TournamentBase>()
+        .WithMany()
+        .HasForeignKey(tc => tc.TournamentID)
+        .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<TournamentClub>()
+        .HasOne<ClubTeam>()
+        .WithMany()
+        .HasForeignKey(tc => tc.ClubID)
+        .OnDelete(DeleteBehavior.Restrict);
+}
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.Tournament.ApplicationService.TournamentModule.ClubModule.Abtracts.ClubFund;
+using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.ClubDto.ClubFund;
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.Tournament.ApplicationService.TournamentModule.LineUpModule.Abtracts;
+using SM.Tournament.ApplicationService.LineUpModule.Abtracts;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.LineUpDto.LineUp;
 

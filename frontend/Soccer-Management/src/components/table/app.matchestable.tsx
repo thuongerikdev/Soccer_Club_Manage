@@ -1,13 +1,12 @@
-import { Button } from 'react-bootstrap';
-import Table from 'react-bootstrap/Table';
-import CreateModal from '../modals/matches/creatematch.modal'; // Ensure you have this modal
-import DeleteModal from '../modals/matches/deletematch.modal'; // Ensure you have this modal
-import UpdateModal from '../modals/matches/updatematch.modal'; // Ensure you have this modal
+import { Button, Table, Form } from 'react-bootstrap';
+import CreateModal from '../modals/matches/creatematch.modal';
+import DeleteModal from '../modals/matches/deletematch.modal';
+import UpdateModal from '../modals/matches/updatematch.modal';
 import { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface IProps {
-    matches: Matches[]; // Define the IMatch interface accordingly
+    matches: Matches[]; // Define the Matches interface accordingly
 }
 
 const MatchesTable = ({ matches }: IProps) => {
@@ -16,6 +15,7 @@ const MatchesTable = ({ matches }: IProps) => {
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [match, setMatch] = useState<Matches | null>(null);
     const [matchId, setMatchId] = useState<number>(0);
+    const [searchId, setSearchId] = useState<number | ''>('');
 
     const handleUpdate = (item: Matches) => {
         setMatch(item);
@@ -31,12 +31,29 @@ const MatchesTable = ({ matches }: IProps) => {
         setShowModalCreate(true);
     };
 
+    // Filter matches based on search ID
+    const filteredMatches = matches.filter(match => 
+        searchId === '' || match.matchesId === searchId
+    );
+
     return (
         <div className="container mt-5">
             <div className='mb-3 d-flex justify-content-between align-items-center'>
                 <h3>Matches Table</h3>
                 <Button variant="primary" onClick={handleCreate}>Add New Match</Button>
             </div>
+
+            <Form className="mb-3">
+                <Form.Group>
+                    <Form.Label>Search by Match ID</Form.Label>
+                    <Form.Control 
+                        type="number" 
+                        placeholder="Enter match ID" 
+                        value={searchId} 
+                        onChange={(e) => setSearchId(e.target.value ? parseInt(e.target.value) : '')}
+                    />
+                </Form.Group>
+            </Form>
 
             <Table striped bordered hover responsive>
                 <thead className="table-light">
@@ -54,7 +71,7 @@ const MatchesTable = ({ matches }: IProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {matches.map(item => {
+                    {filteredMatches.length > 0 ? filteredMatches.map(item => {
                         if (item.matchesId === undefined) {
                             console.error('Invalid match item without matchesId:', item);
                             return null; // Skip rendering this item
@@ -90,7 +107,11 @@ const MatchesTable = ({ matches }: IProps) => {
                                 </td>
                             </tr>
                         );
-                    })}
+                    }) : (
+                        <tr>
+                            <td colSpan={10} className="text-center">No matches found</td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
 
