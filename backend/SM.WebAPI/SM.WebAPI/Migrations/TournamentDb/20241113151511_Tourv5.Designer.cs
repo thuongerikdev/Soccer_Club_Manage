@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SM.Tournament.Infrastructure;
 
@@ -11,9 +12,11 @@ using SM.Tournament.Infrastructure;
 namespace SM.WebAPI.Migrations.TournamentDb
 {
     [DbContext(typeof(TournamentDbContext))]
-    partial class TournamentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241113151511_Tourv5")]
+    partial class Tourv5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -605,19 +608,8 @@ namespace SM.WebAPI.Migrations.TournamentDb
                     b.Property<int>("EventID")
                         .HasColumnType("int");
 
-                    b.Property<string>("EventType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("PlayerID")
                         .HasColumnType("int");
-
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PlayerEventID");
 

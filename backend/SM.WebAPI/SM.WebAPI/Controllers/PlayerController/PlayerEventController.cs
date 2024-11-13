@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SM.Tournament.ApplicationService.PlayerModule.Abtracts;
 using SM.Tournament.Dtos;
-using SM.Tournament.Dtos.PlayerDto.Player;
+using SM.Tournament.Dtos.PlayerDto.PlayerEvent;
 
 namespace SM.WebAPI.Controllers.PlayerController
 {
-    [Route("api/Player")]
+    [Route("api/playerEvent")]
     [ApiController]
-    public class PlayerController : Controller
+    public class PlayerEventController : Controller
     {
-        private readonly IPlayerService _playerService;
-        public PlayerController(IPlayerService playerService)
+        private readonly IPlayerEventService _playerEventService;
+        public PlayerEventController(IPlayerEventService playerEventService)
         {
-            _playerService = playerService;
+            _playerEventService = playerEventService;
         }
-        [HttpPost("createPlayer")]
-        public async Task<IActionResult> CreatePlayer(CreatePlayerDto createPlayerDto)
+        [HttpPost("createPlayerEvent")]
+        public async Task<IActionResult> CreatePlayerEvent(CreatePlayerEventDto createPlayerEventDto)
         {
             if (!ModelState.IsValid)
             {
@@ -29,7 +29,7 @@ namespace SM.WebAPI.Controllers.PlayerController
 
             try
             {
-                var result = await _playerService.CreatePlayer(createPlayerDto);
+                var result = await _playerEventService.CreatePlayerEvent(createPlayerEventDto);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -57,8 +57,8 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
-        [HttpPut("updatePlayer")]
-        public async Task<IActionResult> UpdatePlayer(UpdatePlayerDto updatePlayerDto)
+        [HttpPut("updatePlayerEvent")]
+        public async Task<IActionResult> UpdatePlayerEvent(UpdatePlayerEventDto updatePlayerEventDto)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace SM.WebAPI.Controllers.PlayerController
 
             try
             {
-                var result = await _playerService.UpdatePlayer(updatePlayerDto);
+                var result = await _playerEventService.UpdatePlayerEvent(updatePlayerEventDto);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -100,12 +100,12 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
-        [HttpDelete("deletePlayer")]
-        public async Task<IActionResult> DeletePlayer(int playerID)
+        [HttpDelete("deletePlayerEvent/{playerEventId}")]
+        public async Task<IActionResult> DeletePlayerEvent(int playerEventId)
         {
             try
             {
-                var result = await _playerService.DeletePlayer(playerID);
+                var result = await _playerEventService.DeletePlayerEvent(playerEventId);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -133,12 +133,12 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
-        [HttpGet("getPlayerById")]
-        public async Task<IActionResult> GetPlayerById(int playerID)
+        [HttpGet("getAllPlayerEvent")]
+        public async Task<IActionResult> GetAllPlayerEvent()
         {
             try
             {
-                var result = await _playerService.GetPlayerById(playerID);
+                var result = await _playerEventService.GetAllPlayerEvent();
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -166,12 +166,12 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
-        [HttpGet("getall")]
-        public async Task <IActionResult> GetAllPlayer ()
+        [HttpGet("getPlayerEventById/{playerEventId}")]
+        public async Task<IActionResult> GetPlayerEventById(int playerEventId)
         {
             try
             {
-                var result = await _playerService.GetAllPlayer();
+                var result = await _playerEventService.GetPlayerEventById(playerEventId);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -180,8 +180,8 @@ namespace SM.WebAPI.Controllers.PlayerController
                         ErrorCode = 1,
                         Data = null
                     });
-                }
 
+                }
                 return Ok(new TournamentResponeDto
                 {
                     ErrorMessage = result.ErrorMessage,

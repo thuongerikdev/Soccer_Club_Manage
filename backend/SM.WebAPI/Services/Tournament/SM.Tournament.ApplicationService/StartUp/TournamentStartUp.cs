@@ -53,6 +53,8 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             );
             builder.Services.AddScoped<IClubService, ClubService>();
 
+            builder.Services.AddScoped<EventFactorySerivce>();
+
             builder.Services.AddScoped<IClubFundService, ClubFundService>();
             builder.Services.AddScoped<FundFactoryService>();
             builder.Services.AddScoped<ICaculateService , CaculateFundsService>();
@@ -62,6 +64,9 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
 
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<ILineUpService, LineUpService>();
+
+            builder.Services.AddScoped<IPlayerEventService , PlayerEventService>();
+           
 
             builder.Services.AddScoped<IMatchesService, MatchesService>();
             builder.Services.AddScoped<IMatchesStatisticService, MatchesStatisticService>();

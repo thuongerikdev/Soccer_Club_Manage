@@ -8,8 +8,10 @@ namespace SM.Tournament.Dtos.PlayerDto.PlayerEvent
 {
     public class ReadPlayerEventDto
     {
-        public int PlayerEventID { get; set; }
         public int PlayerID { get; set; }
         public int EventID { get; set; }
+        public string EventType { get; set; }
+        public DateTime JoinDate { get; set; }
+        public string Position { get; set; }
     }
 }
