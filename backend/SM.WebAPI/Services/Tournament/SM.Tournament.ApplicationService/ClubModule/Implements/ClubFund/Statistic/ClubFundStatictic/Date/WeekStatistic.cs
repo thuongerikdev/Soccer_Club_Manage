@@ -21,19 +21,37 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statis
 
         public async Task<TournamentResponeDto> FundStatistic(ReadActionFundDto readActionFundDto)
         {
-            var fundActionHistory = await _dbContext.FundActionHistories.Where(x => x.FundID == readActionFundDto.FundID
-                                                                               && x.ActionDate.Year == readActionFundDto.ActionDate.Year
-                                                                               && x.ActionDate.Month == readActionFundDto.ActionDate.Month
-                                                                               && x.ActionDate.Day >= readActionFundDto.ActionDate.Day - 7
-                                                                               && x.ActionDate.Day <= readActionFundDto.ActionDate.Day).ToListAsync();
+            if (!readActionFundDto.ActionDate.HasValue)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = "ActionDate is required.",
+                    Data = null
+                };
+            }
 
-            var weektotal = fundActionHistory.Where(x => x.ActionDate.Year == readActionFundDto.ActionDate.Year
-                                                      && x.ActionDate.Month == readActionFundDto.ActionDate.Month
-                                                      && x.ActionDate.Day >= readActionFundDto.ActionDate.Day - 7
-                                                      && x.ActionDate.Day <= readActionFundDto.ActionDate.Day).Sum(x => x.Amount);
+            // Store the value of ActionDate to avoid multiple calls to Value
+            var actionDate = readActionFundDto.ActionDate.Value;
+
+            var fundActionHistory = await _dbContext.FundActionHistories
+                .Where(x => x.FundID == readActionFundDto.FundID
+                             && x.ActionDate.Year == actionDate.Year
+                             && x.ActionDate.Month == actionDate.Month
+                             && x.ActionDate.Day >= actionDate.Day - 7
+                             && x.ActionDate.Day <= actionDate.Day)
+                .ToListAsync();
+
+            var weekTotal = fundActionHistory
+                .Where(x => x.ActionDate.Year == actionDate.Year
+                             && x.ActionDate.Month == actionDate.Month
+                             && x.ActionDate.Day >= actionDate.Day - 7
+                             && x.ActionDate.Day <= actionDate.Day)
+                .Sum(x => x.Amount);
+
             return new TournamentResponeDto
             {
-                Data = weektotal
+                Data = weekTotal
             };
         }
     }

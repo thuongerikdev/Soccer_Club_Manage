@@ -21,14 +21,30 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statis
 
         public async Task<TournamentResponeDto> FundStatistic(ReadActionFundDto readActionFundDto)
         {
-            var fundActionHistory = await _dbContext.FundActionHistories.Where(x => x.FundID == readActionFundDto.FundID
-                                                                               && x.FundActionType == readActionFundDto.FundActionType
-                                                                               && x.ActionDate.Month == readActionFundDto.ActionDate.Month).ToListAsync();
+            // Check if ActionDate has a value
+            if (!readActionFundDto.ActionDate.HasValue)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = "ActionDate is required.",
+                    Data = null
+                };
+            }
 
-            var monthtotal = fundActionHistory.Where(x => x.ActionDate.Month == readActionFundDto.ActionDate.Month).Sum(x => x.Amount);
+            var actionMonth = readActionFundDto.ActionDate.Value.Month;
+
+            var fundActionHistory = await _dbContext.FundActionHistories
+                .Where(x => x.FundID == readActionFundDto.FundID
+                             && x.FundActionType == readActionFundDto.FundActionType
+                             && x.ActionDate.Month == actionMonth)
+                .ToListAsync();
+
+            var monthTotal = fundActionHistory.Sum(x => x.Amount);
+
             return new TournamentResponeDto
             {
-                Data = monthtotal
+                Data = monthTotal
             };
         }
     }
