@@ -20,25 +20,28 @@ function DeleteMatchModal(props: IProps) {
     }, [matchId]);
 
     const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_MATCHES}/remove/${id}`, {
+        fetch(`${process.env.NEXT_PUBLIC_MATCHES}/deleteMatches/${matchId}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method: "DELETE",
+            method: 'DELETE',
         })
-            .then(res => res.json())
             .then(res => {
-                if (res) {
-                    toast.success("Delete successful");
-                    handleCloseModal();
-                    mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getall`); // Adjust endpoint as necessary
+                if (!res.ok) {
+                    throw new Error(`Error: ${res.statusText}`);
                 }
+                return res.json();
             })
-            .catch(err => {
-                toast.error("Error deleting match: " + err.message);
-                console.error("Delete error:", err);
-            });
+            .then(res => {
+                console.log("Response from delete:", res); // Log the response for debugging
+               
+                    toast.success('Delete successful');
+                    handleCloseModal();
+                    mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getAllMatches`); // Adjust endpoint if needed
+               
+            })
+           
     };
 
     const handleCloseModal = () => {
@@ -57,7 +60,9 @@ function DeleteMatchModal(props: IProps) {
                     <Modal.Title>Delete Confirmation</Modal.Title>
                 </Modal.Header>
 
-                <Modal.Body>Do you want to delete MATCH ID = {id}?</Modal.Body>
+                <Modal.Body>
+                    Do you want to delete MATCH ID = {id}?
+                </Modal.Body>
 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>

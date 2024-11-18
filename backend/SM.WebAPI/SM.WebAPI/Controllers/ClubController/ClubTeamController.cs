@@ -199,5 +199,71 @@ namespace SM.WebAPI.Controllers.ClubController
                 });
             }
         }
+        [HttpGet("getyourClub/{userID}")]
+        public async Task<IActionResult> GetYourClub(int userID)
+        {
+            try
+            {
+                var result = await clubTeamService.GetClubTeamByUserId(userID);
+                if (result == null)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("findbyName/{name}")]
+        public async Task<IActionResult> FindClubByName(string name)
+        {
+            try
+            {
+                var result = await clubTeamService.FindClubByName(name);
+                if (result == null)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
     } 
 }

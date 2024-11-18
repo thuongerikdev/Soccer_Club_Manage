@@ -16,5 +16,7 @@ namespace SM.Tournament.ApplicationService.ClubModule.Abtracts
         public Task<TournamentResponeDto> RemoveClubTeam(int clubTeamId);
         public ValueTask<TournamentResponeDto> GetAllClubTeam();
         public ValueTask<TournamentResponeDto> GetClubTeamById(int UserID);
+        public ValueTask<TournamentResponeDto> GetClubTeamByUserId(int UserID);
+        public Task<TournamentResponeDto> FindClubByName(string name);
     }
 }

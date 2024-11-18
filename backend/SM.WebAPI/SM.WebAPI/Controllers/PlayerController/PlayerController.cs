@@ -133,7 +133,7 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
-        [HttpGet("getPlayerById")]
+        [HttpGet("getPlayerById/{playerID}")]
         public async Task<IActionResult> GetPlayerById(int playerID)
         {
             try
@@ -172,6 +172,39 @@ namespace SM.WebAPI.Controllers.PlayerController
             try
             {
                 var result = await _playerService.GetAllPlayer();
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("getPlayerClub/{clubID}")]
+        public async Task<IActionResult> GetAllPlayerByClubId(int clubID)
+        {
+            try
+            {
+                var result = await _playerService.GetPlayerByCLub(clubID);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto

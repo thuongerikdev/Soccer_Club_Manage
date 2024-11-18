@@ -34,7 +34,7 @@ const PlayerTable = ({ players }: IProps) => {
 
     // Filter players based on search ID
     const filteredPlayers = players.filter(player => 
-        searchId === '' || player.playerId === searchId
+        searchId === '' || player.playerID === searchId
     );
 
     return (
@@ -61,13 +61,8 @@ const PlayerTable = ({ players }: IProps) => {
                             <th>ID</th>
                             <th>Name</th>
                             <th>Position</th>
-                            <th>Nationality</th>
                             <th>Image</th>
                             <th>Age</th>
-                            <th>Value</th>
-                            <th>Health</th>
-                            <th>Skill</th>
-                            <th>Salary</th>
                             <th>Club</th>
                             <th>Shirt Number</th>
                             <th>Status</th>
@@ -79,11 +74,10 @@ const PlayerTable = ({ players }: IProps) => {
                     </thead>
                     <tbody>
                         {filteredPlayers.length > 0 ? filteredPlayers.map(item => (
-                            <tr key={item.playerId}>
-                                <td>{item.playerId}</td>
+                            <tr key={item.playerID}>
+                                <td>{item.playerID}</td>
                                 <td>{item.playerName}</td>
                                 <td>{item.playerPosition}</td>
-                                <td>{item.playerNationality}</td>
                                 <td>
                                     {item.playerImage ? (
                                         <img 
@@ -100,11 +94,8 @@ const PlayerTable = ({ players }: IProps) => {
                                     )}
                                 </td>
                                 <td>{item.playerAge}</td>
-                                <td>{item.playerValue}</td>
-                                <td>{item.playerHealth}</td>
-                                <td>{item.playerSkill}</td>
-                                <td>{item.playerSalary}</td>
-                                <td>{item.clubId}</td>
+
+                                <td>{item.clubID}</td>
                                 <td>{item.shirtnumber}</td>
                                 <td>{item.playerStatus}</td>
                                 <td>{item.leg}</td>
@@ -119,13 +110,13 @@ const PlayerTable = ({ players }: IProps) => {
                                         >
                                             <FaEdit /> Update
                                         </Button>
-                                        <Button 
+                                        {/* <Button 
                                             variant='danger' 
                                             className='btn-sm' 
-                                            onClick={() => handleDelete(item.playerId)}
+                                            onClick={() => handleDelete(item.playerID)}
                                         >
                                             <FaTrash /> Delete
-                                        </Button>
+                                        </Button> */}
                                     </div>
                                 </td>
                             </tr>

@@ -18,7 +18,7 @@ const ClubPage = () => {
 
   
     const { data, error } = useSWR(
-        process.env.NEXT_PUBLIC_CLUB_GETALL, // API
+       `${process.env.NEXT_PUBLIC_CLUB}/getall`, // API
         fetcher,
         {
             revalidateIfStale: false,
@@ -42,13 +42,13 @@ const ClubPage = () => {
         );
     }
 
-    const totalClubs = data.dt.length;
+    const totalClubs = data.data.length;
     const averageBudget = totalClubs > 0 
-        ? (data.dt.reduce((acc: number, club: Club) => acc + club.budget, 0) / totalClubs).toFixed(2) 
+        ? (data.data.reduce((acc: number, club: Club) => acc + club.budget, 0) / totalClubs).toFixed(2) 
         : 0;
 
     // Lọc câu lạc bộ dựa trên truy vấn tìm kiếm
-    const filteredClubs = data.dt.filter((club: Club) => 
+    const filteredClubs = data.data.filter((club: Club) => 
         club.clubName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -74,7 +74,7 @@ const ClubPage = () => {
                         <Card.Body>
                             <p>Total Clubs: {totalClubs}</p>
                             <p>Average Budget: ${averageBudget}</p>
-                            <p>Most Recent Club: {data.dt[0]?.clubName || "N/A"}</p>
+                            <p>Most Recent Club: {data.data[0]?.clubName || "N/A"}</p>
                         </Card.Body>
                     </Card>
                 </Col>

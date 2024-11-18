@@ -19,14 +19,10 @@ function UpdatePlayerModal(props: IProps) {
     const [playerId, setPlayerId] = useState<number>(0);
     const [playerName, setPlayerName] = useState<string>('');
     const [playerPosition, setPlayerPosition] = useState<string>('');
-    const [playerNationality, setPlayerNationality] = useState<string>('');
     const [playerImage, setPlayerImage] = useState<string>('');
     const [clubId, setClubId] = useState<number>(0);
     const [playerAge, setPlayerAge] = useState<number>(0);
-    const [playerValue, setPlayerValue] = useState<number>(0.0); // double
-    const [playerHealth, setPlayerHealth] = useState<number>(0);
-    const [playerSkill, setPlayerSkill] = useState<number>(0);
-    const [playerSalary, setPlayerSalary] = useState<number>(0.0); // double
+
     const [shirtNumber, setShirtNumber] = useState<number>(0);
     const [playerStatus, setPlayerStatus] = useState<number>(0);
     const [leg, setLeg] = useState<string>('');
@@ -35,17 +31,12 @@ function UpdatePlayerModal(props: IProps) {
 
     useEffect(() => {
         if (player) {
-            setPlayerId(player.playerId);
+            setPlayerId(player.playerID);
             setPlayerName(player.playerName || '');
             setPlayerPosition(player.playerPosition || '');
-            setPlayerNationality(player.playerNationality || '');
             setPlayerImage(player.playerImage || '');
-            setClubId(player.clubId || 0);
+            setClubId(player.clubID || 0);
             setPlayerAge(player.playerAge || 0);
-            setPlayerValue(player.playerValue || 0.0); // double
-            setPlayerHealth(player.playerHealth || 0);
-            setPlayerSkill(player.playerSkill || 0);
-            setPlayerSalary(player.playerSalary || 0.0); // double
             setShirtNumber(player.shirtnumber || 0);
             setPlayerStatus(player.playerStatus || 0);
             setLeg(player.leg || '');
@@ -55,44 +46,52 @@ function UpdatePlayerModal(props: IProps) {
     }, [player]);
 
     const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/update/${playerId}`, {
+        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer/${playerId}`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             method: "PUT",
             body: JSON.stringify({
-                PlayerId: playerId,
-                PlayerName: playerName,
-                PlayerPosition: playerPosition,
-                PlayerNationality: playerNationality,
-                PlayerImage: playerImage,
-                ClubId: clubId,
-                PlayerAge: playerAge,
-                PlayerValue: playerValue,
-                PlayerHealth: playerHealth,
-                PlayerSkill: playerSkill,
-                PlayerSalary: playerSalary,
-                Shirtnumber: shirtNumber,
-                PlayerStatus: playerStatus,
+                playerId: playerId,
+                playerName: playerName,
+                playerPosition: playerPosition,
+                playerImage: playerImage,
+                clubID: clubId,
+                playerAge: playerAge,
+                shirtnumber: shirtNumber,
+                playerStatus: playerStatus,
                 leg: leg,
                 height: height,
                 weight: weight,
             }),
         })
-        .then(res => res.json())
         .then(res => {
-            if (res) {
-                toast.success(res.em); // Adjust based on your API response
-                handleCloseModal();
-                mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
+            // Check if response is valid
+            if (!res.ok) {
+                throw new Error(`Request failed with status: ${res.status}`);
+            }
+            return res.text(); // Get response as text first
+        })
+        .then(resText => {
+            try {
+                const res = JSON.parse(resText); // Try parsing the text as JSON
+                if (res) {
+                    toast.success(res.em); // Adjust based on your API response
+                    handleCloseModal();
+                    mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
+                }
+            } catch (err) {
+                toast.error("Error parsing response");
+                console.error("Error parsing response:", err);
             }
         })
         .catch(err => {
-            toast.error("Error updating player");
-            console.error(err);
+            toast.error(`Error updating player: ${err.message}`);
+            console.error("Error:", err);
         });
     };
+    
 
     const handleCloseModal = () => {
         setPlayer(null); // Reset player state
@@ -100,14 +99,9 @@ function UpdatePlayerModal(props: IProps) {
         setPlayerId(0);
         setPlayerName('');
         setPlayerPosition('');
-        setPlayerNationality('');
         setPlayerImage('');
         setClubId(0);
         setPlayerAge(0);
-        setPlayerValue(0.0);
-        setPlayerHealth(0);
-        setPlayerSkill(0);
-        setPlayerSalary(0.0);
         setShirtNumber(0);
         setPlayerStatus(0);
         setLeg('');
@@ -147,15 +141,6 @@ function UpdatePlayerModal(props: IProps) {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Nationality</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter nationality" 
-                        value={playerNationality}
-                        onChange={(e) => setPlayerNationality(e.target.value)} 
-                    />
-                </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Image URL</Form.Label>
@@ -187,45 +172,7 @@ function UpdatePlayerModal(props: IProps) {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Value</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter player value" 
-                        value={playerValue}
-                        onChange={(e) => setPlayerValue(Number(e.target.value))} 
-                    />
-                </Form.Group>
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Health</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter health" 
-                        value={playerHealth}
-                        onChange={(e) => setPlayerHealth(Number(e.target.value))} 
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Skill</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter skill level" 
-                        value={playerSkill}
-                        onChange={(e) => setPlayerSkill(Number(e.target.value))} 
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Salary</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter salary" 
-                        value={playerSalary}
-                        onChange={(e) => setPlayerSalary(Number(e.target.value))} 
-                    />
-                </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Shirt Number</Form.Label>

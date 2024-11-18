@@ -10,7 +10,7 @@ const LineUpPage = () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
     const { data, error } = useSWR(
-        `http://localhost:3001/api/lineup/getall`, // Adjust to your API endpoint
+        `${process.env.NEXT_PUBLIC_LINEUP}/getAllLineUp`, // Adjust to your API endpoint
         fetcher,
         {
             revalidateIfStale: false,
@@ -53,7 +53,7 @@ const LineUpPage = () => {
                         </Card.Header>
                         <Card.Body>
                             <p>Total Lineups: {data.data.length}</p>
-                            <LineUpTable lineUps={data.data.sort((a: any, b: any) => b.lineUpId - a.lineUpId)} />
+                            <LineUpTable lineUps={data.data.sort((a: any, b: any) => b.lineUpID - a.lineUpID)} />
                         </Card.Body>
                     </Card>
                 </Col>

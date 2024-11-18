@@ -19,26 +19,34 @@ function DeleteLineUpModal(props: IProps) {
         setId(lineUpId);
     }, [lineUpId]);
 
-    const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_LINEUP}/remove/${id}`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "DELETE",
-        })
-            .then(res => res.json())
-            .then(res => {
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_LINEUP}/deleteLineUp/${id}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                // Check if the response body contains data
+                const res = await response.json().catch(() => null); // Avoid parsing errors
                 if (res) {
                     toast.success("Delete successful");
                     handleCloseModal();
-                    mutate(`${process.env.NEXT_PUBLIC_LINEUP}/getall`);
+                    mutate(`${process.env.NEXT_PUBLIC_LINEUP}/getAllLineUp`);
+                } else {
+                    toast.error("No data returned after deletion.");
                 }
-            })
-            .catch(err => {
-                toast.error("Error deleting lineup: " + err.message);
-                console.error("Error details:", err);
-            });
+            } else {
+                const errorRes = await response.text();
+                toast.error(`Error deleting lineup: ${errorRes || 'Unknown error'}`);
+            }
+        } catch (err) {
+            toast.error("Error deleting lineup: " + err);
+            console.error("Error details:", err);
+        }
     };
 
     const handleCloseModal = () => {

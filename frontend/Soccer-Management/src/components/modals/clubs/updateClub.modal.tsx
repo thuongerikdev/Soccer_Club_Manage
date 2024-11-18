@@ -5,8 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 
-
-
 interface IProps {
     showModalUpdate: boolean;
     setShowModalUpdate: (value: boolean) => void;
@@ -22,27 +20,28 @@ function UpdateModals(props: IProps) {
     const [clubDescription, setClubDescription] = useState<string>('');
     const [clubLogo, setClubLogo] = useState<string>('');
     const [clubBanner, setClubBanner] = useState<string>('');
-    const [boss, setBoss] = useState<number | ''>(0);
-    const [budget, setBudget] = useState<number | ''>(0);
-    const [clubLevel, setClubLevel] = useState<number | 0>(0);
-    const [clubAge, setClubAge] = useState<string | ''>('');
+    const [clubLevel, setClubLevel] = useState<string>(''); // Keep it as a string
+    const [clubAge, setClubAge] = useState<string>(''); // Keep it as a string
 
     useEffect(() => {
-        if (club && club.clubId) {
-            setClubId(club.clubId);
+        if (club && club.clubID) {
+            setClubId(club.clubID);
             setClubName(club.clubName || '');
             setClubDescription(club.clubDescription || '');
             setClubLogo(club.clubLogo || '');
             setClubBanner(club.clubBanner || '');
-            setBoss(club.userId || '');
-            setBudget(club.budget || 0.0);
-            setClubLevel(club.clubLevel || 0.0);
-            setClubAge(club.clubAge || '');
+            setClubLevel(club.clubLevel || ''); // Ensure it's a string
+            setClubAge(club.clubAge || ''); // Ensure it's a string
         }
     }, [club]);
 
     const handleSubmit = () => {
         // Ensure you have these fields defined in your component's state
+        if (!clubName || !clubDescription || !clubLogo || !clubBanner || !clubLevel || !clubAge) {
+            toast.error("All fields are required.");
+            return;
+        }
+
         fetch(`${process.env.NEXT_PUBLIC_CLUB}/update/${clubId}`, {
             headers: {
                 'Accept': 'application/json',
@@ -50,16 +49,13 @@ function UpdateModals(props: IProps) {
             },
             method: "PUT",
             body: JSON.stringify({
-                ClubId: clubId,               // Include ClubId
-                ClubName: clubName,           // Map to expected API input
-                ClubDescription: clubDescription,
-                UserId: boss,               // Assume you have userId in your state
-                ClubLogo: clubLogo,
-                ClubBanner: clubBanner,
-                Budget: budget,               // Ensure this is included
-                // Add additional fields as needed
-                ClubLevel: clubLevel,         // If applicable
-                ClubAge: clubAge,             // If applicable
+                clubId: clubId,               // Include clubId
+                clubName: clubName,           // Ensure clubName is mapped correctly
+                clubDescription: clubDescription,
+                clubLogo: clubLogo,
+                clubBanner: clubBanner,
+                clubLevel: clubLevel.toString(), // Ensure it's passed as a string
+                clubAge: clubAge.toString(),     // Ensure it's passed as a string
             }),
         })
         .then(res => res.json())
@@ -81,8 +77,8 @@ function UpdateModals(props: IProps) {
         setClubDescription("");
         setClubLogo("");
         setClubBanner("");
-        setBoss(0);
-        setBudget(0);
+        setClubLevel(""); // Reset as string
+        setClubAge(""); // Reset as string
         setShowModalUpdate(false);
         setClub(null);
     };
@@ -140,32 +136,12 @@ function UpdateModals(props: IProps) {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label>Boss User ID</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter boss user ID" 
-                        value={boss}
-                        onChange={(e) => setBoss(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Budget</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter budget" 
-                        value={budget}
-                        onChange={(e) => setBudget(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
                     <Form.Label>Club Level</Form.Label>
                     <Form.Control 
                         type="text" 
                         placeholder="Enter club level" 
                         value={clubLevel}
-                        onChange={(e) => setClubLevel(e.target.value ? Number(e.target.value) : 0)} 
+                        onChange={(e) => setClubLevel(e.target.value)} 
                     />
                 </Form.Group>
 

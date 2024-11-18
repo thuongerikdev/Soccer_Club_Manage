@@ -284,8 +284,9 @@ namespace SM.WebAPI.Migrations.TournamentDb
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("MatchesName")
-                        .HasColumnType("int");
+                    b.Property<string>("MatchesName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Stadium")
                         .IsRequired()

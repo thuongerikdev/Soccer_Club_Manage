@@ -31,7 +31,7 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
 
             // Fetch the user from the database by username
             var user = await _dbContext.AuthUsers
-                .FirstOrDefaultAsync(x => x.username == loginUserDto.username);
+                .FirstOrDefaultAsync(x => x.username == loginUserDto.username && x.password == loginUserDto.password);
 
             // Check if the user exists and validate the password
             if (user == null)

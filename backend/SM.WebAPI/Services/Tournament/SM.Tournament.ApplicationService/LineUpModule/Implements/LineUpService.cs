@@ -2,6 +2,7 @@
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.LineUpModule.Abtracts;
 using SM.Tournament.Domain.LineUp;
+using SM.Tournament.Domain.Player;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.LineUpDto.LineUp;
 using SM.Tournament.Infrastructure;
@@ -91,7 +92,16 @@ namespace SM.Tournament.ApplicationService.LineUpModule.Implements
         public async Task<TournamentResponeDto> DeleteLineUp(int lineUpID)
         {
             try
+
             {
+                var playerLineup = _dbContext.PlayerLineUps.Where(x => x.LineUpID == lineUpID).ToList();
+               
+
+                foreach (PlayerLineUp player in playerLineup)
+                {
+                     _dbContext.PlayerLineUps.Remove(player);
+                }
+
                 var lineUp = _dbContext.LineUps.FirstOrDefault(x => x.LineUpID == lineUpID);
                 if (lineUp == null)
                 {
@@ -157,6 +167,28 @@ namespace SM.Tournament.ApplicationService.LineUpModule.Implements
             try
             {
                 var lineUps = _dbContext.LineUps.ToList();
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = "Line Up List",
+                    Data = lineUps
+                };
+            }
+            catch (Exception ex)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = ex.Message,
+                    Data = null
+                };
+            }
+        }
+        public async Task<TournamentResponeDto> GetLineUpbyClub(int clubID)
+        {
+            try
+            {
+                var lineUps = _dbContext.LineUps.Where(x => x.ClubID == clubID).ToList();
                 return new TournamentResponeDto
                 {
                     ErrorCode = 0,

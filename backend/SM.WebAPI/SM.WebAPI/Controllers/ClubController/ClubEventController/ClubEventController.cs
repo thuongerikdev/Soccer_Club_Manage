@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents;
+using SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents.Statistic;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.ClubDto.ClubEvent.ClubEvent;
 
@@ -10,18 +11,18 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
     [ApiController]
     public class ClubEventController : Controller
     {
-        private readonly EventFactorySerivce _eventFactorySerivce;
-        public ClubEventController(EventFactorySerivce eventFactorySerivce)
+        private readonly IEventStrategyUse _clubEventStrategyUse;
+        public ClubEventController(IEventStrategyUse clubEventStrategyUse)
         {
-            _eventFactorySerivce = eventFactorySerivce;
+           _clubEventStrategyUse = clubEventStrategyUse;
         }
         [HttpPost("create")]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventDto createEventDto)
         {
             try
             {
-                var service = _eventFactorySerivce.CreateService(createEventDto.EventType);
-                var result = await ((IClubEventService)service).CreateEvent(createEventDto);
+                var service = _clubEventStrategyUse.CreateEventsService(createEventDto.EventType);
+                var result = await service.CreateEvent(createEventDto);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -58,8 +59,9 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
         {
             try
             {
-                var service = _eventFactorySerivce.CreateService(updateEventDto.EventType);
-                var result = await ((IClubEventService)service).UpdateEvent(updateEventDto);
+                var service = _clubEventStrategyUse.CreateEventsService(updateEventDto.EventType);
+                var result = await service.UpdateEvent(updateEventDto);
+
                 if (result.ErrorCode != 0) {
                     return BadRequest(new TournamentResponeDto
                     {
@@ -90,8 +92,8 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
         {
             try
             {
-                var service = _eventFactorySerivce.CreateService(EventType);
-                var result = await ((IClubEventService)service).RemoveEvent(EventID);
+                var service = _clubEventStrategyUse.CreateEventsService(EventType);
+                var result = await service.RemoveEvent(EventID);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -123,8 +125,8 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
         public async Task<IActionResult> GetAllEvent(string EventType)
         {
             try {
-                var service = _eventFactorySerivce.CreateService(EventType);
-                var result = await ((IClubEventService)service).GetAllEvents();
+                var service = _clubEventStrategyUse.CreateEventsService(EventType);
+                var result = await service.GetAllEvents();
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto
@@ -156,8 +158,8 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
         {
             try
             {
-                var service = _eventFactorySerivce.CreateService(EventType);
-                var result = await ((IClubEventService)service).GetEventById(EventID);
+                var service = _clubEventStrategyUse.CreateEventsService(EventType);
+                var result = await service.GetEventById(EventID);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto

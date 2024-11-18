@@ -15,5 +15,6 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Abtracts
         public Task<TournamentResponeDto> DeletePlayer(int playerId);
         public Task<TournamentResponeDto> GetAllPlayer();
         public Task<TournamentResponeDto> GetPlayerById(int playerId);
+        public Task <TournamentResponeDto> GetPlayerByCLub(int clubId);
     }
 }

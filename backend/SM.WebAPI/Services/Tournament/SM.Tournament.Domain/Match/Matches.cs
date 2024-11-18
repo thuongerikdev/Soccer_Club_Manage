@@ -15,7 +15,7 @@ namespace SM.Tournament.Domain.Match
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MatchesID { get; set; }
-        public int MatchesName { get; set; }
+        public string MatchesName { get; set; }
         public int TeamA { get; set; } // CLubId
         public int TeamB { get; set; } //// CLubId
         [MaxLength(50)]

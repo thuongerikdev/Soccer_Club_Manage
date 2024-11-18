@@ -15,31 +15,27 @@ function CreateLineUpModal(props: IProps) {
 
     const [lineUpName, setLineUpName] = useState<string>('');
     const [lineUpType, setLineUpType] = useState<string>('');
-    const [matchType, setMatchType] = useState<string>('');
-    const [stadiumBackground, setStadiumBackground] = useState<string>('');
+    const [playerNumber, setPlayerNumber] = useState<number | ''>(0);
     const [clubId, setClubId] = useState<number | ''>(0);
-    const [matchId, setMatchId] = useState<number | ''>(0);
 
     const handleSubmit = async () => {
         // Input validation
-        if (!lineUpName || !lineUpType || !matchType || !stadiumBackground || clubId === 0 || matchId === 0) {
+        if (!lineUpName || !lineUpType || playerNumber === 0 || clubId === 0) {
             toast.error("All fields are required.");
             return;
         }
 
         const lineUpData = {
-            matchId: Number(matchId),
-            clubId: Number(clubId),
+            clubID: Number(clubId),  // Corrected key name to match API format
             lineUpName,
             lineUpType,
-            matchType,
-            stadiumBackGroud : stadiumBackground, // Correct spelling to match API requirements
+            playerNumber: Number(playerNumber),  // Added playerNumber
         };
     
         console.log("Submitting lineup data:", lineUpData);
     
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_LINEUP}/create`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_LINEUP}/createLineUp`, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -53,7 +49,7 @@ function CreateLineUpModal(props: IProps) {
             console.log("Server response:", res);
             toast.success("Create successful");
             handleCloseModal();
-            mutate(`${process.env.NEXT_PUBLIC_LINEUP}/getall`);
+            mutate(`${process.env.NEXT_PUBLIC_LINEUP}/getAllLineUp`);
         } catch (err) {
             toast.error("Error creating lineup: " + err);
             console.error("Error details:", err);
@@ -63,10 +59,8 @@ function CreateLineUpModal(props: IProps) {
     const handleCloseModal = () => {
         setLineUpName('');
         setLineUpType('');
-        setMatchType('');
-        setStadiumBackground('');
+        setPlayerNumber(0);
         setClubId(0);
-        setMatchId(0);
         setShowModalCreate(false);
     };
 
@@ -101,21 +95,12 @@ function CreateLineUpModal(props: IProps) {
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Match Type</Form.Label>
+                    <Form.Label>Player Number</Form.Label>
                     <Form.Control 
-                        type="text" 
-                        placeholder="Enter match type" 
-                        value={matchType}
-                        onChange={(e) => setMatchType(e.target.value)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Stadium Background URL</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter stadium background URL" 
-                        value={stadiumBackground}
-                        onChange={(e) => setStadiumBackground(e.target.value)} 
+                        type="number" 
+                        placeholder="Enter player number" 
+                        value={playerNumber === 0 ? '' : playerNumber}
+                        onChange={(e) => setPlayerNumber(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -125,15 +110,6 @@ function CreateLineUpModal(props: IProps) {
                         placeholder="Enter club ID" 
                         value={clubId === 0 ? '' : clubId}
                         onChange={(e) => setClubId(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Match ID</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter match ID" 
-                        value={matchId === 0 ? '' : matchId}
-                        onChange={(e) => setMatchId(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
             </Modal.Body>

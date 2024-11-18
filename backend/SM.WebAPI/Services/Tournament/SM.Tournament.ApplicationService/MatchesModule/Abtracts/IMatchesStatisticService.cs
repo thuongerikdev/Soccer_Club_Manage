@@ -15,5 +15,7 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Abtracts
         public Task<TournamentResponeDto> DeleteMatchesStatistic(int matchesStatisticID);
         public Task<TournamentResponeDto> GetMatchesStatistic(int matchesStatisticID);
         public Task<TournamentResponeDto> GetMatchesStatistics();
+        public Task<TournamentResponeDto> GetClubMatches( int ClubID);
+     
     }
 }

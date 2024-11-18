@@ -1,0 +1,160 @@
+.container {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state {
+    text-align: center;
+    color: #888;
+}
+
+.lineup-container-1 {
+    background: #5cc7a9; // Light green background for lineup
+    padding: 1rem;
+
+    .add-button {
+        background-color: #13b278; // Green for adding lineups
+        &:hover {
+            background-color: #4ca137; // Darker green on hover
+        }
+    }
+
+    .table-custom {
+        background-color: #e1f5fe; // Light blue background for the table
+        border-radius: 8px; // Rounded corners
+
+        th {
+            background-color: #50c522; // Header background color
+            color: rgb(116, 203, 106); // Header text color
+            text-align: center; // Center header text
+        }
+
+        td {
+            background-color: #c4edc7; // Table cell background
+            color: #333; // Table cell text color
+            text-align: center; // Center cell text
+        }
+
+        tr:hover {
+            background-color: #bbdefb; // Background color on row hover
+        }
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #888;
+    }
+}
+
+.matches-container {
+    background: #5cc7a9; // Light green background for lineup
+    padding: 1rem;
+
+    .add-button {
+        background-color: #13b278; // Green for adding lineups
+        &:hover {
+            background-color: #4ca137; // Darker green on hover
+        }
+    }
+
+    .table-custom {
+        background-color: #e1f5fe; // Light blue background for the table
+        border-radius: 8px; // Rounded corners
+
+        th {
+            background-color: #50c522; // Header background color
+            color: rgb(116, 203, 106); // Header text color
+            text-align: center; // Center header text
+        }
+
+        td {
+            background-color: #c4edc7; // Table cell background
+            color: #333; // Table cell text color
+            text-align: center; // Center cell text
+        }
+
+        tr:hover {
+            background-color: #bbdefb; // Background color on row hover
+        }
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #888;
+    }
+}
+
+.player-container {
+    background: #5cc7a9; // Light orange background for players
+    padding: 1rem;
+
+    .add-button {
+        background-color: #13b278; // Red for adding players
+
+        &:hover {
+            background-color: #4ca137;
+        }
+    }
+    .table-custom {
+        background-color: #30ac87; // Light green background for the table
+        border-radius: 8px; // Rounded corners
+    
+        th {
+            background-color: #50c522; // Header background color
+            color: rgb(116, 203, 106); // Header text color
+            text-align: center; // Center header text
+        }
+    
+        td {
+            background-color: #c4edc7; // Table cell background
+            color: #333; // Table cell text color
+            text-align: center; // Center cell text
+        }
+    
+        tr:hover {
+            background-color: #bbdefb; // Background color on row hover
+        }
+    }
+    
+}
+
+.list {
+    margin-top: 1rem; // Increased margin for better spacing
+    display: flex;
+    flex-direction: column; // Stack items vertically
+}
+
+.item {
+    display: flex; // Align items in a row
+    justify-content: space-between; // Space between info and button
+    align-items: center; // Center items vertically
+    padding: 10px; // Padding for item
+    border-bottom: 1px solid #eee; // Divider between items
+}
+
+// .add-button {
+//     margin-bottom: 1rem; // Space below the button
+//     padding: 0.5rem 1rem;
+//     background-color: #007bff; // Bootstrap primary color
+//     color: white;
+//     border: none;
+//     border-radius: 4px;
+//     cursor: pointer;
+
+//     &:hover {
+//         background-color: #0056b3; // Darker shade on hover
+//     }
+// }
+
+
+// Bootstrap utility classes for additional styling
+.btn {
+    @extend .add-button; // Extend custom button styles
+}
+.table-container {
+    max-height: 300px; // Set your desired height
+    overflow-y: auto; // Enable vertical scrolling
+    margin-top: 1rem; // Add spacing above the table
+}

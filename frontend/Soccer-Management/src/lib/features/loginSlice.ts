@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface AuthState {
     isAuthenticated: boolean;
     user: User | null; // user can be User type or null
+    
 }
 
 const initialState: AuthState = {
@@ -30,6 +31,7 @@ const authSlice = createSlice({
         setUser(state, action: PayloadAction<{ user: User; isAuthenticated: boolean }>) {
           state.user = action.payload.user; // Lưu thông tin người dùng
           state.isAuthenticated = action.payload.isAuthenticated; // Cập nhật trạng thái xác thực
+         
       },
       checkAuth(state) {
         const authStatus = localStorage.getItem('isAuthenticated');

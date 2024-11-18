@@ -90,7 +90,7 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
         {
             try
             {
-                var match = _dbContext.Matches.Find(MatchID);
+                var match =  await _dbContext.Matches.FindAsync(MatchID);
                 if (match == null)
                 {
                     return new TournamentResponeDto
@@ -159,6 +159,51 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                 {
                     ErrorCode = 0,
                     ErrorMessage = "Get All Matches Success",
+                    Data = matches
+                };
+            }
+            catch (Exception ex)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = ex.Message,
+                    Data = null
+                };
+            }
+        }
+        public async  Task<TournamentResponeDto> GetMatchesByTeamA(int TeamA)
+        {
+            try
+            {
+                var matches = _dbContext.Matches.Where(x => x.TeamA == TeamA).ToList();
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = "Get Matches By Tournament ID Success",
+                    Data = matches
+                };
+            }
+            catch (Exception ex)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = ex.Message,
+                    Data = null
+                };
+            }
+
+        }
+        public async Task<TournamentResponeDto> GetMatchesByTeamB(int TeamB)
+        {
+            try
+            {
+                var matches = _dbContext.Matches.Where(x => x.TeamB == TeamB).ToList();
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = "Get Matches By Tournament ID Success",
                     Data = matches
                 };
             }

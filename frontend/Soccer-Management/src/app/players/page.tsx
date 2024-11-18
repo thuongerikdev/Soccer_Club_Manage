@@ -9,7 +9,7 @@ const PlayerPage = () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
     const { data, error } = useSWR(
-        `http://localhost:3001/api/players/getall`,
+        `${process.env.NEXT_PUBLIC_PLAYER}/getall`,
         fetcher,
         {
             revalidateIfStale: false,
@@ -52,8 +52,8 @@ const PlayerPage = () => {
                             <h5>Players Overview</h5>
                         </Card.Header>
                         <Card.Body>
-                            <p>Total Players: {data.dt.length}</p>
-                            <PlayerTable players={data.dt.sort((a: any, b: any) => b.PlayerId - a.PlayerId)} />
+                            <p>Total Players: {data.data.length}</p>
+                            <PlayerTable players={data.data.sort((a: any, b: any) => b.playerID - a.playerID)} />
                         </Card.Body>
                     </Card>
                 </Col>

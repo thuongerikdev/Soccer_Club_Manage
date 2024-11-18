@@ -16,52 +16,33 @@ interface IUser {
     name: string
 }
 interface IClub {
-    clubId: number;
+    clubID: number;
     clubName: string;
     clubDescription: string;
     clubLogo: string;
     clubBanner: string;
     userId: number;
     budget: number;
-    clubLevel: number;
+    clubLevel: string;
     clubAge: string;
 }
 
 interface IPlayer {
-    playerId: number;
+    clubID: number;
+    playerID: number;
     playerName: string;
     playerPosition: string;
-    playerNationality: string;
     playerImage: string;
     clubId: number;
     height: number;
     leg: string;
     playerAge: number;
-    playerHealth: number;
-    playerSalary: number;
-    playerSkill: number;
-    playerStatus: number;
-    playerValue: number;
-    shirtNumber: number;
-    weight: number;
-}
-interface IPlayer {
-    playerId: number;
-    playerName: string;
-    playerPosition: string;
-    playerNationality: string;
-    playerImage: string;
-    playerAge: number;
-    playerValue: number;
-    playerHealth: number;
-    playerSkill: number;
-    playerSalary: number;
     shirtnumber: number;
-    playerStatus: number;
-    leg: string;
-    height: number;
     weight: number;
+    phoneNumber : number,
+    playerStatus :number
 }
+
 interface Player {
     PlayerId: number;
     name: string;
@@ -81,14 +62,13 @@ interface Player {
     exp: number;    // Assuming exp is a number (Unix timestamp)
   }
 interface LineUp {
-    lineUpId : number ;
-    clubId : number ; 
-    matchId : number
+    lineUpID : number ;
+    clubID : number ; 
     lineUpName : string ;
     lineUpType : string;
-    matchType : string ;
-    stadiumBackGround : string ;
+
     createAt : string ;
+    playerNumber : number
 }
 interface PlayerLineUp {
     playerLineUpId : number ;
@@ -100,13 +80,15 @@ interface PlayerLineUp {
     playTime : number
 }
 interface Matches {
-    matchesId : number ;
+    matchesID : number ;
     matchesName : string;
     matchesDescription : string ;
-    tournamentId : number ;
+    tournamentID : number ;
     stadium : string ;
     startTime : string ;
     endTime : string;
     teamWin : number ;
-    teamLose : number
+    teamLose : number,
+    teamA : number ,
+    teamB : number
 }

@@ -27,6 +27,13 @@ using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund.FundStatisti
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Caculate;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund.Caculate;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic;
+using SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents.Statistic;
+using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents.Statistic;
+using SM.Tournament.ApplicationService.TourModule.Abtracts;
+using SM.Tournament.ApplicationService.TourModule.Implements;
+using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.ClubFundStatictic.Date;
+using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.ClubFundStatictic.Rank;
+using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Caculate.CaculateType;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -53,7 +60,37 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             );
             builder.Services.AddScoped<IClubService, ClubService>();
 
-            builder.Services.AddScoped<EventFactorySerivce>();
+            //builder.Services.AddScoped<EventFactorySerivce>();
+
+
+            //Club Event 
+            builder.Services.AddScoped<IEventStrategyUse, ClubEventStrategyUse>();
+
+           
+            builder.Services.AddKeyedScoped<IClubEventService,CelebrateService>("celebrate");
+            builder.Services.AddKeyedScoped< IClubEventService,TeamMeetingService>("teamMeeting");
+            builder.Services.AddKeyedScoped<IClubEventService, TrainingService>("training");
+
+
+            builder.Services.AddKeyedScoped<IEventStatisticStrategy , ListEventOfPlayer>("listEventofplayer");
+            builder.Services.AddKeyedScoped<IEventStatisticStrategy,ListPlayerOf1EventType>("listplayerofevent");
+
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, DayStatistic>("Day");
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, MonthStatistic>("Month");
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, WeekStatistic>("Week");
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, YearStatistic>("Year");
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, PlayerFundRank>("Rank");
+
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy , ContributeFundCaculation>("Contribute");
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, DebtFundCalculation>("Debt");
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ExpenseFundCalculation>("Expense");
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ContributeFundCaculation>("ContributeTax");
+
+
+
+
+
+
 
             builder.Services.AddScoped<IClubFundService, ClubFundService>();
             builder.Services.AddScoped<FundFactoryService>();
@@ -66,12 +103,15 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddScoped<ILineUpService, LineUpService>();
 
             builder.Services.AddScoped<IPlayerEventService , PlayerEventService>();
-           
+            builder.Services.AddScoped<IPlayerLineUpService, PlayerLineUpService>();
+
 
             builder.Services.AddScoped<IMatchesService, MatchesService>();
             builder.Services.AddScoped<IMatchesStatisticService, MatchesStatisticService>();
 
-       
+            builder.Services.AddScoped<ITournamentService, TournamentService>();
+
+
 
 
 

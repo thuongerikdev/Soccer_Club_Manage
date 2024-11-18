@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents.Statistic;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents;
 using SM.Tournament.Dtos;
@@ -10,10 +11,10 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
     [ApiController]
     public class EventStatisticController : Controller
     {
-        private readonly EventFactorySerivce _eventFactorySerivce;
-        public EventStatisticController(EventFactorySerivce eventFactorySerivce)
+        private readonly IEventStrategyUse _eventStrategyUse;
+        public EventStatisticController(IEventStrategyUse eventStrategyUse)
         {
-            _eventFactorySerivce = eventFactorySerivce;
+            _eventStrategyUse = eventStrategyUse;
         }
         [HttpGet ("playerEventStatistic/{type}")]
         public async Task<IActionResult> EventStatistic(string type ,[FromQuery] ReadPlayerEventDto readPlayerEventDto)
@@ -30,8 +31,8 @@ namespace SM.WebAPI.Controllers.ClubController.ClubEventController
                         Data = null
                     });
                 }
-                var service = _eventFactorySerivce.eventStatisticStrategy(type);
-                var result = await ((IEventStatisticStrategy)service).EventStatistic(readPlayerEventDto);
+                var service = _eventStrategyUse.CreateEventStatisticStrategy(type);
+                var result = await service.EventStatistic(readPlayerEventDto);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto

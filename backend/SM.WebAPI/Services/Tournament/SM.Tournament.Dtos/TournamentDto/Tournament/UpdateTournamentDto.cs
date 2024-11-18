@@ -11,7 +11,10 @@ namespace SM.Tournament.Dtos.TournamentDto.Tournament
     {
         public int TournamentID { get; set; }
         public string TournamentName { get; set; }
+        public decimal TournamentPrice { get; set; }
+
         public string TournamentDescription { get; set; }
+
         public string TournamentType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

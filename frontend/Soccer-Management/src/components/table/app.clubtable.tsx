@@ -14,7 +14,7 @@ const ClubTable = ({ clubs }: IProps) => {
     const [showModalUpdate, setShowModalUpdate] = useState<boolean>(false);
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [club, setClub] = useState<IClub | null>(null);
-    const [clubId, setClubId] = useState<number>(0);
+    const [clubID, setClubId] = useState<number>(0);
     const [searchId, setSearchId] = useState<number | ''>('');
 
     const handleUpdate = (item: IClub) => {
@@ -33,7 +33,7 @@ const ClubTable = ({ clubs }: IProps) => {
 
     // Filter clubs based on search ID
     const filteredClubs = clubs.filter(club => 
-        searchId === '' || club.clubId === searchId
+        searchId === '' || club.clubID === searchId
     );
 
     return (
@@ -72,26 +72,26 @@ const ClubTable = ({ clubs }: IProps) => {
                 </thead>
                 <tbody>
                     {filteredClubs.length > 0 ? filteredClubs.map(item => {
-                        if (item.clubId === undefined) {
+                        if (item.clubID === undefined) {
                             console.error('Invalid club item without clubId:', item);
                             return null; // Skip rendering this item
                         }
                         return (
-                            <tr key={`club-${item.clubId}`}>
-                                <td>{item.clubId}</td>
+                            <tr key={`club-${item.clubID}`}>
+                                <td>{item.clubID}</td>
                                 <td>{item.clubName}</td>
                                 <td>{item.clubDescription}</td>
                                 <td>
                                     {item.clubLogo ? (
                                         <img alt={item.clubName}
-                                        src={item.clubLogo} // Use actual logo URL
+                                        src={'./cardData1.png'} // Use actual logo URL
                                         style={{ width: '50px', borderRadius: '50%' }} />
                                     ) : null}
                                 </td>
                                 <td>
                                     {item.clubBanner ? (
                                         <img alt={item.clubName} 
-                                        src={item.clubBanner} // Use actual banner URL
+                                        src={'./cardData5.png'} // Use actual logo URL
                                         style={{ width: '100px', borderRadius: '5%' }} />
                                     ) : null}
                                 </td>
@@ -111,7 +111,7 @@ const ClubTable = ({ clubs }: IProps) => {
                                         <Button
                                             variant='danger'
                                             className='btn-sm button-equal'
-                                            onClick={() => handleDelete(item.clubId)}
+                                            onClick={() => handleDelete(item.clubID)}
                                         >
                                             <FaTrash /> Delete
                                         </Button>
@@ -142,7 +142,7 @@ const ClubTable = ({ clubs }: IProps) => {
             <DeleteModal
                 showModalDelete={showModalDelete}
                 setShowModalDelete={setShowModalDelete}
-                clubId={clubId}
+                clubID={clubID}
                 setCLubId={setClubId}
             />
         </div>

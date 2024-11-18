@@ -5,23 +5,13 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 
+
+
 interface IProps {
     showModalUpdate: boolean;
     setShowModalUpdate: (value: boolean) => void;
-    match: IMatch | null;
-    setMatch: (value: IMatch | null) => void;
-}
-
-interface IMatch {
-    matchesId: number;
-    matchesName: string;
-    matchesDescription: string;
-    tournamentId: number;
-    stadium: string;
-    startTime: string;
-    endTime: string;
-    teamWin: number;
-    teamLose: number;
+    match: Matches | null;
+    setMatch: (value: Matches | null) => void;
 }
 
 function UpdateMatchModal(props: IProps) {
@@ -30,52 +20,52 @@ function UpdateMatchModal(props: IProps) {
     const [matchesId, setMatchesId] = useState<number>(0);
     const [matchesName, setMatchesName] = useState<string>('');
     const [matchesDescription, setMatchesDescription] = useState<string>('');
-    const [tournamentId, setTournamentId] = useState<number | ''>(0);
+    const [teamA, setTeamA] = useState<number>(0);
+    const [teamB, setTeamB] = useState<number>(0);
+    const [tournamentID, setTournamentID] = useState<number | ''>(0);
     const [stadium, setStadium] = useState<string>('');
     const [startTime, setStartTime] = useState<string>('');
     const [endTime, setEndTime] = useState<string>('');
-    const [teamWin, setTeamWin] = useState<number | ''>(0);
-    const [teamLose, setTeamLose] = useState<number | ''>(0);
 
     useEffect(() => {
-        if (match && match.matchesId) {
-            setMatchesId(match.matchesId);
+        if (match && match.matchesID) {
+            setMatchesId(match.matchesID);
             setMatchesName(match.matchesName || '');
             setMatchesDescription(match.matchesDescription || '');
-            setTournamentId(match.tournamentId || 0);
+            setTeamA(match.teamA || 0);
+            setTeamB(match.teamB || 0);
+            setTournamentID(match.tournamentID || 0);
             setStadium(match.stadium || '');
             setStartTime(match.startTime || '');
             setEndTime(match.endTime || '');
-            setTeamWin(match.teamWin || 0);
-            setTeamLose(match.teamLose || 0);
         }
     }, [match]);
 
     const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_MATCHES}/update/${matchesId}`, {
+        fetch(`${process.env.NEXT_PUBLIC_MATCHES}/updateMatches`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             method: "PUT",
             body: JSON.stringify({
-                matchesId,               // Include match ID
-                matchesName,             // Map to expected API input
-                matchesDescription,
-                tournamentId,
-                stadium,
-                startTime,
-                endTime,
-                teamWin,
-                teamLose,
+                matchesID: matchesId,               // Match ID should be in the payload
+                matchesName,                        // Match name field
+                teamA,                              // Team A
+                teamB,                              // Team B
+                matchesDescription,                 // Description of the match
+                tournamentID,                       // Tournament ID
+                stadium,                            // Stadium name
+                startTime,                          // Match start time
+                endTime,                            // Match end time
             }),
         })
         .then(res => res.json())
         .then(res => {
             if (res) {
-                toast.success("Update successful"); // Adjusted to match the expected response key
+                toast.success("Update successful");
                 handleCloseModal();
-                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getall`); // Adjust endpoint as necessary
+                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getAllMatches`);
             }
         })
         .catch(err => {
@@ -87,12 +77,12 @@ function UpdateMatchModal(props: IProps) {
     const handleCloseModal = () => {
         setMatchesName("");
         setMatchesDescription("");
-        setTournamentId(0);
+        setTeamA(0);
+        setTeamB(0);
+        setTournamentID(0);
         setStadium("");
         setStartTime("");
         setEndTime("");
-        setTeamWin(0);
-        setTeamLose(0);
         setShowModalUpdate(false);
         setMatch(null);
     };
@@ -130,12 +120,32 @@ function UpdateMatchModal(props: IProps) {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
+                    <Form.Label>Team A</Form.Label>
+                    <Form.Control 
+                        type="number" 
+                        placeholder="Enter Team A ID" 
+                        value={teamA === 0 ? '' : teamA}
+                        onChange={(e) => setTeamA(e.target.value ? Number(e.target.value) : 0)} 
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Team B</Form.Label>
+                    <Form.Control 
+                        type="number" 
+                        placeholder="Enter Team B ID" 
+                        value={teamB === 0 ? '' : teamB}
+                        onChange={(e) => setTeamB(e.target.value ? Number(e.target.value) : 0)} 
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
                     <Form.Label>Tournament ID</Form.Label>
                     <Form.Control 
                         type="number" 
                         placeholder="Enter tournament ID" 
-                        value={tournamentId === 0 ? '' : tournamentId}
-                        onChange={(e) => setTournamentId(e.target.value ? Number(e.target.value) : 0)} 
+                        value={tournamentID === 0 ? '' : tournamentID}
+                        onChange={(e) => setTournamentID(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
 
@@ -166,26 +176,6 @@ function UpdateMatchModal(props: IProps) {
                         placeholder="Enter end time" 
                         value={endTime}
                         onChange={(e) => setEndTime(e.target.value)} 
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Team Win</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter winning team ID" 
-                        value={teamWin === 0 ? '' : teamWin}
-                        onChange={(e) => setTeamWin(e.target.value ? Number(e.target.value) : 0)} 
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Team Lose</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter losing team ID" 
-                        value={teamLose === 0 ? '' : teamLose}
-                        onChange={(e) => setTeamLose(e.target.value ? Number(e.target.value) : 0)} 
                     />
                 </Form.Group>
             </Modal.Body>

@@ -208,5 +208,25 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Implements
             }
 
         }
+        public  async Task<TournamentResponeDto> GetPlayerByCLub(int clubId)
+        {
+            var player =   _dbContext.ClubPlayers.Where(x => x.ClubID == clubId).ToList();
+            if (player == null)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = "Player not found",
+                    Data = null
+                };
+            }
+            return new TournamentResponeDto
+            {
+                ErrorCode = 0,
+                ErrorMessage = "Get Player Success",
+                Data = player
+            };
+
+        }
     }
 }

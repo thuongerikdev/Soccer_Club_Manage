@@ -1,0 +1,38 @@
+.custom-navbar {
+  background-color: #4caf50; /* Background color for the navbar */
+  // margin-bottom: 20px;
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between; /* Space between brand and nav items */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Full width of the navbar */
+    padding: 0 20px; /* Optional padding to prevent content from touching edges */
+  }
+
+  .nav-links {
+    flex-grow: 1; /* Allow nav to grow and fill available space */
+    text-align: center; /* Center nav items */
+  }
+
+  .nav-link,
+  .navbar-brand {
+    color: white; /* Text color */
+  }
+
+  .nav-link:hover,
+  .navbar-brand:hover {
+    color: #ffcccc; /* Text color on hover */
+  }
+}
+.logout-button {
+  color: white; /* Màu chữ */
+  background-color: #4caf50; /* Màu nền xanh lá cây */
+  border: none; /* Xóa đường viền */
+  padding: 0; /* Xóa padding nếu cần */
+  text-decoration: none; /* Xóa gạch chân */
+
+  &:hover {
+    background-color: #45a049; /* Màu nền tối hơn khi hover */
+  }
+}

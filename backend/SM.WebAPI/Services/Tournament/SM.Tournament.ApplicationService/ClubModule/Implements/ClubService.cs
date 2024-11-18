@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SM.Tournament.Domain.Club.Club;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace SM.Tournament.ApplicationService.ClubModule.Implements
 {
@@ -205,5 +206,33 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements
                 };
             }
         }
+        public async Task<TournamentResponeDto> FindClubByName(string name)
+        {
+            try
+            {
+                // Sử dụng Contains để tìm kiếm theo chuỗi con (không phân biệt chữ hoa/chữ thường)
+                var clubs = await _dbContext.ClubTeams
+                    .Where(x => EF.Functions.Like(x.ClubName, $"%{name}%"))
+                    .ToListAsync();
+
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = "Find Club Success",
+                    Data = clubs
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Find Club Error");
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = "Find Club Error",
+                    Data = null
+                };
+            }
+        }
+
     }
 }

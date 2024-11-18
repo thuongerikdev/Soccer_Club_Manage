@@ -199,5 +199,38 @@ namespace SM.WebAPI.Controllers.MatchesController
                 });
             }
         }
+        [HttpGet ("getMatchClub/{clubID}")]
+        public async Task<IActionResult> GetMatchesClub( int clubID)
+        {
+            try
+            {
+                var result = await _matchesStatisticService.GetClubMatches(clubID);
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = result.ErrorMessage,
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                 var matchesStatistic = new MatchesStatistic
                 {
                     MatchesID = createMatchesStatisticDto.MatchesID,
+                    LineUpID= createMatchesStatisticDto.LineUpID,
                     PlayerID = createMatchesStatisticDto.PlayerID,
                     ClubID = createMatchesStatisticDto.ClubID,
                     Goal = createMatchesStatisticDto.Goal,
@@ -187,5 +188,35 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                 };
             }
         }
+        public async Task<TournamentResponeDto> GetClubMatches( int ClubID)
+        {
+            try
+            {
+                var matchesStatistics = _dbContext.MatchesStatistics.Where(x => x.ClubID == ClubID).ToList();
+
+                var matchesID = matchesStatistics.GroupBy(x => x.MatchesID).Select(x => x.Key).ToList();
+
+                var matches = _dbContext.Matches.Where(x => matchesID.Contains(x.MatchesID)).ToList();
+
+
+
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = "Get Match Statistic Success",
+                    Data = matches
+                };
+
+            }
+            catch (Exception ex)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = ex.Message,
+                    Data = null
+                };
+            }
+        } 
     }
 }

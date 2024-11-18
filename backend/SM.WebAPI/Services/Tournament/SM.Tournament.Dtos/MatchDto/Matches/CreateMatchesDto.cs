@@ -8,7 +8,7 @@ namespace SM.Tournament.Dtos.MatchDto.Matches
 {
     public class CreateMatchesDto
     { 
-        public int MatchesName { get; set; }
+        public string MatchesName { get; set; }
         public int TeamA { get; set; }
         public int TeamB { get; set; }
         public string MatchesDescription { get; set; }

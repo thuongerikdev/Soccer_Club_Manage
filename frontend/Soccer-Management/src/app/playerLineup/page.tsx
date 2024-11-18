@@ -1,160 +1,196 @@
-// Home.tsx
-"use client"
-import React, { useEffect, useState } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import Lineup from '../../components/playerlineup/lineup';
-import PlayerList from '../../components/playerlineup/playerlist';
-import ListLineup from '../../components/playerlineup/savedlineup';
-import useSWR from 'swr';
-import withAuth from '@/components/middleware/withAuth';
+// "use client";
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+// import React, { useState, useEffect } from "react";
+// import { DndProvider } from "react-dnd";
+// import { HTML5Backend } from "react-dnd-html5-backend";
+// import Lineup from "../../components/playerlineup/lineup";
+// import PlayerList from "../../components/playerlineup/playerlist";
+// import useSWR from "swr";
+// import withAuth from "@/components/middleware/withAuth";
+// import { useSelector } from "react-redux"; // Import useSelector from Redux
+// import { RootState } from "@/lib/store"; // Adjust the import path as needed
+// import { useRouter } from "next/navigation";
 
-const Home: React.FC = () => {
-  const { data: playerData, error: playerError } = useSWR<{ dt: IPlayer[] }>(
-    'http://localhost:3001/api/players/getall',
-    fetcher
-  );
+// const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-  const { data: lineupData, error: lineupError } = useSWR<{ data: LineUp[] }>(
-    'http://localhost:3001/api/lineup/getall',
-    fetcher
-  );
+// type Params = {
+//   clubID: string;
+//   lineUpID: string;
+// };
 
-  const [selectedLineupId, setSelectedLineupId] = useState<number | null>(null);
-  const [positions, setPositions] = useState<(IPlayer | null)[]>(Array(19).fill(null)); // Assuming 19 positions
-  const [lineupPlayers, setLineupPlayers] = useState<IPlayer[]>([]);
+// type HomeProps = {
+//   params: Promise<Params>;
+//   userRole?: string | null;
+// };
 
-  const handleSelectLineup = async (lineupId: number) => {
-    setSelectedLineupId(lineupId);
-    await fetchLineupDetails(lineupId);
-  };
+// const Home: React.FC<HomeProps> = ({ params, userRole }) => {
+//   const [clubOwnerUserID, setClubOwnerUserID] = useState<number | null>(null);
+//   const [clubID, setClubID] = useState<string | null>(null);
+//   const [lineupID, setLineupID] = useState<string | null>(null);
+//   const [selectedLineupId, setSelectedLineupId] = useState<number | null>(null);
+//   const [positions, setPositions] = useState<(IPlayer | null)[]>(Array(19).fill(null));
+//   const [lineupPlayers, setLineupPlayers] = useState<IPlayer[]>([]);
 
-  const fetchLineupDetails = async (lineupId: number) => {
-    try {
-      // Fetch lineup data
-      const lineupResponse = await fetch(`${process.env.NEXT_PUBLIC_PLAYERLINEUP}/getbylineupid/${lineupId}`);
-      if (!lineupResponse.ok) {
-        throw new Error(`Failed to fetch lineup details. Status: ${lineupResponse.status}`);
-      }
-      
-      const lineupData = await lineupResponse.json();
-      if (lineupData.errorCode !== 0) {
-        throw new Error(lineupData.errorMessage || 'Unknown error occurred while fetching lineup');
-      }
-  
-      if (!Array.isArray(lineupData.data)) {
-        throw new Error('Invalid lineup data format received');
-      }
-  
-      // Fetch player details for each lineup item
-      const players = await Promise.all(
-        lineupData.data.map(async (lineupItem: any) => {
-          const playerResponse = await fetch(`http://localhost:3001/api/players/getById/${lineupItem.playerId}`);
-          
-          if (!playerResponse.ok) {
-            console.warn(`Failed to fetch player ${lineupItem.playerId}. Status: ${playerResponse.status}`);
-            return null; // Allow missing players to be null and handle them in rendering logic
-          }
-          
-          const playerData = await playerResponse.json();
-          if (playerData.ec !== 0) {
-            console.warn(`Error fetching player details: ${playerData.em}`);
-            return null; // Handle API response error
-          }
-          
-          return {
-            ...playerData.dt, // Spread player data
-            playerPosition: lineupItem.playerPosition || playerData.dt.playerPosition, // Use lineup or default position
-            isCaptain: lineupItem.isCaptain, 
-            playTime: lineupItem.playTime,
-          };
-        })
-      );
-  
-      // Filter out any null players (in case some fetches failed)
-      const validPlayers = players.filter(Boolean);
-  
-      setLineupPlayers(validPlayers);
-  
-      // Map player positions
-      const newPositions = Array(19).fill(null);
-      validPlayers.forEach((player) => {
-        if (player) {
-          const positionIndex = parseInt(player.playerPosition) || 0; // Default index for unknown positions
-          newPositions[positionIndex] = player;
-        }
-      });
-      setPositions(newPositions);
-      
-    } catch (error) {
-      console.error('Error fetching lineup details:', error);
-      alert('Error fetching lineup details: ' + error);
-    }
-  };
-  
+//   const userId = useSelector((state: RootState) => state.auth.user?.userId); // userId is a string or undefined
+//   const [isOwner, setIsOwner] = useState<boolean>(false); // Status of whether the user is the owner
+//   const [loading, setLoading] = useState<boolean>(true); // Loading status
 
-  const dropPlayer = (player: IPlayer, positionIndex: number) => {
-    const newPositions = [...positions];
-    newPositions[positionIndex] = player;
-    setPositions(newPositions);
-  };
+//   useEffect(() => {
+//     const fetchParams = async () => {
+//       const resolvedParams = await params;
+//       console.log("Resolved Params:", resolvedParams);
+//       setClubID(resolvedParams.clubID);
+//       setLineupID(resolvedParams.lineUpID);
+//       const lineupId = resolvedParams.lineUpID ? Number(resolvedParams.lineUpID) : null;
+//       setSelectedLineupId(lineupId);
 
-  const removePlayerFromLineup = (positionIndex: number) => {
-    const newPositions = [...positions];
-    newPositions[positionIndex] = null;
-    setPositions(newPositions);
-  };
+//       // Convert userId to a number (or undefined) to pass it correctly
+//       const userIdAsNumber = userId ? Number(userId) : undefined;
+//       // Check if the user is the owner of the club
+//       await checkIfUserIsOwner(resolvedParams.clubID, userIdAsNumber);
+//     };
 
-  if (playerError) return <div>Error loading players.</div>;
-  if (!playerData) return <div>Loading players...</div>;
+//     fetchParams();
+//   }, [params, userId]);
 
-  if (lineupError) return <div>Error loading lineups.</div>;
-  if (!lineupData || !lineupData.data || !Array.isArray(lineupData.data)) {
-    return <div>No lineups available.</div>;
-  }
+//   // Check if the user is the owner of the club
+//   const checkIfUserIsOwner = async (clubID: string, userId?: number) => {
+//     try {
+//       const response = await fetch(`${process.env.NEXT_PUBLIC_CLUB}/get/${clubID}`);
+//       const clubOwnerData = await response.json();
+//       const clubOwnerUserID = clubOwnerData.data.userID; // Assuming this is a number
 
-  const displayedPlayers = selectedLineupId && lineupPlayers.length > 0 ? lineupPlayers : playerData.dt;
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <div style={{ display: 'flex', padding: '20px' }}>
-        <div style={{ flex: 1, marginRight: '20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-            <h1>Player List</h1>
-          </div>
-          <PlayerList players={displayedPlayers} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-            <h1>Lineup</h1>
-          </div>
-          <Lineup
-            positions={positions}
-            onDropPlayer={dropPlayer}
-            onRemovePlayer={removePlayerFromLineup}
-            selectedLineupId={selectedLineupId}
-            setPositions={setPositions}
-          />
-        </div>
-        <div style={{ flex: 1, marginLeft: '20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-            <h1>LineUps</h1>
-          </div>
-          <ListLineup
-            lineups={lineupData.data}
-            onSelectLineup={handleSelectLineup}
-            selectedLineupId={selectedLineupId}
-          />
-        </div>
-      </div>
-    </DndProvider>
-  );
-};
+//       // Ensure comparison is done between numbers
+//       if (clubOwnerUserID === userId) {
+//         setIsOwner(true);
+//       } else {
+//         setIsOwner(false);
+//       }
+//     } catch (error) {
+//       console.error("Error checking ownership:", error);
+//     } finally {
+//       setLoading(false); // End the loading process after verification
+//     }
+//   };
 
-export default withAuth(Home) ;
+//   const { data: playerData, error: playerError } = useSWR<{ data: IPlayer[] }>(
+//     clubID ? `${process.env.NEXT_PUBLIC_PLAYER}/getPlayerClub/${clubID}` : null,
+//     fetcher
+//   );
 
-// IPlayer, PlayerList, Lineup, ListLineup Components (as previously provided)
-// Ensure each component is correctly fetching and displaying data
+//   const fetchLineupDetails = async (lineupId: number) => {
+//     try {
+//       const lineupResponse = await fetch(
+//         `${process.env.NEXT_PUBLIC_PLAYERLINEUP}/getPlayerLineUpByLineUP/${lineupId}`
+//       );
 
-// Adjust any mapping or key assignments if your data format differs slightly
+//       if (!lineupResponse.ok) {
+//         const errorMessage = await lineupResponse.text();
+//         throw new Error(
+//           `Failed to fetch lineup details. Status: ${lineupResponse.status}, Response: ${errorMessage}`
+//         );
+//       }
+
+//       const lineupData = await lineupResponse.json();
+//       console.log("Lineup Response:", lineupData);
+
+//       if (lineupData.errorCode !== 0) {
+//         throw new Error(lineupData.errorMessage || "Unknown error occurred while fetching lineup");
+//       }
+
+//       const players: any[] = [];
+
+//       for (const lineupItem of lineupData.data) {
+//         try {
+//           console.log(`Fetching details for player ID: ${lineupItem.playerID}`);
+//           const playerResponse = await fetch(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayerById/${lineupItem.playerID}`);
+
+//           if (!playerResponse.ok) {
+//             const errorMessage = await playerResponse.text();
+//             console.warn(`Failed to fetch player ${lineupItem.playerID}. Status: ${playerResponse.status}, Response: ${errorMessage}`);
+//             players.push(null);
+//             continue;
+//           }
+
+//           const playerData = await playerResponse.json();
+//           players.push({
+//             ...playerData.data,
+//             playerPosition: lineupItem.position || playerData.data.playerPosition,
+//             isCaptain: lineupItem.isCaptain,
+//           });
+//         } catch (error) {
+//           console.error(`Error fetching player ${lineupItem.playerID}:`, error);
+//           players.push(null);
+//         }
+//       }
+
+//       const validPlayers = players.filter(Boolean);
+//       setLineupPlayers(validPlayers);
+
+//       const newPositions = Array(19).fill(null);
+//       validPlayers.forEach((player) => {
+//         if (player) {
+//           const positionIndex = parseInt(player.playerPosition) || 0;
+//           newPositions[positionIndex] = player;
+//         }
+//       });
+//       setPositions(newPositions);
+//     } catch (error) {
+//       console.error("Error fetching lineup details:", error);
+//       alert("Error fetching lineup details: " + (error || "Unknown error occurred"));
+//     }
+//   };
+
+//   const dropPlayer = (player: IPlayer, positionIndex: number) => {
+//     if (isOwner) {
+//       const newPositions = [...positions];
+//       newPositions[positionIndex] = player;
+//       setPositions(newPositions);
+//     }
+//   };
+
+//   const removePlayerFromLineup = (positionIndex: number) => {
+//     if (isOwner) {
+//       const newPositions = [...positions];
+//       newPositions[positionIndex] = null;
+//       setPositions(newPositions);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (selectedLineupId) {
+//       fetchLineupDetails(selectedLineupId);
+//     }
+//   }, [selectedLineupId]);
+
+//   if (loading) return <div className="loading">Loading...</div>;
+//   if (playerError) return <div>Error loading players.</div>;
+//   if (!playerData) return <div>Loading players...</div>;
+
+//   const displayedPlayers = selectedLineupId && lineupPlayers.length > 0 ? lineupPlayers : playerData.data;
+
+//   return (
+//     <DndProvider backend={HTML5Backend}>
+//       <div style={{ display: "flex", padding: "20px" }}>
+//         <div style={{ flex: 1, marginRight: "20px" }}>
+//           <h1>Player List</h1>
+//           <PlayerList players={displayedPlayers} />
+//         </div>
+//         <div style={{ flex: 1 }}>
+//           <h1>Lineup</h1>
+//           <Lineup
+//             positions={positions}
+//             onDropPlayer={dropPlayer}
+//             onRemovePlayer={removePlayerFromLineup}
+//             selectedLineupId={selectedLineupId}
+//             setPositions={setPositions}
+//             isOwner={isOwner} // Pass the isOwner flag to Lineup to control edit permissions
+//           />
+//         </div>
+//       </div>
+//     </DndProvider>
+//   );
+// };
+
+// // Wrap the component with the HOC
+// export default withAuth(Home);

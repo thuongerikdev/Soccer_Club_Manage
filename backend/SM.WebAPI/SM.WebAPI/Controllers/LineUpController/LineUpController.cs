@@ -100,7 +100,7 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
-        [HttpDelete("deleteLineUp")]
+        [HttpDelete("deleteLineUp/{lineUpID}")]
         public async Task<IActionResult> DeleteLineUp(int lineUpID)
         {
             try
@@ -133,7 +133,7 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
-        [HttpGet("getLineUpById")]
+        [HttpGet("getLineUpById/{lineUpID}")]
         public async Task<IActionResult> GetLineUpById(int lineUpID)
         {
             try
@@ -199,5 +199,38 @@ namespace SM.WebAPI.Controllers.LineUpController
                 });
             }
         }
+        [HttpGet("getLineUpClub/{ClubID}")]
+        public async Task<IActionResult> GetLineUpClub(int ClubID)
+        {
+            try
+            {
+                var result = await _lineUpService.GetLineUpbyClub(ClubID);
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
         }
+    }
 }

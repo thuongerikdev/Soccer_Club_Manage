@@ -15,11 +15,6 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="TourModule\Abtracts\" />
-	  <Folder Include="TourModule\Implements\" />
-	  <Folder Include="TourModule\" />
-	</ItemGroup>
 
 	
 

@@ -16,7 +16,7 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
 {
     public class CelebrateService : TournamentServiceBase, IClubEventService
     {
-        public CelebrateService(ILogger<CelebrateService> logger, TournamentDbContext dbContext) : base(logger, dbContext)
+        public CelebrateService(ILogger<IClubEventService> logger, TournamentDbContext dbContext) : base(logger, dbContext)
         {
         }
         public async Task<TournamentResponeDto> CreateEvent(CreateEventDto createCelebrateEventDto)

@@ -33,7 +33,7 @@ const MatchesTable = ({ matches }: IProps) => {
 
     // Filter matches based on search ID
     const filteredMatches = matches.filter(match => 
-        searchId === '' || match.matchesId === searchId
+        searchId === '' || match.matchesID === searchId
     );
 
     return (
@@ -65,28 +65,25 @@ const MatchesTable = ({ matches }: IProps) => {
                         <th>Stadium</th>
                         <th>Start Time</th>
                         <th>End Time</th>
-                        <th>Team Win</th>
-                        <th>Team Lose</th>
+                    
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {filteredMatches.length > 0 ? filteredMatches.map(item => {
-                        if (item.matchesId === undefined) {
+                        if (item.matchesID === undefined) {
                             console.error('Invalid match item without matchesId:', item);
                             return null; // Skip rendering this item
                         }
                         return (
-                            <tr key={`match-${item.matchesId}`}>
-                                <td>{item.matchesId}</td>
+                            <tr key={`match-${item.matchesID}`}>
+                                <td>{item.matchesID}</td>
                                 <td>{item.matchesName}</td>
                                 <td>{item.matchesDescription}</td>
-                                <td>{item.tournamentId}</td>
+                                <td>{item.tournamentID}</td>
                                 <td>{item.stadium}</td>
                                 <td>{new Date(item.startTime).toLocaleString()}</td>
                                 <td>{new Date(item.endTime).toLocaleString()}</td>
-                                <td>{item.teamWin}</td>
-                                <td>{item.teamLose}</td>
                                 <td>
                                     <div className="d-flex justify-content-around">
                                         <Button
@@ -99,7 +96,7 @@ const MatchesTable = ({ matches }: IProps) => {
                                         <Button
                                             variant='danger'
                                             className='btn-sm'
-                                            onClick={() => handleDelete(item.matchesId)}
+                                            onClick={() => handleDelete(item.matchesID)}
                                         >
                                             <FaTrash /> Delete
                                         </Button>

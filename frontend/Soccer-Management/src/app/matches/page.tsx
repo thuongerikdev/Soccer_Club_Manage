@@ -7,23 +7,12 @@ import { Button, Container, Row, Col, Card, Spinner, Alert, InputGroup, FormCont
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is imported
 import withAuth from '../../components/middleware/withAuth';
 
-interface Matches {
-    matchesId: number;
-    matchesName: string | number; // Adjusted to accept both string and number
-    matchesDescription: string;
-    tournamentId: number;
-    stadium: string;
-    startTime: string;
-    endTime: string;
-    teamWin: number;
-    teamLose: number;
-}
 
 const MatchesPage = () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
     const { data, error } = useSWR(
-        `${process.env.NEXT_PUBLIC_MATCHES}/getall`, // API to fetch all matches
+        `${process.env.NEXT_PUBLIC_MATCHES}/getAllMatches`, // API to fetch all matches
         fetcher,
         {
             revalidateIfStale: false,
@@ -85,7 +74,7 @@ const MatchesPage = () => {
             </Row>
             <Row>
                 <Col>
-                    <MatchesTable matches={filteredMatches.sort((a: Matches, b: Matches) => b.matchesId - a.matchesId)} />
+                    <MatchesTable matches={filteredMatches.sort((a: Matches, b: Matches) => b.matchesID - a.matchesID)} />
                 </Col>
             </Row>
             <Row className="mt-4">

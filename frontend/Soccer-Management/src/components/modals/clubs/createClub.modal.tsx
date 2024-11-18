@@ -24,14 +24,13 @@ function CreateModal(props: IProps) {
 
     const handleSubmit = () => {
         const clubData = {
+            userID: boss, // Keep as is
             clubName,
             clubDescription,
             clubLogo,
             clubBanner,
-            userId: boss, // Change 'boss' to 'userId'
-            budget,
-            clubLevel: Number(clubLevel), // Ensure clubLevel is a number
-            clubAge: String(clubAge), // Ensure clubAge is a string
+            clubLevel: String(clubLevel), // Convert to string
+            clubAge: String(clubAge), // Convert to string
         };
     
         console.log("Submitting club data:", clubData); // Log the data being sent
@@ -48,7 +47,7 @@ function CreateModal(props: IProps) {
             if (!res.ok) {
                 throw new Error(`HTTP error! Status: ${res.status}`);
             }
-            return res.json();
+            return res.json(); // Ensure you parse the response
         })
         .then(res => {
             console.log("Server response:", res); // Log the server response
@@ -69,7 +68,6 @@ function CreateModal(props: IProps) {
         setClubLogo('');
         setClubBanner('');
         setBoss(0);
-        setBudget(0);
         setClubLevel(0.0);
         setClubAge(0);
         setShowModalCreate(false); // Đóng modal sau khi hoàn tất

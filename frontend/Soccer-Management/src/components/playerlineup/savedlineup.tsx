@@ -2,7 +2,7 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 
 interface LineUp {
-  lineUpId: number;
+  lineUpID: number;
   lineUpName: string;
   clubId: number;
 }
@@ -13,10 +13,10 @@ interface ListLineupProps {
   selectedLineupId: number | null;
 }
 
-const LineupItem: React.FC<{ lineup: LineUp; onSelect: (lineupId: number) => void; isSelected: boolean }> = ({ lineup, onSelect, isSelected }) => {
+const LineupItem: React.FC<{ lineup: LineUp; onSelect: (lineupID: number) => void; isSelected: boolean }> = ({ lineup, onSelect, isSelected }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'LINEUP',
-    item: { id: lineup.lineUpId, lineUpName: lineup.lineUpName },
+    item: { id: lineup.lineUpID, lineUpName: lineup.lineUpName },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -29,7 +29,7 @@ const LineupItem: React.FC<{ lineup: LineUp; onSelect: (lineupId: number) => voi
   return (
     <div
       ref={drag}
-      onClick={() => onSelect(lineup.lineUpId)}
+      onClick={() => onSelect(lineup.lineUpID)}
       style={{
         padding: '15px',
         marginBottom: '12px',
@@ -45,7 +45,7 @@ const LineupItem: React.FC<{ lineup: LineUp; onSelect: (lineupId: number) => voi
         {lineup.lineUpName}
       </div>
       <div style={{ fontSize: '14px', color: '#666' }}>
-        LineUpID: {lineup.lineUpId} | Club ID: {lineup.clubId}
+        LineUpID: {lineup.lineUpID} | Club ID: {lineup.clubId}
       </div>
     </div>
   );
@@ -56,10 +56,10 @@ const ListLineup: React.FC<ListLineupProps> = ({ lineups, onSelectLineup, select
     <div style={{ marginBottom: '20px', maxWidth: '300px' }}>
       {lineups.map(lineup => (
         <LineupItem
-          key={lineup.lineUpId}
+          key={lineup.lineUpID}
           lineup={lineup}
           onSelect={onSelectLineup}
-          isSelected={lineup.lineUpId === selectedLineupId}
+          isSelected={lineup.lineUpID === selectedLineupId}
         />
       ))}
     </div>

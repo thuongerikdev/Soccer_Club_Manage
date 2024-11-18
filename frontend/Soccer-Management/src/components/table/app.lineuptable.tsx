@@ -15,7 +15,7 @@ const LineupsTable = ({ lineUps }: IProps) => {
     const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const [lineUp, setLineUp] = useState<LineUp | null>(null);
     const [lineUpId, setLineUpId] = useState<number>(0);
-    const [searchId, setSearchId] = useState<number | ''>('');
+    const [searchId, setSearchId] = useState<number | ''>(''); // Allow both number and string type
 
     const handleUpdate = (item: LineUp) => {
         setLineUp(item);
@@ -31,9 +31,9 @@ const LineupsTable = ({ lineUps }: IProps) => {
         setShowModalCreate(true);
     };
 
-    // Filter lineups based on search ID
+    // Filter lineups based on search ID (compare against lineUpID)
     const filteredLineUps = lineUps.filter(lineup => 
-        searchId === '' || lineup.lineUpId === searchId
+        searchId === '' || lineup.lineUpID === searchId
     );
 
     useEffect(() => {
@@ -63,36 +63,20 @@ const LineupsTable = ({ lineUps }: IProps) => {
                 <thead className="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Match ID</th>
                         <th>Club ID</th>
                         <th>Lineup Name</th>
                         <th>Lineup Type</th>
-                        <th>Match Type</th>
-                        <th>Stadium Background</th>
                         <th>Created At</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {filteredLineUps.length > 0 ? filteredLineUps.map(item => (
-                        <tr key={`lineup-${item.lineUpId}`}>
-                            <td>{item.lineUpId}</td>
-                            <td>{item.matchId}</td>
-                            <td>{item.clubId}</td>
+                        <tr key={`lineup-${item.lineUpID}`}>
+                            <td>{item.lineUpID}</td>
+                            <td>{item.clubID}</td>
                             <td>{item.lineUpName}</td>
                             <td>{item.lineUpType}</td>
-                            <td>{item.matchType}</td>
-                            <td>
-                                {item.stadiumBackGround ? (
-                                    <img 
-                                        alt={item.lineUpName} 
-                                        src={item.stadiumBackGround} 
-                                        style={{ width: '100px', borderRadius: '5%' }} 
-                                    />
-                                ) : (
-                                    <span>No Image</span>
-                                )}
-                            </td>
                             <td>{new Date(item.createAt).toLocaleString()}</td>
                             <td>
                                 <div className="d-flex justify-content-around">
@@ -106,7 +90,7 @@ const LineupsTable = ({ lineUps }: IProps) => {
                                     <Button
                                         variant='danger'
                                         className='btn-sm'
-                                        onClick={() => handleDelete(item.lineUpId)}
+                                        onClick={() => handleDelete(item.lineUpID)}
                                     >
                                         <FaTrash /> Delete
                                     </Button>
@@ -115,7 +99,7 @@ const LineupsTable = ({ lineUps }: IProps) => {
                         </tr>
                     )) : (
                         <tr>
-                            <td colSpan={9} className="text-center">No lineups found</td>
+                            <td colSpan={6} className="text-center">No lineups found</td>
                         </tr>
                     )}
                 </tbody>

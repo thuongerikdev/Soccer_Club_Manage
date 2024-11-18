@@ -9,6 +9,8 @@ interface LineupProps {
   onRemovePlayer: (positionIndex: number) => void;
   selectedLineupId: number | null;
   setPositions: React.Dispatch<React.SetStateAction<(IPlayer | null)[]>>;
+  isOwner: boolean; // Nhận isOwner từ props
+  playerLineupID : number
 }
 
 const PlayerPosition: React.FC<{
@@ -16,32 +18,31 @@ const PlayerPosition: React.FC<{
   player: IPlayer | null;
   onDropPlayer: (player: IPlayer, positionIndex: number) => void;
   onRemovePlayer: (positionIndex: number) => void;
-}> = ({ index, player, onDropPlayer, onRemovePlayer }) => {
+  isOwner: boolean; // Thêm isOwner vào props
+}> = ({ index, player, onDropPlayer, onRemovePlayer, isOwner }) => {
   const [, drop] = useDrop({
     accept: 'PLAYER',
     drop: (item: { id: number; playerName: string; playerPosition: string }) => {
-      const droppedPlayer: IPlayer = {
-        playerId: item.id,
-        playerName: item.playerName,
-        playerPosition: item.playerPosition,
-        playerNationality: '',
-        playerImage: '',
-        clubId: 0,
-        height: 0,
-        leg: '',
-        playerAge: 0,
-        playerHealth: 0,
-        playerSalary: 0,
-        playerSkill: 0,
-        playerStatus: 0,
-        playerValue: 0,
-        shirtNumber: 0,
-        weight: 0,
-        shirtnumber: 0,
-      };
-      onDropPlayer(droppedPlayer, index);
+      if (isOwner) {  // Chỉ cho phép kéo thả nếu là chủ sở hữu
+        const droppedPlayer: IPlayer = {
+          playerID: item.id,
+          playerName: item.playerName,
+          playerPosition: item.playerPosition,
+          playerImage: '',
+          clubId: 0,
+          height: 0,
+          leg: '',
+          playerAge: 0,
+          shirtnumber: 0,
+          weight: 0,
+          clubID: 0,
+          phoneNumber: 0,
+          playerStatus: 0
+        };
+        onDropPlayer(droppedPlayer, index);
+      }
     },
-    canDrop: () => !player,
+    canDrop: () => !player && isOwner, // Không cho kéo thả nếu không phải chủ sở hữu
   });
 
   return (
@@ -60,32 +61,32 @@ const PlayerPosition: React.FC<{
   );
 };
 
-const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlayer, onRemovePlayer, setPositions }) => {
+const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlayer, onRemovePlayer, setPositions, isOwner ,playerLineupID }) => {
   const saveLineup = async () => {
+    console.log('Selected Lineup ID:', selectedLineupId); // Check this value
     const payload = positions
       .map((player, index) => {
         if (player) {
           return {
-            lineUpId: selectedLineupId,
-            playerId: player.playerId,
-            clubId: player.clubId,
-            playerPosition: index.toString(), // Use index as player position
-            isCaptain: false,
-            playTime: 0,
+            lineUpID: selectedLineupId, // Use selectedLineupId from props
+            playerID: player.playerID,
+            status: "ok", // Adjust as necessary
+            createdDate: new Date().toISOString(),
+            position: index.toString(), // Ensure this is a string as expected
+            isCaptain: false, // Change this based on your logic
           };
         }
         return null;
       })
       .filter((item) => item !== null);
   
-    console.log("API URL:", `${process.env.NEXT_PUBLIC_PLAYERLINEUP}/create`);
     console.log("Payload:", payload);
   
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_PLAYERLINEUP}/create`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_PLAYERLINEUP}/CreatePlayerLineUp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload), // Send as an array
       });
   
       if (!response.ok) {
@@ -99,6 +100,9 @@ const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlay
       console.error(error);
       alert('Error saving lineup');
     }
+
+    
+
   };
   
   return (
@@ -106,33 +110,67 @@ const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlay
       {/* Top Row - 3 Positions */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
         {[0, 1, 2].map((index) => (
-          <PlayerPosition key={index} index={index} player={positions[index]} onDropPlayer={onDropPlayer} onRemovePlayer={onRemovePlayer} />
+          <PlayerPosition
+            key={index}
+            index={index}
+            player={positions[index]}
+            onDropPlayer={onDropPlayer}
+            onRemovePlayer={onRemovePlayer}
+            isOwner={isOwner} // Truyền isOwner vào PlayerPosition
+          />
         ))}
       </div>
 
       {/* Second Row - 5 Positions */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
         {[3, 4, 5, 6, 7].map((index) => (
-          <PlayerPosition key={index} index={index} player={positions[index]} onDropPlayer={onDropPlayer} onRemovePlayer={onRemovePlayer} />
+          <PlayerPosition
+            key={index}
+            index={index}
+            player={positions[index]}
+            onDropPlayer={onDropPlayer}
+            onRemovePlayer={onRemovePlayer}
+            isOwner={isOwner} // Truyền isOwner vào PlayerPosition
+          />
         ))}
       </div>
 
       {/* Third Row - 5 Positions */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
         {[8, 9, 10, 11, 12].map((index) => (
-          <PlayerPosition key={index} index={index} player={positions[index]} onDropPlayer={onDropPlayer} onRemovePlayer={onRemovePlayer} />
+          <PlayerPosition
+            key={index}
+            index={index}
+            player={positions[index]}
+            onDropPlayer={onDropPlayer}
+            onRemovePlayer={onRemovePlayer}
+            isOwner={isOwner} // Truyền isOwner vào PlayerPosition
+          />
         ))}
       </div>
 
       {/* Fourth Row - 5 Positions */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
         {[13, 14, 15, 16, 17].map((index) => (
-          <PlayerPosition key={index} index={index} player={positions[index]} onDropPlayer={onDropPlayer} onRemovePlayer={onRemovePlayer} />
+          <PlayerPosition
+            key={index}
+            index={index}
+            player={positions[index]}
+            onDropPlayer={onDropPlayer}
+            onRemovePlayer={onRemovePlayer}
+            isOwner={isOwner} // Truyền isOwner vào PlayerPosition
+          />
         ))}
       </div>
 
       {/* Bottom Row - 1 Position */}
-      <PlayerPosition index={18} player={positions[18]} onDropPlayer={onDropPlayer} onRemovePlayer={onRemovePlayer} />
+      <PlayerPosition
+        index={18}
+        player={positions[18]}
+        onDropPlayer={onDropPlayer}
+        onRemovePlayer={onRemovePlayer}
+        isOwner={isOwner} // Truyền isOwner vào PlayerPosition
+      />
 
       <Button className="save-button" onClick={saveLineup}>
         Save Lineup

@@ -1,11 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-interface IPlayer {
-  playerId: number; // or string
-  playerName: string;
-  playerPosition: string;
-}
+
 
 interface PlayerListProps {
   players: IPlayer[];
@@ -15,7 +11,7 @@ const PlayerItem: React.FC<{ player: IPlayer }> = ({ player }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'PLAYER',
     item: { 
-      id: player.playerId, 
+      id: player.playerID, 
       playerName: player.playerName,
       playerPosition: player.playerPosition,
     },
@@ -45,7 +41,7 @@ const PlayerItem: React.FC<{ player: IPlayer }> = ({ player }) => {
         fontWeight: 'bold',
         color: '#4caf50',
       }}>
-        #{player.playerId}
+        #{player.playerID}
       </div>
       <div style={{
         display: 'flex',
@@ -70,16 +66,25 @@ const PlayerItem: React.FC<{ player: IPlayer }> = ({ player }) => {
 };
 
 const PlayerList: React.FC<PlayerListProps> = ({ players }) => {
+  var playerList = players.filter(x => x.playerStatus ==1)
   return (
-    <ul>
-      {players.map((player, index) => (
-        <li key={`${player.playerId}-${index}`}> {/* Combined playerId and index */}
-          <PlayerItem player={player} />
-        </li>
-      ))}
-    </ul>
+    <div style={{ 
+      maxHeight: '840px', // Chiều cao tối đa để kích hoạt thanh cuộn
+      overflowY: 'auto',  // Kích hoạt thanh cuộn dọc
+      margin: '10px 0',   // Thêm khoảng cách trên và dưới
+      border: '1px solid #ddd', // Thêm viền cho danh sách
+      borderRadius: '8px',
+      // maxWidth:'300px' // Bo góc
+    }}>
+      <ul style={{ padding: 0, listStyleType: 'none' }}>
+        {playerList.map((player, index) => (
+          <li key={`${player.playerID}-${index}`}>
+            <PlayerItem player={player} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
-
 
 export default PlayerList;

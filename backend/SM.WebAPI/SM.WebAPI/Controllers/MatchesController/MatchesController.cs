@@ -106,15 +106,15 @@ namespace SM.WebAPI.Controllers.MatchesController
             try
             {
                 var result = await _matchesService.DeleteMatches(matchesID);
-                if (result.ErrorCode != 0)
-                {
-                    return BadRequest(new TournamentResponeDto
-                    {
-                        ErrorMessage = "Invalid credentials.",
-                        ErrorCode = 1,
-                        Data = null
-                    });
-                }
+                //if (result.ErrorCode != 0)
+                //{
+                //    return BadRequest(new TournamentResponeDto
+                //    {
+                //        ErrorMessage = "Invalid credentials.",
+                //        ErrorCode = 1,
+                //        Data = null
+                //    });
+                //}
 
                 return Ok(new TournamentResponeDto
                 {
@@ -172,6 +172,72 @@ namespace SM.WebAPI.Controllers.MatchesController
             try
             {
                 var result = await _matchesService.GetAllMatches();
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("teamA/{TeamA}")]
+        public async Task<IActionResult> GetMatchesByTeamA(int TeamA)
+        {
+            try
+            {
+                var result = await _matchesService.GetMatchesByTeamA(TeamA);
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = "Invalid credentials.",
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new TournamentResponeDto
+                {
+                    ErrorMessage = "Internal server error: " + ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                });
+            }
+        }
+        [HttpGet("TeamB/{TeamB}")]
+        public async Task<IActionResult> GetMatchesByTeamB(int TeamB)
+        {
+            try
+            {
+                var result = await _matchesService.GetMatchesByTeamB(TeamB);
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto

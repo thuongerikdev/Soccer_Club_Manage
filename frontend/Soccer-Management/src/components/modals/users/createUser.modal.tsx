@@ -14,6 +14,7 @@ function CreateModal(props: IProps) {
     const { showModalCreate, setShowModalCreate } = props;
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [name , setName] = useState<string>('')
     const [email, setEmail] = useState<string>('');
     
     const handleSubmit = () => {
@@ -23,7 +24,7 @@ function CreateModal(props: IProps) {
                 'Content-Type': 'application/json'
             },
             method: "POST",
-            body: JSON.stringify({ username, password, email })
+            body: JSON.stringify({ username, password, email  ,name})
         })
         .then(res => res.json())
         .then(res => {
@@ -39,6 +40,7 @@ function CreateModal(props: IProps) {
         setUsername('');
         setPassword('');
         setEmail('');
+        setName('');
         setShowModalCreate(false);
     };
 
@@ -68,6 +70,11 @@ function CreateModal(props: IProps) {
                     <Form.Label>Email</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" value={email}
                         onChange={(e) => setEmail(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" placeholder="Enter name" value={name}
+                        onChange={(e) => setName(e.target.value)} />
                 </Form.Group>
             </Modal.Body>
             <Modal.Footer>

@@ -24,6 +24,7 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Cacula
         public void CalculateFund()
         {
             _fundCalculationStrategy.CalculateFund(_fund, _amount);
+
         }
     }
 }
