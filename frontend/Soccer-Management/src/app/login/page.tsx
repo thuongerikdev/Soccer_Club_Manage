@@ -112,7 +112,33 @@ const LoginPage = () => {
     } finally {
       setLoading(false);
     }
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER}/oldRegister`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password}),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Registration failed: ${errorText}`);
+      }
+
+      const data = await response.json();
+      if (data.ec === 0) {
+        toast.success(data.em);
+      } else {
+        toast.error(data.em);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   // Show loading spinner while loading
   if (loading) {

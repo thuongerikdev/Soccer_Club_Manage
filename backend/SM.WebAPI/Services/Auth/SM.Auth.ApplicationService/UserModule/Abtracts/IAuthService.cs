@@ -16,6 +16,7 @@ namespace SM.Auth.ApplicationService.UserModule.Abtracts
         public Task<AuthResponeDto> AuthRemove (int userId);
         public  Task <AuthResponeDto>  AuthUpdate ( int userId ,AuthUpdateDto authUpdateDto);
         public ValueTask<IEnumerable<AuthGetAllUserDto>> AuthGetAll();
+        public  Task<AuthResponeDto> register(LoginUserDto loginUserDto);
 
 
     }

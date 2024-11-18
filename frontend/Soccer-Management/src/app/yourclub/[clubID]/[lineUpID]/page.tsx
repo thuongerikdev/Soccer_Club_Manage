@@ -7,11 +7,13 @@ import Lineup from "../../../../components/playerlineup/lineup";
 import PlayerList from "../../../../components/playerlineup/playerlist";
 import useSWR from "swr";
 import withAuth from "@/components/middleware/withAuth";
-import { useSelector } from "react-redux"; // Import useSelector from Redux
-import { RootState } from "@/lib/store"; // Adjust the import path as needed
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { Container } from "react-bootstrap";
-import './lineup.scss'
+import DeleteModal from '../../../../components/modals/lineups/deleteLineup.modal';
+import './lineup.scss';
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 type Params = {
@@ -25,54 +27,50 @@ type HomeProps = {
 };
 
 const Home: React.FC<HomeProps> = ({ params, userRole }) => {
-  const [clubOwnerUserID, setClubOwnerUserID] = useState<number | null>(null);
   const [clubID, setClubID] = useState<string | null>(null);
-  const [lineupID, setLineupID] = useState<string | null>(null);
+  const [lineupID, setLineupID] = useState<number | null>(null);
   const [selectedLineupId, setSelectedLineupId] = useState<number | null>(null);
   const [positions, setPositions] = useState<(IPlayer | null)[]>(Array(19).fill(null));
   const [lineupPlayers, setLineupPlayers] = useState<IPlayer[]>([]);
+  const userId = useSelector((state: RootState) => state.auth.user?.userId);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [playerLineUpID, setPlayerLineUPID] = useState<number>(0);
+  const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
 
-  const userId = useSelector((state: RootState) => state.auth.user?.userId); // userId is a string or undefined
-  const [isOwner, setIsOwner] = useState<boolean>(false); // Status of whether the user is the owner
-  const [loading, setLoading] = useState<boolean>(true); // Loading status
-  const [playerLineUpID , setPlayerLineUPID] = useState<number>(0)
+  // State to hold lineup ID for deletion
+  const [lineUpId, setLineUpId] = useState<number | null>(null);
+
+  const handleDelete = (id: number) => {
+    setLineUpId(id);
+    setShowModalDelete(true);
+  };
+
   useEffect(() => {
     const fetchParams = async () => {
       const resolvedParams = await params;
-      console.log("Resolved Params:", resolvedParams);
       setClubID(resolvedParams.clubID);
-      setLineupID(resolvedParams.lineUpID);
-      const lineupId = resolvedParams.lineUpID ? Number(resolvedParams.lineUpID) : null;
+      setLineupID(resolvedParams.lineUpID ? Number(resolvedParams.lineUpID) : null);
+      setSelectedLineupId(lineupID);
 
-      setSelectedLineupId(lineupId);
-      
-
-      // Convert userId to a number (or undefined) to pass it correctly
       const userIdAsNumber = userId ? Number(userId) : undefined;
-      // Check if the user is the owner of the club
       await checkIfUserIsOwner(resolvedParams.clubID, userIdAsNumber);
     };
 
     fetchParams();
   }, [params, userId]);
 
-  // Check if the user is the owner of the club
   const checkIfUserIsOwner = async (clubID: string, userId?: number) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_CLUB}/get/${clubID}`);
       const clubOwnerData = await response.json();
-      const clubOwnerUserID = clubOwnerData.data.userID; // Assuming this is a number
+      const clubOwnerUserID = clubOwnerData.data.userID;
 
-      // Ensure comparison is done between numbers
-      if (clubOwnerUserID === userId) {
-        setIsOwner(true);
-      } else {
-        setIsOwner(false);
-      }
+      setIsOwner(clubOwnerUserID === userId);
     } catch (error) {
       console.error("Error checking ownership:", error);
     } finally {
-      setLoading(false); // End the loading process after verification
+      setLoading(false);
     }
   };
 
@@ -89,14 +87,11 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
 
       if (!lineupResponse.ok) {
         const errorMessage = await lineupResponse.text();
-        throw new Error(
-          `Failed to fetch lineup details. Status: ${lineupResponse.status}, Response: ${errorMessage}`
-        );
+        throw new Error(`Failed to fetch lineup details. Status: ${lineupResponse.status}, Response: ${errorMessage}`);
       }
 
       const lineupData = await lineupResponse.json();
-      setPlayerLineUPID(lineupData.data.playerLineUpID)
-      console.log("Lineup Response:", lineupData);
+      setPlayerLineUPID(lineupData.data.playerLineUpID);
 
       if (lineupData.errorCode !== 0) {
         throw new Error(lineupData.errorMessage || "Unknown error occurred while fetching lineup");
@@ -106,7 +101,6 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
 
       for (const lineupItem of lineupData.data) {
         try {
-          console.log(`Fetching details for player ID: ${lineupItem.playerID}`);
           const playerResponse = await fetch(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayerById/${lineupItem.playerID}`);
 
           if (!playerResponse.ok) {
@@ -147,23 +141,17 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
 
   const dropPlayer = (player: IPlayer, positionIndex: number) => {
     if (!isOwner) return;
-  
-    // Check if the player already exists in another position
-    const existingIndex = positions.findIndex(
-      (pos) => pos?.playerID === player.playerID
-    );
-  
+
+    const existingIndex = positions.findIndex((pos) => pos?.playerID === player.playerID);
     if (existingIndex !== -1 && existingIndex !== positionIndex) {
       alert("This player is already assigned to another position.");
       return;
     }
-  
-    // Update the positions array
+
     const newPositions = [...positions];
     newPositions[positionIndex] = player;
     setPositions(newPositions);
   };
-  
 
   const removePlayerFromLineup = (positionIndex: number) => {
     if (isOwner) {
@@ -187,28 +175,40 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
 
   return (
     <Container className="new_container">
-       <DndProvider backend={HTML5Backend}>
-      <div style={{ display: "flex", padding: "20px" }}>
-        <div style={{ flex: 1, marginRight: "20px" }}>
-          <h1>Player List</h1>
-          <PlayerList players={playerData.data} />
+      <DndProvider backend={HTML5Backend}>
+        <div style={{ display: "flex", padding: "20px" }}>
+          <div style={{ flex: 1, marginRight: "20px" }}>
+            <h1>Player List</h1>
+            <PlayerList players={playerData.data} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h1>Lineup</h1>
+            {isOwner && (
+              <button onClick={() => handleDelete(lineupID!)} className="btn btn-danger mb-3">
+                Delete Lineup
+              </button>
+            )}
+            <Lineup
+              positions={positions}
+              onDropPlayer={dropPlayer}
+              onRemovePlayer={removePlayerFromLineup}
+              selectedLineupId={selectedLineupId}
+              setPositions={setPositions}
+              isOwner={isOwner}
+              playerLineupID={playerLineUpID}
+            />
+          </div>
         </div>
-        <div style={{ flex: 1 }}>
-          <h1>Lineup</h1>
-          <Lineup
-            positions={positions}
-            onDropPlayer={dropPlayer}
-            onRemovePlayer={removePlayerFromLineup}
-            selectedLineupId={selectedLineupId}
-            setPositions={setPositions}
-            isOwner={isOwner} // Pass the isOwner flag to Lineup to control edit permissions
-            playerLineupID = {playerLineUpID}
-          />
-        </div>
-      </div>
-    </DndProvider>
+      </DndProvider>
+      {showModalDelete && lineUpId !== null && (
+        <DeleteModal
+          showModalDelete={showModalDelete}
+          setShowModalDelete={setShowModalDelete}
+          lineUpId={lineUpId} // lineUpId is guaranteed to be a number here
+          setLineUpId={setLineUpId}
+        />
+      )}
     </Container>
-   
   );
 };
 

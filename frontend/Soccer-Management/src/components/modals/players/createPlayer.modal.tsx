@@ -37,7 +37,7 @@ function CreatePlayerModal(props: IProps) {
     };
 
     const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/create`, {
+        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/createPlayer`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -46,30 +46,33 @@ function CreatePlayerModal(props: IProps) {
             body: JSON.stringify({
                 playerName,
                 playerPosition,
-                playerImage, // Base64 string
-                clubId,
+                playerImage :playerImage, // Base64 string
+                clubID: clubId,
                 playerAge,
                 shirtnumber: shirtNumber,
                 playerStatus,
                 leg,
                 height,
-                weight,
+                weight
             }),
         })
-        .then(res => res.json())
         .then(res => {
-            if (res) {
-                toast.success("Create successful");
-                handleCloseModal();
-                mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
             }
+            return res.json();
+        })
+        .then(res => {
+            toast.success("Create successful");
+            handleCloseModal();
+            // onLineupCreated(); // Refresh the lineup data
+            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
         })
         .catch(err => {
             toast.error("Error creating player");
             console.error(err);
         });
     };
-
     const handleCloseModal = () => {
         // Reset input fields
         setPlayerName('');

@@ -29,14 +29,28 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
         {
             try
             {
+                // Check if username or email already exists
+                var existingUser = await _dbContext.AuthUsers
+                    .FirstOrDefaultAsync(u => u.username == authRegisterDto.username );
+
+                if (existingUser != null)
+                {
+                    return new AuthResponeDto
+                    {
+                        EM = "Username or email already exists",
+                        EC = 1,
+                        DT = null
+                    };
+                }
+
                 var user = new AuthUser
                 {
                     username = authRegisterDto.username,
-                    password = authRegisterDto.password,
+                    password = authRegisterDto.password, // Consider hashing the password before saving
                     email = authRegisterDto.email,
                     age = 0,
                     address = "",
-                    gender =  "",
+                    gender = "",
                     phone = 0,
                     name = authRegisterDto.name
                 };
@@ -48,7 +62,7 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                 {
                     EM = "Register success",
                     EC = 0,
-                    DT = null // Hoặc mảng chuỗi nếu cần
+                    DT = null // Or an array of strings if needed
                 };
             }
             catch (Exception ex)
@@ -166,6 +180,50 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
             {
                 // Ghi log lỗi nếu cần
                 throw new Exception("An error occurred while retrieving users.", ex);
+            }
+        }
+        public async Task<AuthResponeDto> register(LoginUserDto loginUserDto)
+        {
+            try
+            {
+                var user = await _dbContext.AuthUsers
+              .FirstOrDefaultAsync(x => x.username == loginUserDto.username && x.password == loginUserDto.password);
+                var userrole = new AuthUserRole
+                {
+                    roleId = 3,
+                    userId = user.userId
+                };
+                if (user == null)
+                {
+                    return new AuthResponeDto
+                    {
+                        EM = "Invalid Username or password ",
+                        EC = 1,
+                        DT = ""
+                    };
+                }
+                _dbContext.AuthUserRoles.Add(userrole);
+                await _dbContext.SaveChangesAsync();
+                return new AuthResponeDto
+                {
+                    EM = "success",
+                    EC = 0,
+                    DT = null
+                };
+
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+                return new AuthResponeDto
+                {
+                    EM = ex.Message,
+                    EC = 1,
+                    DT = null
+                };
             }
         }
     }

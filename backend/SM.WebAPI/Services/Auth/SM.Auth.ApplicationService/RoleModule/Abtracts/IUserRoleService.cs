@@ -16,5 +16,6 @@ namespace SM.Auth.ApplicationService.RoleModule.Abtracts
         public Task<AuthResponeDto> DeleteRole(int roleId);
         public Task<AuthResponeDto> GetRole(int roleId);
         public Task<AuthResponeDto> GetAllRoles();
+        public Task<AuthResponeDto> GetRolebyUser(int userID);
     }
 }

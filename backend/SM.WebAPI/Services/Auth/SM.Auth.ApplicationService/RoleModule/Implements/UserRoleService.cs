@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SM.Auth.ApplicationService.RoleModule.Implements
 {
-    public class UserRoleService : AuthServiceBase , IUserRoleService
+    public class UserRoleService : AuthServiceBase, IUserRoleService
     {
         public UserRoleService(ILogger<AuthService> logger, AuthDbContext dbContext) : base(logger, dbContext)
         {
@@ -27,7 +27,7 @@ namespace SM.Auth.ApplicationService.RoleModule.Implements
             {
                 var userRole = new AuthUserRole
                 {
-                    roleId =createUserRoleDto.roleId,
+                    roleId = createUserRoleDto.roleId,
                     userId = createUserRoleDto.userId
 
                 };
@@ -48,7 +48,7 @@ namespace SM.Auth.ApplicationService.RoleModule.Implements
                     EM = "Create User Role success",
                     DT = null
                 };
-            }  
+            }
             catch (Exception ex)
             {
                 return new AuthResponeDto
@@ -59,7 +59,7 @@ namespace SM.Auth.ApplicationService.RoleModule.Implements
                 };
             }
         }
-        public async Task<AuthResponeDto> UpdateRole(int userRoleId , UpdateUserRoleDto updateUserRoleDto)
+        public async Task<AuthResponeDto> UpdateRole(int userRoleId, UpdateUserRoleDto updateUserRoleDto)
         {
             try
             {
@@ -187,6 +187,25 @@ namespace SM.Auth.ApplicationService.RoleModule.Implements
                     DT = null
                 };
             }
+        }
+        public async Task<AuthResponeDto> GetRolebyUser(int userID)
+        {
+            var role = _dbContext.AuthUserRoles.FirstOrDefault(x => x.userId == userID);
+            if (role == null)
+            {
+                return new AuthResponeDto
+                {
+                    EC = 1,
+                    EM = "Role not found",
+                    DT = null
+                };
+            }
+            return new AuthResponeDto
+            {
+                EC = 0,
+                EM = "Get Role success",
+                DT = role
+            };
         }
     }
 }

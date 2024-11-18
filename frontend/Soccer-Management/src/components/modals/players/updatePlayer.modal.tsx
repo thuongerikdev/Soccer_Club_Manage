@@ -46,7 +46,7 @@ function UpdatePlayerModal(props: IProps) {
     }, [player]);
 
     const handleSubmit = () => {
-        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer/${playerId}`, {
+        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

@@ -176,6 +176,38 @@ namespace SM.WebAPI.Controllers.AuthController
                 };
             }
         }
+        [HttpGet("getRolebyUser/{userID}")]
+        public async Task<AuthResponeDto> GetRoleByUser(int userID)
+        {
+            try
+            {
+                var result = await _userRoleService.GetRolebyUser(userID);
+                if (result.EC != 0)
+                {
+                    return new AuthResponeDto
+                    {
+                        EC = result.EC,
+                        EM = result.EM,
+                        DT = result.DT
+                    };
+                }
+                return new AuthResponeDto
+                {
+                    EC = result.EC,
+                    EM = result.EM,
+                    DT = result.DT
+                };
+            }
+            catch (Exception e)
+            {
+                return new AuthResponeDto
+                {
+                    EC = -1,
+                    EM = e.Message,
+                    DT = null
+                };
+            }
+        }
 
     }
 }

@@ -16,7 +16,7 @@ const withAuth = <P extends { userRole?: string | null }>(WrappedComponent: Reac
     useEffect(() => {
       const fetchUserRole = async () => {
         try {
-          const roleResponse = await fetch(`http://localhost:3001/api/authuserrole/getuserrole/${userId}`);
+          const roleResponse = await fetch(`http://localhost:3001/api/authuserrole/getRolebyUser/${userId}`);
           if (!roleResponse.ok) {
             throw new Error('Failed to fetch user role');
           }

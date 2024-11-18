@@ -216,5 +216,41 @@ namespace SM.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpPost("oldRegister")]
+        public async Task<IActionResult> OldRegister(LoginUserDto loginUserDto)
+        {
+            try
+            {
+                var result = await _authService.register(loginUserDto);
+
+                if (result.EC == 0) // Assuming EC = 0 means success
+                {
+                    return Ok(new AuthResponeDto
+                    {
+                        EM = result.EM,
+                        EC = result.EC,
+                        DT = result.DT // hoặc bất kỳ dữ liệu nào bạn muốn trả về
+                    });
+                }
+                else
+                {
+                    return BadRequest(new AuthResponeDto
+                    {
+                        EM = result.EM, // Error message from service
+                        EC = result.EC,
+                        DT = null
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new AuthResponeDto
+                {
+                    EM = "Internal server error: " + ex.Message,
+                    EC = 1,
+                    DT = null
+                });
+            }
+        }
     }
 }
