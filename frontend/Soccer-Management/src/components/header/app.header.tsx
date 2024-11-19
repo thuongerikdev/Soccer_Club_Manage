@@ -102,7 +102,6 @@ const AppHeader = ({ userRole, loading }: AppHeaderProps) => {
       </Modal>
 
       {/* User Update Modal */}
-      // In AppHeader component
       <UpdateModals
         showModalUpdate={showUpdateModal}
         setShowModalUpdate={setShowUpdateModal}
