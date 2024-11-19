@@ -7,7 +7,7 @@ interface LineupProps {
   positions: (IPlayer | null)[];
   onDropPlayer: (player: IPlayer, positionIndex: number) => void;
   onRemovePlayer: (positionIndex: number) => void;
-  selectedLineupId: number | null;
+  selectedLineupId: number;
   setPositions: React.Dispatch<React.SetStateAction<(IPlayer | null)[]>>;
   isOwner: boolean; // Nhận isOwner từ props
   playerLineupID : number

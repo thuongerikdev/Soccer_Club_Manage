@@ -39,7 +39,7 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
   const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
 
   // State to hold lineup ID for deletion
-  const [lineUpId, setLineUpId] = useState<number | null>(null);
+  const [lineUpId, setLineUpId] = useState<number>(0);
 
   const handleDelete = (id: number) => {
     setLineUpId(id);
@@ -92,6 +92,7 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
 
       const lineupData = await lineupResponse.json();
       setPlayerLineUPID(lineupData.data.playerLineUpID);
+      console.log(lineupData.data)
 
       if (lineupData.errorCode !== 0) {
         throw new Error(lineupData.errorMessage || "Unknown error occurred while fetching lineup");
@@ -132,6 +133,7 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
           newPositions[positionIndex] = player;
         }
       });
+      console.log(players)
       setPositions(newPositions);
     } catch (error) {
       console.error("Error fetching lineup details:", error);
@@ -162,10 +164,10 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
   };
 
   useEffect(() => {
-    if (selectedLineupId) {
-      fetchLineupDetails(selectedLineupId);
-    }
-  }, [selectedLineupId]);
+   
+      fetchLineupDetails(Number(lineupID));
+    
+  }, [lineupID]);
 
   if (loading) return <div className="loading">Loading...</div>;
   if (playerError) return <div>Error loading players.</div>;
@@ -188,11 +190,12 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
                 Delete Lineup
               </button>
             )}
+            
             <Lineup
               positions={positions}
               onDropPlayer={dropPlayer}
               onRemovePlayer={removePlayerFromLineup}
-              selectedLineupId={selectedLineupId}
+              selectedLineupId={Number(lineupID)}
               setPositions={setPositions}
               isOwner={isOwner}
               playerLineupID={playerLineUpID}

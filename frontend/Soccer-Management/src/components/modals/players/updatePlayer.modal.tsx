@@ -5,7 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 
-
 interface IProps {
     showModalUpdate: boolean;
     setShowModalUpdate: (value: boolean) => void;
@@ -22,12 +21,12 @@ function UpdatePlayerModal(props: IProps) {
     const [playerImage, setPlayerImage] = useState<string>('');
     const [clubId, setClubId] = useState<number>(0);
     const [playerAge, setPlayerAge] = useState<number>(0);
-
     const [shirtNumber, setShirtNumber] = useState<number>(0);
     const [playerStatus, setPlayerStatus] = useState<number>(0);
     const [leg, setLeg] = useState<string>('');
     const [height, setHeight] = useState<number>(0.0); // double
     const [weight, setWeight] = useState<number>(0.0); // double
+    const [phoneNumber, setPhoneNumber] = useState<number>(0); // New state for phone number
 
     useEffect(() => {
         if (player) {
@@ -40,8 +39,9 @@ function UpdatePlayerModal(props: IProps) {
             setShirtNumber(player.shirtnumber || 0);
             setPlayerStatus(player.playerStatus || 0);
             setLeg(player.leg || '');
-            setHeight(player.height || 0.0); // double
-            setWeight(player.weight || 0.0); // double
+            setHeight(player.height || 0.0);
+            setWeight(player.weight || 0.0);
+            setPhoneNumber(player.phoneNumber || 0); // Set phone number from player data
         }
     }, [player]);
 
@@ -64,34 +64,25 @@ function UpdatePlayerModal(props: IProps) {
                 leg: leg,
                 height: height,
                 weight: weight,
+                phoneNumber: phoneNumber, // Include phone number in the request
             }),
         })
         .then(res => {
-            // Check if response is valid
             if (!res.ok) {
                 throw new Error(`Request failed with status: ${res.status}`);
             }
-            return res.text(); // Get response as text first
+            return res.json(); // Get response as JSON
         })
-        .then(resText => {
-            try {
-                const res = JSON.parse(resText); // Try parsing the text as JSON
-                if (res) {
-                    toast.success(res.em); // Adjust based on your API response
-                    handleCloseModal();
-                    mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
-                }
-            } catch (err) {
-                toast.error("Error parsing response");
-                console.error("Error parsing response:", err);
-            }
+        .then(res => {
+            toast.success(res.em); // Adjust based on your API response
+            handleCloseModal();
+            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
         })
         .catch(err => {
             toast.error(`Error updating player: ${err.message}`);
             console.error("Error:", err);
         });
     };
-    
 
     const handleCloseModal = () => {
         setPlayer(null); // Reset player state
@@ -107,7 +98,55 @@ function UpdatePlayerModal(props: IProps) {
         setLeg('');
         setHeight(0.0);
         setWeight(0.0);
+        setPhoneNumber(0); // Reset phone number
     };
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this player?")) {
+            const requestData = {
+                playerId: playerId,
+                playerName: playerName,
+                playerPosition: playerPosition,
+                playerImage: playerImage,
+                clubID: clubId,
+                playerAge: playerAge,
+                shirtnumber: shirtNumber,
+                playerStatus: 2,
+                leg: leg,
+                height: height,
+                weight: weight,
+                phoneNumber: phoneNumber, // Include phone number in the request
+            };
+        
+            console.log("Request Payload:", requestData); // Log the request payload for debugging
+        
+            fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                method: "PUT",
+                body: JSON.stringify(requestData),
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Failed with status ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(res => {
+                toast.success("Create successful");
+                // onLineupCreated()
+                mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getall`);
+                handleCloseModal();
+                
+            })
+            .catch(err => {
+                toast.error("Error updating player");
+                console.error("Error:", err);
+            });
+        };
+    }
+    
 
     return (
         <Modal
@@ -141,7 +180,6 @@ function UpdatePlayerModal(props: IProps) {
                     />
                 </Form.Group>
 
-
                 <Form.Group className="mb-3">
                     <Form.Label>Image URL</Form.Label>
                     <Form.Control 
@@ -149,6 +187,16 @@ function UpdatePlayerModal(props: IProps) {
                         placeholder="Enter image URL" 
                         value={playerImage}
                         onChange={(e) => setPlayerImage(e.target.value)} 
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Phone Number</Form.Label> {/* New field for phone number */}
+                    <Form.Control 
+                        type="text" 
+                        placeholder="Enter phone number" 
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(Number(e.target.value))} 
                     />
                 </Form.Group>
 
@@ -171,8 +219,6 @@ function UpdatePlayerModal(props: IProps) {
                         onChange={(e) => setPlayerAge(Number(e.target.value))} 
                     />
                 </Form.Group>
-
-
 
                 <Form.Group className="mb-3">
                     <Form.Label>Shirt Number</Form.Label>
@@ -229,6 +275,7 @@ function UpdatePlayerModal(props: IProps) {
                     Close
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>Save</Button>
+            <Button variant="primary" onClick={handleDelete}>delete</Button>
             </Modal.Footer>
         </Modal>
     );

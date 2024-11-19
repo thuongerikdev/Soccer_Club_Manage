@@ -1,4 +1,5 @@
-﻿using SM.Tournament.Domain.Match;
+﻿using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
+using SM.Tournament.Domain.Match;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MatchDto.MatchesStatistic;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic
 {
-    public class MatchStatBase
+    public class MatchStatBase : IMatchStatBase
     {
         public TournamentResponeDto caculateStat (List <CaculateStatisticDto> stat )
         {

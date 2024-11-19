@@ -80,6 +80,9 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
         {
             try
             {
+                var role = await _dbContext.AuthUserRoles.FirstOrDefaultAsync(x => x.userId == userId);
+
+                _dbContext.AuthUserRoles.Remove(role);
                 var user = await _dbContext.AuthUsers.FirstOrDefaultAsync(x => x.userId == userId);
 
                 if (user == null)
