@@ -18,6 +18,8 @@ namespace SM.Auth.ApplicationService.UserModule.Abtracts
         public ValueTask<IEnumerable<AuthGetAllUserDto>> AuthGetAll();
         public  Task<AuthResponeDto> register(LoginUserDto loginUserDto);
 
+        public Task<AuthResponeDto> getbyID(int userID);
+
 
     }
 

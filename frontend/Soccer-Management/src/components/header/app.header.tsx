@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { setUser, logout } from '@/lib/features/loginSlice';
 import { useRouter } from 'next/navigation';
+import UpdateModals from '../modals/users/updateMyAccount'; // Import the update modal component
 
 interface AppHeaderProps {
   userRole: string | null;
@@ -22,6 +23,7 @@ const AppHeader = ({ userRole, loading }: AppHeaderProps) => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const user = useSelector((state: RootState) => state.auth.user);
   const [showModal, setShowModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false); // State for update modal
 
   useEffect(() => {
     const storedLoginState = localStorage.getItem('isAuthenticated');
@@ -69,7 +71,13 @@ const AppHeader = ({ userRole, loading }: AppHeaderProps) => {
           <Nav>
             {isAuthenticated ? (
               <>
-                <span className='nav-link'>Welcome, {user?.name}</span>
+                <span
+                  className='nav-link'
+                  onClick={() => setShowUpdateModal(true)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Welcome, {user?.name}
+                </span>
                 <Button variant="button" className='nav-link logout-button' onClick={() => setShowModal(true)}>Log out</Button>
               </>
             ) : (
@@ -92,6 +100,14 @@ const AppHeader = ({ userRole, loading }: AppHeaderProps) => {
           <Button variant="secondary" onClick={handleLogout}>Log out</Button>
         </Modal.Footer>
       </Modal>
+
+      {/* User Update Modal */}
+      // In AppHeader component
+      <UpdateModals
+        showModalUpdate={showUpdateModal}
+        setShowModalUpdate={setShowUpdateModal}
+        userID={Number(user?.userId)}  // Pass userID directly
+      />
     </>
   );
 }

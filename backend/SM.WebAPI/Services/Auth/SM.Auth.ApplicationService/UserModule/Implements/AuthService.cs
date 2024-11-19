@@ -229,5 +229,39 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                 };
             }
         }
+        public async Task<AuthResponeDto> getbyID(int userID)
+        {
+            try
+            {
+                var user = await _dbContext.AuthUsers.FirstOrDefaultAsync(x => x.userId == userID);
+                if (user == null)
+                {
+                    return new AuthResponeDto
+                    {
+                        EM = "User not found",
+                        EC = 1,
+                        DT = null
+                    };
+                }
+
+                return new AuthResponeDto
+                {
+                    EM = "success",
+                    EC = 0,
+                    DT = user
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting user with ID: {UserId}", userID);
+                return new AuthResponeDto
+                {
+                    EM = ex.Message,
+                    EC = 1,
+                    DT = null
+                };
+
+            }
+        }
     }
 }

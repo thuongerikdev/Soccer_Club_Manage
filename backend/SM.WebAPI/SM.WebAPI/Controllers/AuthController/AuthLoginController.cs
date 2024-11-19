@@ -252,5 +252,49 @@ namespace SM.WebAPI.Controllers
                 });
             }
         }
+        [HttpGet("getbyID/{userID}")]
+        public async Task<IActionResult> GetByID(int userID)
+        {
+            try
+            {
+                var result = await _authService.getbyID(userID);
+                if (result.EC == 0)
+                {
+                    return Ok(new AuthResponeDto
+                    {
+                        EM = result.EM,
+                        EC = result.EC,
+                        DT = result.DT // hoặc bất kỳ dữ liệu nào bạn muốn trả về
+                    });
+                }
+                else
+                {
+                    return BadRequest(new AuthResponeDto
+                    {
+                        EM = result.EM,
+                        EC = result.EC,
+                        DT = null
+                    });
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new AuthResponeDto
+                {
+                    EM = $"User with ID {userID} not found.",
+                    EC = 1,
+                    DT = null
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new AuthResponeDto
+                {
+                    EM = "Internal server error: " + ex.Message,
+                    EC = 1,
+                    DT = null
+                });
+            }
+        }
     }
 }
