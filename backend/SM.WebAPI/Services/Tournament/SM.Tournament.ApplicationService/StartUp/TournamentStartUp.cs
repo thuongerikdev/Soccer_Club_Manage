@@ -34,6 +34,10 @@ using SM.Tournament.ApplicationService.TourModule.Implements;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.ClubFundStatictic.Date;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.ClubFundStatictic.Rank;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Caculate.CaculateType;
+using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
+using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic;
+using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Match;
+using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Player;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -86,10 +90,17 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddKeyedScoped<IFundCalculationStrategy, ExpenseFundCalculation>("Expense");
             builder.Services.AddKeyedScoped<IFundCalculationStrategy, ContributeFundCaculation>("ContributeTax");
 
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, ClubMatchStatService>("clubMatch");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, MatchesStatService>("matches");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, PlayerMatchStatService>("playerMatch");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, PlayerMatchStatService>("player");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentMatchStatService>("tournamentMatch");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentClubMatchStatService>("tournamentClub");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentMatchService>("tournament");
 
 
 
-
+            builder.Services.AddScoped<IMatchStatBase, MatchStatBase>();
 
 
             builder.Services.AddScoped<IClubFundService, ClubFundService>();
@@ -105,9 +116,10 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddScoped<IPlayerEventService , PlayerEventService>();
             builder.Services.AddScoped<IPlayerLineUpService, PlayerLineUpService>();
 
-
             builder.Services.AddScoped<IMatchesService, MatchesService>();
             builder.Services.AddScoped<IMatchesStatisticService, MatchesStatisticService>();
+            builder.Services.AddScoped<IMatchStatisticUse, MatchStrategyUse>();
+
 
             builder.Services.AddScoped<ITournamentService, TournamentService>();
 
