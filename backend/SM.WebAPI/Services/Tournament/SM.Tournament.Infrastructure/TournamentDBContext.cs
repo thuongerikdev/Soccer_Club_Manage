@@ -144,11 +144,6 @@ namespace SM.Tournament.Infrastructure
         .HasForeignKey(p => p.MinigameID)
         .OnDelete(DeleteBehavior.Restrict);
     modelBuilder.Entity<Predictions>()
-        .HasOne<ClubPlayers>()
-        .WithMany()
-        .HasForeignKey(p => p.PlayerID)
-        .OnDelete(DeleteBehavior.Restrict);
-    modelBuilder.Entity<Predictions>()
         .HasOne<Matches>()
         .WithMany()
         .HasForeignKey(p => p.MatchID)
@@ -165,11 +160,7 @@ namespace SM.Tournament.Infrastructure
         .WithMany()
         .HasForeignKey(v => v.MinigameID)
         .OnDelete(DeleteBehavior.Restrict);
-    modelBuilder.Entity<Votes>()
-        .HasOne<ClubPlayers>()
-        .WithMany()
-        .HasForeignKey(v => v.PlayerID)
-        .OnDelete(DeleteBehavior.Restrict);
+   
     modelBuilder.Entity<Votes>()
         .HasOne<Matches>()
         .WithMany()

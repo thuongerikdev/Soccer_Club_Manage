@@ -38,6 +38,8 @@ using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
 using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic;
 using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Match;
 using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Player;
+using SM.Tournament.ApplicationService.Minigame.Abtracts;
+using SM.Tournament.ApplicationService.Minigame.Implements;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -122,6 +124,10 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
 
 
             builder.Services.AddScoped<ITournamentService, TournamentService>();
+
+            builder.Services.AddScoped<IMinigameService, MinigameService>();
+            builder.Services.AddScoped<IPredictService, PredictSerivce>();
+            builder.Services.AddScoped<IVoteService, VoteService>();
 
 
 

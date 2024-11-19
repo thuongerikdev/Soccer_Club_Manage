@@ -17,11 +17,9 @@ namespace SM.Tournament.Domain.Minigame
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VoteID { get; set; }
         public int MinigameID { get; set; }
-        public int PlayerID { get; set; }
         public int MatchID { get; set; }
         public int UserID { get; set; }
         public string  Selection { get; set; }
-        public int Points { get; set; }
         public DateTime VoteDate { get; set; }
 
     }
