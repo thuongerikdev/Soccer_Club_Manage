@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SM.Tournament.ApplicationService.PlayerModule.Implements
 {
-    public class PlayerLineUpService : TournamentServiceBase , IPlayerLineUpService
+    public class PlayerLineUpService : TournamentServiceBase, IPlayerLineUpService
     {
-        public PlayerLineUpService (ILogger<PlayerLineUpService> logger, TournamentDbContext dbContext) : base(logger, dbContext)
+        public PlayerLineUpService(ILogger<PlayerLineUpService> logger, TournamentDbContext dbContext) : base(logger, dbContext)
         {
         }
         public async Task<TournamentResponeDto> CreatePlayerLineUps(List<CreatePlayerLineUpDto> createPlayerLineUpDtos)
@@ -60,7 +60,7 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Implements
                 Data = playerLineUps.Select(p => p.PlayerLineUpID).ToList() // Trả về tất cả các ID đã tạo
             };
         }
-        public async Task<TournamentResponeDto> UpdatePlayerLineUp (UpdatePlayerLineUpDto updatePlayerLineUpDto)
+        public async Task<TournamentResponeDto> UpdatePlayerLineUp(UpdatePlayerLineUpDto updatePlayerLineUpDto)
         {
             var playerlineup = await _dbContext.PlayerLineUps.FindAsync(updatePlayerLineUpDto.PlayerLineUpID);
             if (playerlineup == null) throw new ArgumentException("Player LineUp not found");
@@ -109,6 +109,19 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Implements
                 ErrorCode = 0,
                 ErrorMessage = "Get Player LineUp By Club Success",
                 Data = playerlineup
+            };
+        }
+        public async Task<TournamentResponeDto> DeletePlayerLineUpByPlayer(int PlayerID)
+        {
+            var playerLineup = _dbContext.PlayerLineUps.Where(x => x.PlayerID == PlayerID);
+
+            _dbContext.PlayerLineUps.RemoveRange(playerLineup);
+            await _dbContext.SaveChangesAsync();
+            return new TournamentResponeDto
+            {
+                ErrorCode = 0,
+                ErrorMessage = "Delete Player LineUp By Player Success",
+                Data = null
             };
         }
     }

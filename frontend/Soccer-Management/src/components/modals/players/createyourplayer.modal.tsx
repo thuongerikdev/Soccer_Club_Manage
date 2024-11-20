@@ -67,7 +67,7 @@ function CreatePlayerModal(props: IProps) {
             toast.success("Create successful");
             handleCloseModal();
             // onLineupCreated(); // Refresh the lineup data
-            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayersByClub/${clubID}`);
+            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayerClub/${clubID}` );
         })
         .catch(err => {
             toast.error("Error creating player");

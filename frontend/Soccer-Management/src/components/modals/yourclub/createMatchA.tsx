@@ -58,6 +58,7 @@ const CreateMatchA: React.FC<CreateMatchAProps> = ({ showModalCreate, setShowMod
 
             const data = await response.json();
             setClubs(data.data || []);
+            mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamA/${clubID}`);
         } catch (error: any) {
             setError(error.message || 'Failed to fetch clubs.');
         } finally {
@@ -128,8 +129,9 @@ const CreateMatchA: React.FC<CreateMatchAProps> = ({ showModalCreate, setShowMod
             })
             .then(() => {
                 toast.success('Match created successfully.');
+                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamA/${clubID}`);
                 handleCloseModal();
-                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/getall`);
+          
             })
             .catch((err) => {
                 toast.error(`Error creating match: ${err.message}`);

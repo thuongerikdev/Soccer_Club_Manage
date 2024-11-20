@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { mutate } from 'swr';
 
 interface ViewModalProps {
     showModalView: boolean;
@@ -52,7 +53,7 @@ const ViewModal: React.FC<ViewModalProps> = ({ showModalView, setShowModalView, 
     
                 const data = await response.json();
 
-    
+                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamA/${id}`);
                 alert('Match deleted successfully!'); // Thông báo thành công
                 
             } catch (error) {

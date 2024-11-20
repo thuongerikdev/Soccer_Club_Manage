@@ -92,52 +92,75 @@ function ViewPlayer(props: IProps) {
     };
     
     
-    const handleDelete = () => {
-        if (window.confirm("Are you sure you want to delete this player?")) {
-            const requestData = {
-                playerID: playerID,
-                playerName: playerName,
-                playerPosition: playerPosition,
-                clubID: clubID,
-                playerAge: playerAge,
-                shirtnumber: shirtNumber,
-                playerImage: playerImage,
-                phoneNumber: phoneNumber,
-                playerStatus: 2,
-                leg: leg,
-                height: height,
-                weight: weight,
-            };
-        
-            console.log("Request Payload:", requestData); // Log the request payload for debugging
-        
-            fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                method: "PUT",
-                body: JSON.stringify(requestData),
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Failed with status ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(res => {
-                toast.success("Create successful");
-                // onLineupCreated()
-                mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayersByClub/${clubID}`);
-                handleCloseModal();
-                
-            })
-            .catch(err => {
-                toast.error("Error updating player");
-                console.error("Error:", err);
-            });
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this player?")) {
+            return;
+        }
+    
+        const requestData = {
+            playerID: playerID,
+            playerName: playerName,
+            playerPosition: playerPosition,
+            clubID: clubID,
+            playerAge: playerAge,
+            shirtnumber: shirtNumber,
+            playerImage: playerImage,
+            phoneNumber: phoneNumber,
+            playerStatus: 2, // Update status to "deleted"
+            leg: leg,
+            height: height,
+            weight: weight,
         };
-    }
+    
+        console.log("Request Payload:", requestData); // Debug payload
+    
+        try {
+            // Delete player from lineup
+            const deleteResponse = await fetch(
+                `${process.env.NEXT_PUBLIC_PLAYERLINEUP}/deleteByPlayer/${playerID}`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    method: "DELETE",
+                    body: JSON.stringify(requestData),
+                }
+            );
+    
+            if (!deleteResponse.ok) {
+                throw new Error(`Delete player failed with status ${deleteResponse.status}`);
+            }
+    
+            // Update player status
+            const updateResponse = await fetch(
+                `${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    method: "PUT",
+                    body: JSON.stringify(requestData),
+                }
+            );
+    
+            if (!updateResponse.ok) {
+                throw new Error(`Update player failed with status ${updateResponse.status}`);
+            }
+    
+            const updateResult = await updateResponse.json();
+    
+            // Show success message and update UI
+            toast.success("Player deleted successfully");
+            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayersByClub/${clubID}`);
+            handleCloseModal();
+        } catch (error) {
+            // Log and show error message
+            console.error("Error:", error);
+            toast.error("Error deleting or updating player");
+        }
+    };
     
 
     const handleCloseModal = () => {

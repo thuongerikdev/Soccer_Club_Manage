@@ -15,6 +15,7 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Abtracts
         public Task<TournamentResponeDto> DeletePlayerLineUp(int PlayerLineUpID);
         public Task<TournamentResponeDto> GetPlayerLineUp( );
         public Task<TournamentResponeDto> GetPlayerLineUpByLineUp( int LineUpID);
+        public Task<TournamentResponeDto> DeletePlayerLineUpByPlayer(int PlayerID);
 
     }
 }

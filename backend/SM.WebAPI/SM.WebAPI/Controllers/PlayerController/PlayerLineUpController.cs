@@ -130,5 +130,28 @@ namespace SM.WebAPI.Controllers.PlayerController
                 });
             }
         }
+        [HttpDelete("deleteByPlayer/{PlayerID}")]
+        public async Task<IActionResult> deleteByPlayer(int PlayerID)
+        {
+            try
+            {
+                var result = await _playerLineUpService.DeletePlayerLineUpByPlayer(PlayerID);
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorCode = result.ErrorCode,
+                    ErrorMessage = result.ErrorMessage,
+                    Data = result.Data
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = ex.Message,
+                    Data = null
+                });
+            }
+        }
     }
 }
