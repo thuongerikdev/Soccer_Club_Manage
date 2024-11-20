@@ -17,7 +17,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
         private readonly ICaculationResultStrategy _numberOfShot;
         private readonly ICaculationResultStrategy _playerVote;
         public MinigameUse(
-            [FromKeyedServices("matchesScore")] ICaculationResultStrategy matchesScore,
+            [FromKeyedServices("matchScore")] ICaculationResultStrategy matchesScore,
             [FromKeyedServices("numberOfFouls")] ICaculationResultStrategy numberOfFouls,
             [FromKeyedServices("numberOfPass")] ICaculationResultStrategy numberOfPass,
             [FromKeyedServices("numberOfShot")] ICaculationResultStrategy numberOfShot,

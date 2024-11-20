@@ -121,7 +121,7 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
 
 
             //minigame
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, MatchScore>("matchSCore");
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, MatchScore>("matchScore");
             builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfShot>("numberOfShot");
             builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfPass>("numberOfPass");
             builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfFouls>("numberOfFouls");
