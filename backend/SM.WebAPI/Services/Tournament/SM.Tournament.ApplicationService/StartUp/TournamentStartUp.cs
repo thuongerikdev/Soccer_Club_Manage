@@ -132,6 +132,7 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddScoped<IMinigameService, MinigameService>();
             builder.Services.AddScoped<IPredictService, PredictSerivce>();
             builder.Services.AddScoped<IVoteService, VoteService>();
+            builder.Services.AddScoped<IRewardService ,RewardService>();
 
 
 
