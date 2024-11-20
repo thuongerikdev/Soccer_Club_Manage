@@ -52,8 +52,9 @@ const ViewModal: React.FC<ViewModalProps> = ({ showModalView, setShowModalView, 
                 }
     
                 const data = await response.json();
-
+                setShowModalView(false)
                 mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamA/${id}`);
+                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamB/${id}`);
                 alert('Match deleted successfully!'); // Thông báo thành công
                 
             } catch (error) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useDrop } from 'react-dnd';
 import './style.scss';
-
+import { useRouter, usePathname } from 'next/navigation'; 
 interface LineupProps {
   positions: (IPlayer | null)[];
   onDropPlayer: (player: IPlayer, positionIndex: number) => void;
@@ -62,6 +62,7 @@ const PlayerPosition: React.FC<{
 };
 
 const Lineup: React.FC<LineupProps> = ({ positions, selectedLineupId, onDropPlayer, onRemovePlayer, setPositions, isOwner ,playerLineupID }) => {
+  const router = useRouter();
   const saveLineup = async () => {
     console.log('Selected Lineup ID:', selectedLineupId); // Check this value
     const payload = positions

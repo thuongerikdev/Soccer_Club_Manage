@@ -3,16 +3,18 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
-
+import { useRouter } from "next/navigation";
 interface IProps {
     showModalDelete: boolean;
     setShowModalDelete: (value: boolean) => void;
     lineUpId: number;
     setLineUpId: (value: number) => void;
+    clubID : number
 }
 
 function DeleteLineUpModal(props: IProps) {
-    const { showModalDelete, setShowModalDelete, lineUpId, setLineUpId } = props;
+    const router = useRouter();
+    const { showModalDelete, setShowModalDelete, lineUpId,clubID ,setLineUpId } = props;
     const [id, setId] = useState<number>(0);
 
     useEffect(() => {
@@ -35,7 +37,7 @@ function DeleteLineUpModal(props: IProps) {
                 if (res) {
                     toast.success("Delete successful");
                     handleCloseModal();
-                    mutate(`${process.env.NEXT_PUBLIC_LINEUP}/getAllLineUp`);
+                    router.push(`/yourclub/${clubID}`);
                 } else {
                     toast.error("No data returned after deletion.");
                 }

@@ -10,12 +10,12 @@ interface IProps {
     setShowModalUpdate: (value: boolean) => void;
     setPlayer: (value: IPlayer | null) => void;
     player: IPlayer | null;
-    isOwner: boolean | string | undefined;  // Thêm isOwner vào props
-    onLineupCreated: () => void; // Change to function type
+    isOwner: boolean | string | undefined;
+    onLineupCreated: () => void;
 }
 
 function ViewPlayer(props: IProps) {
-    const { showModalUpdate, setShowModalUpdate, player, setPlayer, isOwner , onLineupCreated } = props;
+    const { showModalUpdate, setShowModalUpdate, player, setPlayer, isOwner, onLineupCreated } = props;
 
     const [playerID, setPlayerId] = useState<number>(0);
     const [playerName, setPlayerName] = useState<string>('');
@@ -47,73 +47,70 @@ function ViewPlayer(props: IProps) {
         }
     }, [player]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const requestData = {
-            playerID: playerID,
-            playerName: playerName,
-            playerPosition: playerPosition,
-            clubID: clubID,
-            playerAge: playerAge,
+            playerID,
+            playerName,
+            playerPosition,
+            clubID,
+            playerAge,
             shirtnumber: shirtNumber,
-            playerImage: playerImage,
-            phoneNumber: phoneNumber,
-            playerStatus: playerStatus,
-            leg: leg,
-            height: height,
-            weight: weight,
+            playerImage,
+            phoneNumber,
+            playerStatus,
+            leg,
+            height,
+            weight,
         };
-    
+
         console.log("Request Payload:", requestData); // Log the request payload for debugging
-    
-        fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            method: "PUT",
-            body: JSON.stringify(requestData),
-        })
-        .then(res => {
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                method: "PUT",
+                body: JSON.stringify(requestData),
+            });
+
             if (!res.ok) {
                 throw new Error(`Failed with status ${res.status}`);
             }
-            return res.json();
-        })
-        .then(res => {
-            toast.success("Create successful");
-            // onLineupCreated()
+
+            const responseData = await res.json();
+            toast.success("Update successful");
+            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayerClub/${clubID}`);
             handleCloseModal();
-            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayersByClub/${clubID}`);
-        })
-        .catch(err => {
+        } catch (err) {
             toast.error("Error updating player");
             console.error("Error:", err);
-        });
+        }
     };
-    
-    
+
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to delete this player?")) {
             return;
         }
-    
+
         const requestData = {
-            playerID: playerID,
-            playerName: playerName,
-            playerPosition: playerPosition,
-            clubID: clubID,
-            playerAge: playerAge,
+            playerID,
+            playerName,
+            playerPosition,
+            clubID,
+            playerAge,
             shirtnumber: shirtNumber,
-            playerImage: playerImage,
-            phoneNumber: phoneNumber,
+            playerImage,
+            phoneNumber,
             playerStatus: 2, // Update status to "deleted"
-            leg: leg,
-            height: height,
-            weight: weight,
+            leg,
+            height,
+            weight,
         };
-    
+
         console.log("Request Payload:", requestData); // Debug payload
-    
+
         try {
             // Delete player from lineup
             const deleteResponse = await fetch(
@@ -127,11 +124,11 @@ function ViewPlayer(props: IProps) {
                     body: JSON.stringify(requestData),
                 }
             );
-    
+
             if (!deleteResponse.ok) {
                 throw new Error(`Delete player failed with status ${deleteResponse.status}`);
             }
-    
+
             // Update player status
             const updateResponse = await fetch(
                 `${process.env.NEXT_PUBLIC_PLAYER}/updatePlayer`,
@@ -144,24 +141,22 @@ function ViewPlayer(props: IProps) {
                     body: JSON.stringify(requestData),
                 }
             );
-    
+
             if (!updateResponse.ok) {
                 throw new Error(`Update player failed with status ${updateResponse.status}`);
             }
-    
+
             const updateResult = await updateResponse.json();
-    
+
             // Show success message and update UI
             toast.success("Player deleted successfully");
-            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayersByClub/${clubID}`);
+            mutate(`${process.env.NEXT_PUBLIC_PLAYER}/getPlayerClub/${clubID}`);
             handleCloseModal();
         } catch (error) {
-            // Log and show error message
             console.error("Error:", error);
             toast.error("Error deleting or updating player");
         }
     };
-    
 
     const handleCloseModal = () => {
         setPlayer(null); // Reset state player
@@ -195,122 +190,122 @@ function ViewPlayer(props: IProps) {
             <Modal.Body>
                 <Form.Group className="mb-3">
                     <Form.Label>Player Name</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter player name" 
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter player name"
                         value={playerName}
-                        onChange={(e) => setPlayerName(e.target.value)} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setPlayerName(e.target.value)}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Position</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter player position" 
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter player position"
                         value={playerPosition}
-                        onChange={(e) => setPlayerPosition(e.target.value)} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setPlayerPosition(e.target.value)}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Club ID</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter club ID" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter club ID"
                         value={clubID}
-                        onChange={(e) => setClubId(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setClubId(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Age</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter age" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter age"
                         value={playerAge}
-                        onChange={(e) => setPlayerAge(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setPlayerAge(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Shirt Number</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter shirt number" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter shirt number"
                         value={shirtNumber}
-                        onChange={(e) => setShirtNumber(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setShirtNumber(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Player Image</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter player image URL" 
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter player image URL"
                         value={playerImage}
-                        onChange={(e) => setPlayerImage(e.target.value)} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setPlayerImage(e.target.value)}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Phone Number</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter phone number" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter phone number"
                         value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setPhoneNumber(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Player Status</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter player status" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter player status"
                         value={playerStatus}
-                        onChange={(e) => setPlayerStatus(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setPlayerStatus(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Leg</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        placeholder="Enter player's dominant leg" 
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter player's dominant leg"
                         value={leg}
-                        onChange={(e) => setLeg(e.target.value)} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setLeg(e.target.value)}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Height</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter height" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter height"
                         value={height}
-                        onChange={(e) => setHeight(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setHeight(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Weight</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        placeholder="Enter weight" 
+                    <Form.Control
+                        type="number"
+                        placeholder="Enter weight"
                         value={weight}
-                        onChange={(e) => setWeight(Number(e.target.value))} 
-                        disabled={isDisabled} 
+                        onChange={(e) => setWeight(Number(e.target.value))}
+                        disabled={isDisabled}
                     />
                 </Form.Group>
 
@@ -318,10 +313,9 @@ function ViewPlayer(props: IProps) {
             <Modal.Footer>
                 {isOwner && (
                     <>
-                     <Button variant="primary" onClick={handleSubmit}>Save</Button>
-                     <Button variant="primary" onClick={handleDelete}>delete</Button>
+                        <Button variant="primary" onClick={handleSubmit}>Save</Button>
+                        <Button variant="primary" onClick={handleDelete}>Delete</Button>
                     </>
-                   
                 )}
                 <Button variant="secondary" onClick={handleCloseModal}>
                     Close

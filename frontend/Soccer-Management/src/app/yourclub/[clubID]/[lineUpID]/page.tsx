@@ -14,6 +14,7 @@ import { Container } from "react-bootstrap";
 import DeleteModal from '../../../../components/modals/lineups/deleteLineup.modal';
 import './lineup.scss';
 
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 type Params = {
@@ -27,6 +28,8 @@ type HomeProps = {
 };
 
 const Home: React.FC<HomeProps> = ({ params, userRole }) => {
+  const router = useRouter();
+
   const [clubID, setClubID] = useState<string | null>(null);
   const [lineupID, setLineupID] = useState<number | null>(null);
   const [selectedLineupId, setSelectedLineupId] = useState<number | null>(null);
@@ -209,6 +212,7 @@ const Home: React.FC<HomeProps> = ({ params, userRole }) => {
           setShowModalDelete={setShowModalDelete}
           lineUpId={lineUpId} // lineUpId is guaranteed to be a number here
           setLineUpId={setLineUpId}
+          clubID = {Number(clubID)}
         />
       )}
     </Container>
