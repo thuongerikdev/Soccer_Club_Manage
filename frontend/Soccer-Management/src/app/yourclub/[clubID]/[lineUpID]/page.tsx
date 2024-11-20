@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { Container } from "react-bootstrap";
-import DeleteModal from '../../../../components/modals/lineups/deleteLineup.modal';
+import DeleteModal from '../../../../components/modals/lineups/deleteYourLineup.modal';
 import './lineup.scss';
 
 
