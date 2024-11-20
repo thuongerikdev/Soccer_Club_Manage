@@ -9,11 +9,11 @@ interface IProps {
     showModalCreate: boolean;
     setShowModalCreate: (value: boolean) => void;
     clubID? : number
-    onLineupCreated: () => void; // Change to function type
+
 }
 
 function CreatePlayerModal(props: IProps) {
-    const { showModalCreate, setShowModalCreate  , clubID  , onLineupCreated} = props;
+    const { showModalCreate, setShowModalCreate  , clubID  } = props;
 
     // State for player attributes
     const [playerName, setPlayerName] = useState<string>('');

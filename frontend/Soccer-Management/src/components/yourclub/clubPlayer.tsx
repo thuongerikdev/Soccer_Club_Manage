@@ -47,6 +47,7 @@ const Player: React.FC<PlayerProps> = ({ data, clubID, isOwner }) => {
                 <Table striped bordered hover className="mt-3 table-custom">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Player Name</th>
                             <th>Player Position</th>
                             <th>Actions</th>
@@ -55,6 +56,7 @@ const Player: React.FC<PlayerProps> = ({ data, clubID, isOwner }) => {
                     <tbody>
                         {activePlayers.map((player) => (
                             <tr key={player.playerID}>
+                                <td>{player.playerID}</td>
                                 <td>{player.playerName}</td>
                                 <td>{player.playerPosition}</td>
                                 <td>

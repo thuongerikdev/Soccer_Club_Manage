@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
-
+import useSWR from 'swr'; // Import SWR
 interface IProps {
     showModalCreate: boolean;
     setShowModalCreate: (value: boolean) => void;
@@ -52,7 +52,7 @@ function CreateModal({ showModalCreate, setShowModalCreate, userId }: IProps) {
             if (res) {
                 toast.success("Create successful");
                 handleCloseModal();
-                mutate(`${process.env.NEXT_PUBLIC_CLUB}/getall`);
+                mutate(`${process.env.NEXT_PUBLIC_CLUB}/getyourClub/${userId}`);
             }
         })
         .catch(err => {

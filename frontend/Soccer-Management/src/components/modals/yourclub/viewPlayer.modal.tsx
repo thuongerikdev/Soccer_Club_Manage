@@ -11,11 +11,11 @@ interface IProps {
     setPlayer: (value: IPlayer | null) => void;
     player: IPlayer | null;
     isOwner: boolean | string | undefined;
-    onLineupCreated: () => void;
+
 }
 
 function ViewPlayer(props: IProps) {
-    const { showModalUpdate, setShowModalUpdate, player, setPlayer, isOwner, onLineupCreated } = props;
+    const { showModalUpdate, setShowModalUpdate, player, setPlayer, isOwner } = props;
 
     const [playerID, setPlayerId] = useState<number>(0);
     const [playerName, setPlayerName] = useState<string>('');

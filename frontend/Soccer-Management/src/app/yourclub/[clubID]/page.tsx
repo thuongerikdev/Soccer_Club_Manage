@@ -10,17 +10,19 @@ import MatchB from "../../../components/yourclub/matchesTeamB";
 import Lineup from "../../../components/yourclub/clubLineUp";
 import Player from "../../../components/yourclub/clubPlayer";
 import "./clubstat.scss";
-
+import DeleteModal from "../../../components/modals/clubs/deleteClub.modal";
 // Fetcher function for swr
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const YourClubStat = () => {
+    const [clubId, setClubId] = useState<number>(0);
     const { clubID: paramClubID } = useParams<{ clubID?: string }>();
     const reduxUserID = useSelector((state: RootState) => state.auth.user?.userId);
     const clubID = paramClubID ? parseInt(paramClubID) : undefined;
-
+    const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     // State quản lý component hiển thị
     const [activeTab, setActiveTab] = useState<string>("players");
+    
 
     // Fetch club owner info
     const { data: clubOwnerData, error: clubOwnerError } = useSWR(
@@ -60,6 +62,11 @@ const YourClubStat = () => {
     if (clubOwnerError || playersError || lineupError) {
         return <div className="error">Failed to load data</div>;
     }
+    
+    const handleDelete = (id: number) => {
+        setClubId(id);
+        setShowModalDelete(true);
+    };
 
     return (
         <div className="club-stat-container">
@@ -93,6 +100,22 @@ const YourClubStat = () => {
                         </button>
                     </>
                 )}
+            </div>
+            <div className="club-stat-container">
+                <h2>Club Statistics</h2>
+                {isOwner && (
+                    <button className="delete-club-button" onClick={() => handleDelete(Number(clubID))}>
+                        Delete Club
+                    </button>
+                )}
+
+                {/* Modal */}
+                <DeleteModal
+                    showModalDelete={showModalDelete}
+                    setShowModalDelete={setShowModalDelete}
+                    clubID={Number(clubID)}
+                    setCLubId={setClubId}
+                />
             </div>
 
             <div className="stats-content">

@@ -147,6 +147,7 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
 
 
             builder.Services.AddScoped<ITournamentService, TournamentService>();
+            builder.Services.AddScoped<ITournamentClubService, TournamentClubService>();
 
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { mutate } from 'swr';
-
+import { useRouter } from "next/navigation";
 interface ViewModalProps {
     showModalView: boolean;
     setShowModalView: (show: boolean) => void;
@@ -9,7 +9,8 @@ interface ViewModalProps {
     matchID?: string; // Pass the match ID to fetch details
 }
 
-const ViewModal: React.FC<ViewModalProps> = ({ showModalView, setShowModalView, matchID }) => {
+const ViewModal: React.FC<ViewModalProps> = ({ showModalView, setShowModalView, matchID ,clubID }) => {
+    const router = useRouter();
     const [matchDetails, setMatchDetails] = useState<any>(null); // Use appropriate type
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -45,23 +46,24 @@ const ViewModal: React.FC<ViewModalProps> = ({ showModalView, setShowModalView, 
                         'Content-Type': 'application/json',
                     },
                 });
-    
+
                 if (!response.ok) {
                     const errorData = await response.json(); // Lấy thông tin lỗi từ phản hồi
                     throw new Error(errorData.message || 'Failed to delete the match');
                 }
-    
+
                 const data = await response.json();
                 setShowModalView(false)
                 mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamA/${id}`);
-                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamB/${id}`);
+                // router.push(`/yourclub/${clubID}`);
                 alert('Match deleted successfully!'); // Thông báo thành công
-                
+
             } catch (error) {
                 console.error(error);
                 alert(`Error: ${error}`);
             } finally {
-                setLoading(false); 
+                setLoading(false);
+                mutate(`${process.env.NEXT_PUBLIC_MATCHES}/TeamA/${id}`);
             }
         }
     }

@@ -13,7 +13,7 @@ interface LineUp {
 interface LineupProps {
     data: LineUp[];
     clubID?: number;
-    isOwner: boolean|string|undefined;  // Add isOwner prop
+    isOwner: boolean | string | undefined;  // Add isOwner prop
 }
 
 const Lineup: React.FC<LineupProps> = ({ data, clubID, isOwner }) => {
@@ -59,6 +59,7 @@ const Lineup: React.FC<LineupProps> = ({ data, clubID, isOwner }) => {
                 <Table striped bordered hover className="mt-3 table-custom">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Lineup Name</th>
                             <th>Player Number</th>
                             <th>Lineup Type</th>
@@ -68,11 +69,12 @@ const Lineup: React.FC<LineupProps> = ({ data, clubID, isOwner }) => {
                     <tbody>
                         {lineupData.map((lineup) => (
                             <tr key={lineup.lineUpID}>
+                                <td>{lineup.lineUpID}</td>
                                 <td>{lineup.lineUpName}</td>
                                 <td>{lineup.playerNumber}</td>
                                 <td>{lineup.lineUpType}</td>
                                 <td>
-                                    <Button 
+                                    <Button
                                         className="view-button"
                                         onClick={() => handleViewLineup(lineup.lineUpID)}
                                     >
@@ -88,7 +90,7 @@ const Lineup: React.FC<LineupProps> = ({ data, clubID, isOwner }) => {
                 showModalCreate={showModalCreate}
                 setShowModalCreate={setShowModalCreate}
                 clubID={clubID}
-                onLineupCreated={refreshLineupData} 
+                onLineupCreated={refreshLineupData}
             />
         </div>
     );
