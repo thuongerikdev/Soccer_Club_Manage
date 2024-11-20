@@ -90,6 +90,7 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
         {
             try
             {
+                
                 var match =  await _dbContext.Matches.FindAsync(MatchID);
                 if (match == null)
                 {

@@ -80,17 +80,24 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
         {
             try
             {
+                // Kiểm tra vai trò của người dùng
                 var role = await _dbContext.AuthUserRoles.FirstOrDefaultAsync(x => x.userId == userId);
+                if (role != null)
+                {
+                    _dbContext.AuthUserRoles.Remove(role);
+                }
 
-                _dbContext.AuthUserRoles.Remove(role);
+                // Kiểm tra người dùng
                 var user = await _dbContext.AuthUsers.FirstOrDefaultAsync(x => x.userId == userId);
-
                 if (user == null)
                 {
                     throw new Exception("User not found");
                 }
 
+                // Xóa người dùng
                 _dbContext.AuthUsers.Remove(user);
+
+                // Lưu thay đổi vào cơ sở dữ liệu
                 await _dbContext.SaveChangesAsync();
 
                 return new AuthResponeDto

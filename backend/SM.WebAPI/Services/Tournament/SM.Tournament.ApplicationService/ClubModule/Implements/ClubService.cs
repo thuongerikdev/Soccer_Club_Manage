@@ -98,6 +98,27 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements
         {
             try
             {
+                // Tìm tất cả các trận đấu liên quan đến clubTeamId
+                var matches = await _dbContext.Matches
+                    .Where(x => x.TeamA == clubTeamId || x.TeamB == clubTeamId)
+                    .ToListAsync();
+
+                // Xóa các trận đấu nếu có
+                if (matches.Count > 0)
+                {
+                    _dbContext.Matches.RemoveRange(matches);
+                }
+                var player = await _dbContext.ClubPlayers.Where(x => x.ClubID == clubTeamId).ToListAsync();
+                if (player.Count > 0) { 
+                    _dbContext.ClubPlayers.RemoveRange(player);
+                }
+                var lineup = await _dbContext.LineUps.Where(x => x.ClubID == clubTeamId).ToListAsync();
+                if (lineup.Count > 0)
+                {
+                    _dbContext.LineUps.RemoveRange(lineup);
+                }
+
+                // Kiểm tra sự tồn tại của câu lạc bộ
                 var existClub = await _dbContext.ClubTeams.FindAsync(clubTeamId);
                 if (existClub == null)
                 {
@@ -108,8 +129,13 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements
                         Data = null
                     };
                 }
+
+                // Xóa câu lạc bộ
                 _dbContext.ClubTeams.Remove(existClub);
+
+                // Lưu thay đổi vào cơ sở dữ liệu
                 await _dbContext.SaveChangesAsync();
+
                 return new TournamentResponeDto
                 {
                     ErrorCode = 0,
@@ -119,11 +145,11 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Remove Club Error");
+                _logger.LogError(ex, "Error occurred while removing club team with ID: {ClubTeamId}", clubTeamId);
                 return new TournamentResponeDto
                 {
                     ErrorCode = 1,
-                    ErrorMessage = "Remove Club Error",
+                    ErrorMessage = "Remove Club Error: " + ex.Message,
                     Data = null
                 };
             }

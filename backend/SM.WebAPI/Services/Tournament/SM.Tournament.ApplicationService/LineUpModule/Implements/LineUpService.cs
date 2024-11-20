@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.LineUpModule.Abtracts;
 using SM.Tournament.Domain.LineUp;
@@ -92,17 +93,25 @@ namespace SM.Tournament.ApplicationService.LineUpModule.Implements
         public async Task<TournamentResponeDto> DeleteLineUp(int lineUpID)
         {
             try
-
             {
-                var playerLineup = _dbContext.PlayerLineUps.Where(x => x.LineUpID == lineUpID).ToList();
-               
+                // Tìm tất cả các cầu thủ trong LineUp
+                var playerLineup = await _dbContext.PlayerLineUps
+                    .Where(x => x.LineUpID == lineUpID)
+                    .ToListAsync();
 
-                foreach (PlayerLineUp player in playerLineup)
+                // Xóa các cầu thủ trong LineUp
+                var matchesStat = await _dbContext.MatchesStatistics.Where(x => x.LineUpID == lineUpID).ToListAsync();
+                if (matchesStat.Count > 0) {
+                    _dbContext.MatchesStatistics.RemoveRange(matchesStat);
+                }
+                if (playerLineup.Any())
                 {
-                     _dbContext.PlayerLineUps.Remove(player);
+                    _dbContext.PlayerLineUps.RemoveRange(playerLineup);
                 }
 
-                var lineUp = _dbContext.LineUps.FirstOrDefault(x => x.LineUpID == lineUpID);
+                // Kiểm tra sự tồn tại của LineUp
+                var lineUp = await _dbContext.LineUps
+                    .FirstOrDefaultAsync(x => x.LineUpID == lineUpID);
                 if (lineUp == null)
                 {
                     return new TournamentResponeDto
@@ -112,8 +121,13 @@ namespace SM.Tournament.ApplicationService.LineUpModule.Implements
                         Data = null
                     };
                 }
+
+                // Xóa LineUp
                 _dbContext.LineUps.Remove(lineUp);
+
+                // Lưu thay đổi vào cơ sở dữ liệu
                 await _dbContext.SaveChangesAsync();
+
                 return new TournamentResponeDto
                 {
                     ErrorCode = 0,
@@ -123,10 +137,11 @@ namespace SM.Tournament.ApplicationService.LineUpModule.Implements
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while deleting Line Up with ID: {LineUpID}", lineUpID);
                 return new TournamentResponeDto
                 {
                     ErrorCode = 1,
-                    ErrorMessage = ex.Message,
+                    ErrorMessage = "Error deleting Line Up: " + ex.Message,
                     Data = null
                 };
             }
