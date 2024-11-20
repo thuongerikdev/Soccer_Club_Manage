@@ -3,6 +3,7 @@ using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.Minigame.Abtracts;
 using SM.Tournament.Domain.Minigame;
 using SM.Tournament.Dtos;
+using SM.Tournament.Dtos.MinigameDto;
 using SM.Tournament.Dtos.MinigameDto.Vote;
 using SM.Tournament.Infrastructure;
 using System;
@@ -289,6 +290,37 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                 };
             }
         }
-        
+        public  async Task<TournamentResponeDto> GetListPlayerVote(int minigameID)
+        {
+            var minigame = _dbContext.Votes.Where(x => x.MinigameID == minigameID).ToList();
+            int matchesID = minigame.Select(x => x.MatchID).FirstOrDefault();
+            var match = _dbContext.MatchesStatistics.Where(x => x.MatchesID == matchesID).ToList();
+            int lineup = match.Select(x => x.LineUpID).FirstOrDefault();
+            var playerLineUP = _dbContext.PlayerLineUps.Where(x => x.LineUpID == lineup).ToList();
+
+            var ListPlayer = new List<PlayerVoteDto>();
+
+            foreach (var item in playerLineUP)
+            {
+                var player = _dbContext.ClubPlayers.Where(x => x.PlayerID == item.PlayerID).FirstOrDefault();
+
+                var chosen = new PlayerVoteDto
+                {
+                    selection = player.PlayerName,
+                    count = 0
+                };
+                ListPlayer.Add(chosen);
+
+            }
+            return new TournamentResponeDto
+            {
+                ErrorCode = 0,
+                ErrorMessage = "success",
+                Data = ListPlayer
+            };
+
+
+        }
+
     }
 }

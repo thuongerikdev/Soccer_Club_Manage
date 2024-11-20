@@ -233,5 +233,39 @@ namespace SM.WebAPI.Controllers.MinigameController
                 });
             }
         }
+        [HttpGet("GetListPlayerVote/{minigameID}")]
+        public async Task<IActionResult> GetListPlayerVote(int minigameID)
+        {
+            try
+            {
+                var result = await _votingService.GetListPlayerVote(minigameID);
+                if (result.ErrorCode != 0)
+                {
+                    return BadRequest(new TournamentResponeDto
+                    {
+                        ErrorMessage = result.ErrorMessage,
+                        ErrorCode = 1,
+                        Data = null
+                    });
+                }
+
+                return Ok(new TournamentResponeDto
+                {
+                    ErrorMessage = result.ErrorMessage,
+                    ErrorCode = result.ErrorCode,
+                    Data = result.Data
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = ex.Message,
+                    Data = null
+                });
+            }
+        }
     }
 }

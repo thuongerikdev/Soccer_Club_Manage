@@ -16,5 +16,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Abtracts
         public Task<TournamentResponeDto> GetVotesByMinigame(int minigameID);
         public Task<TournamentResponeDto> GetVotebyID(int voteID);
         public Task<TournamentResponeDto> GetAllVotes();
+
+        public Task<TournamentResponeDto> GetListPlayerVote (int minigameID );
     }
 }

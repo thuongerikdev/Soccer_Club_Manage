@@ -38,6 +38,8 @@ namespace SM.Tournament.Infrastructure
         public DbSet<TournamentBase> Tournaments { get; set; }
         public DbSet<TournamentClub> TournamentClubs { get; set; }
 
+        public DbSet<MinigameReward> MinigameRewards {  get; set; }
+
        protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     modelBuilder.Entity<TournamentBase>()
@@ -67,6 +69,12 @@ namespace SM.Tournament.Infrastructure
         .HasPrecision(18, 2);
 
     // ClubTeam
+     // CelebrateEvent
+    modelBuilder.Entity<Minigames>()
+        .HasOne<MinigameReward>()
+        .WithMany()
+        .HasForeignKey(e => e.MinigameRewardID)
+        .OnDelete(DeleteBehavior.Restrict);
 
     // CelebrateEvent
     modelBuilder.Entity<CelebrateEvent>()

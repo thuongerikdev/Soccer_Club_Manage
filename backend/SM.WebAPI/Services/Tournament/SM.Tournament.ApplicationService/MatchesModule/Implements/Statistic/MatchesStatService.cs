@@ -23,12 +23,14 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Ma
 
         public async Task<TournamentResponeDto> getStatisTic(ReadMatchesStatisticDto readMatchesStatisticDto)
         {
+            var matchstat = _dbContext.Matches.FirstOrDefault(Matches => Matches.MatchesID == readMatchesStatisticDto.MatchesID);
+
             var teamAStats = _dbContext.MatchesStatistics
-                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == readMatchesStatisticDto.ClubID)
+                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamA)
                 .ToList();
 
             var teamBStats = _dbContext.MatchesStatistics
-                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID != readMatchesStatisticDto.ClubID)
+                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamB)
                 .ToList();
 
 
@@ -40,15 +42,30 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Ma
             var resultTeamA = _matchStatBase.caculateStat(teamAStatsDto);
             var resultTeamB = _matchStatBase.caculateStat(teamBStatsDto);
 
-            var result = new
+            // Chuyển đổi Data thành CaculateStatisticDto
+            var teamAData = resultTeamA.Data as CaculateStatisticDto;
+            var teamBData = resultTeamB.Data as CaculateStatisticDto;
+
+            var result = new ScoreStatisticDto
             {
-                teamA = new
+                TeamA = new CaculateStatisticDto
                 {
-                    additionalStats = resultTeamA.Data // Include additional calculated stats
+                   Goal = teamAData.Goal,
+                   Pass = teamAData.Pass,
+                   Shot = teamAData.Shot,
+                    YellowCard = teamAData.YellowCard,
+                    RedCard = teamAData.RedCard,
+                    Fouls = teamAData.Fouls,
+                   
                 },
-                teamB = new
+                TeamB = new CaculateStatisticDto
                 {
-                    additionalStats = resultTeamB.Data // Include additional calculated stats
+                    Goal = teamBData.Goal,
+                    Pass = teamBData.Pass,
+                    Shot = teamBData.Shot,
+                    YellowCard = teamBData.YellowCard,
+                    RedCard = teamBData.RedCard,
+                    Fouls = teamBData.Fouls,
                 }
             };
 
