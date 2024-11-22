@@ -18,6 +18,7 @@ namespace SM.Tournament.Domain.Match
         public int PlayerID { get; set; }
         public int LineUpID { get; set; }
         public int ClubID { get; set; }
+        public int half { get; set; }               // Hiệp đấu
         public int MatchesID { get; set; }           // ID của trận đấu
         public int Shot { get; set; }              // Số lần phạt góc
         public int Pass { get; set; }             // Số lần việt vị

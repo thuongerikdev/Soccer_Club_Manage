@@ -64,6 +64,23 @@ namespace SM.WebAPI.Controllers
                 });
             }
         }
+        [HttpPost("login/google")]
+        public async Task<IActionResult> AuthLoginWithGoogle([FromBody] string googleToken)
+        {
+            if (string.IsNullOrEmpty(googleToken))
+            {
+                return BadRequest(new { Message = "Google Token is required" });
+            }
+
+            var result = await _authLoginService.AuthLoginWithGoogle(googleToken);
+
+            if (result.EC != 0)
+            {
+                return Unauthorized(result);
+            }
+
+            return Ok(result);
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(AuthRegisterDto authRegisterDto)

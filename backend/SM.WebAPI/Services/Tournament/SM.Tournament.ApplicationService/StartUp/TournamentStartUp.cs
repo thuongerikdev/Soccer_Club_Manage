@@ -41,8 +41,12 @@ using SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Player
 using SM.Tournament.ApplicationService.Minigame.Abtracts;
 using SM.Tournament.ApplicationService.Minigame.Implements;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Caculation;
-using SM.Tournament.ApplicationService.Minigame.Implements.Predict.PredictMatches;
+//using SM.Tournament.ApplicationService.Minigame.Implements.Predict.PredictMatches;
 using SM.Tournament.ApplicationService.Minigame.Implements.Vote;
+using SM.Tournament.ApplicationService.OrderModule.Abtracts;
+using SM.Tournament.ApplicationService.OrderModule.Implements;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
+using SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPredict;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -120,12 +124,19 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
 
 
 
-            //minigame
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, MatchScore>("matchScore");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfShot>("numberOfShot");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfPass>("numberOfPass");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfFouls>("numberOfFouls");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("playerVote");
+            ////minigame
+            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, MatchScore>("matchScore");
+            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfShot>("numberOfShot");
+            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfPass>("numberOfPass");
+            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfFouls>("numberOfFouls");
+            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("playerVote");
+            //builder.Services.AddKeyedScoped<IChooseTypePredict, halfChoose>("halfOrFullTime");
+            //builder.Services.AddKeyedScoped<IChooseTypePredict, PredictionType>("predictionType");
+
+
+
+            // Thêm các chiến lược khác nếu cần.
+
 
             builder.Services.AddScoped<IMatchStatBase, MatchStatBase>();
             builder.Services.AddScoped<IMinigameUse, MinigameUse>();
@@ -144,9 +155,10 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddScoped<IPlayerEventService , PlayerEventService>();
             builder.Services.AddScoped<IPlayerLineUpService, PlayerLineUpService>();
 
-           
+           //Order
+            builder.Services.AddScoped<IOrderService , OrderService>();
 
-
+            //tournament
             builder.Services.AddScoped<ITournamentService, TournamentService>();
             builder.Services.AddScoped<ITournamentClubService, TournamentClubService>();
 

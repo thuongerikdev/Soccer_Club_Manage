@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 
 namespace SM.Tournament.Dtos.MatchDto.MatchesStatistic
 {
-    public class ScoreStatisticDto
+    namespace SM.Tournament.Dtos.MatchDto.MatchesStatistic
     {
-        public CaculateStatisticDto TeamA { get; set; }
-        public CaculateStatisticDto TeamB { get; set; }
+        public class HalfStatisticDto
+        {
+            public CaculateStatisticDto TeamA { get; set; }
+            public CaculateStatisticDto TeamB { get; set; }
+        }
+
+        public class MatchStatisticsDto
+        {
+            public HalfStatisticDto Half1 { get; set; }
+            public HalfStatisticDto Half2 { get; set; }
+        }
     }
+
 }

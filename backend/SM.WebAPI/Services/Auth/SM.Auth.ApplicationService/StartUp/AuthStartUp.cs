@@ -48,7 +48,7 @@ namespace SM.Auth.ApplicationService.StartUp
 
            var secretKey = builder.Configuration["Jwt:SecretKey"];
             var key = Encoding.UTF8.GetBytes(secretKey);
-          // Thay đổi secret key của bạn
+            // Thay đổi secret key của bạn
 
             builder.Services.AddAuthentication(options =>
             {
@@ -57,7 +57,7 @@ namespace SM.Auth.ApplicationService.StartUp
             })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false; // Chỉ nên để true trong môi trường sản xuất
+                options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -66,7 +66,14 @@ namespace SM.Auth.ApplicationService.StartUp
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
-            });
+            })
+            .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                    googleOptions.CallbackPath = "/signin-google"; // Đường dẫn này phải khớp với URI trong Google API Console
+                });
+
 
         }
     }

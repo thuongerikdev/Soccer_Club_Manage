@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using SM.Auth.Dtos;
+using SM.Auth.Domain;
+using Google.Apis.Auth;
 
 namespace SM.Auth.ApplicationService.UserModule.Implements
 {
@@ -73,6 +75,63 @@ namespace SM.Auth.ApplicationService.UserModule.Implements
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public async Task<AuthResponeDto> AuthLoginWithGoogle(string googleToken)
+        {
+            _logger.LogInformation("AuthLoginService.AuthLoginWithGoogle");
+
+            try
+            {
+                // Xác thực Google Token
+                var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken, new GoogleJsonWebSignature.ValidationSettings
+                {
+                    Audience = new[] { _configuration["Google:ClientId"] }
+                });
+
+                // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
+                var user = await _dbContext.AuthUsers.FirstOrDefaultAsync(x => x.email == payload.Email);
+
+                if (user == null)
+                {
+                    // Nếu người dùng chưa tồn tại, tạo mới
+                    user = new AuthUser
+                    {
+                        name = payload.Name,
+                        email = payload.Email,
+                        age = 0,
+                        address = "",
+                        gender = "",
+                        phone = 0,
+                        password="",
+                        username = "",
+                        
+                        // Có thể thêm các trường khác như ảnh đại diện, giới tính, v.v.
+                    };
+
+                    _dbContext.AuthUsers.Add(user);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                // Sinh token JWT
+                string token = GenerateToken(user.name, user.userId);
+
+                return new AuthResponeDto
+                {
+                    EM = "Login with Google successful",
+                    EC = 0,
+                    DT = token
+                };
+            }
+            catch (Exception ex) // Bắt tất cả các ngoại lệ
+            {
+                _logger.LogError("Error during Google Login: {Message}", ex.Message);
+                return new AuthResponeDto
+                {
+                    EM = "An error occurred during login",
+                    EC = 1,
+                    DT = null
+                };
+            }
         }
 
     }

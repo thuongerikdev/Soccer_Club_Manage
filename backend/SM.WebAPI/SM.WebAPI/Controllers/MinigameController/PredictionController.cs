@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SM.Tournament.ApplicationService.Minigame.Abtracts;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MinigameDto.Predict;
 

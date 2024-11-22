@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SM.Tournament.ApplicationService.Common;
-using SM.Tournament.ApplicationService.Minigame.Abtracts;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
 using SM.Tournament.Domain.Minigame;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MinigameDto.Predict;
@@ -11,28 +12,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.Tournament.ApplicationService.Minigame.Implements
+namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPredict
 {
     public class PredictSerivce : TournamentServiceBase, IPredictService
     {
-        public PredictSerivce (ILogger<PredictSerivce> logger , TournamentDbContext dbContext) : base(logger, dbContext)
+        private readonly IChooseTypePredict _chooseHalfOrFullTime;
+        private readonly IChooseTypePredict _choosePredictionType;
+
+        public PredictSerivce(ILogger<PredictSerivce> logger, TournamentDbContext dbContext,
+            [FromKeyedServices("halfOrFullTime")] IChooseTypePredict chooseHalfOrFullTime,
+            [FromKeyedServices("predictionType")] IChooseTypePredict choosePredictionType)
+            : base(logger, dbContext)
         {
+            _chooseHalfOrFullTime = chooseHalfOrFullTime;
+            _choosePredictionType = choosePredictionType;
         }
-        public  async Task<TournamentResponeDto> CreatePredict(CreatePredictDto createPredictDto)
+
+        public async Task<TournamentResponeDto> CreatePredict(CreatePredictDto createPredictDto)
         {
             try
             {
+                // Bước 1: Chọn hiệp hoặc toàn trận
+                var halfOrFullTimeDto = await _chooseHalfOrFullTime.chooseType(createPredictDto.HalfOrFull, createPredictDto);
+
+                // Bước 2: Chọn thể loại dự đoán
+                var predictionTypeDto = await _choosePredictionType.chooseType(createPredictDto.PredictionType, halfOrFullTimeDto);
+
+
+                // Lưu dự đoán vào cơ sở dữ liệu
                 var predict = new Predictions
                 {
-                    MinigameID = createPredictDto.MinigameID,
-                    MatchID = createPredictDto.MatchID,
-                    UserID = createPredictDto.UserID,
-                    Prediction = createPredictDto.Prediction,
-                    PredictionDate = createPredictDto.PredictionDate,
-                    
+                    MinigameID = predictionTypeDto.MinigameID,
+                    OddEven = predictionTypeDto.OddEven,
+                    UserID = predictionTypeDto.UserID,
+                    PredictionDate = predictionTypeDto.PredictionDate,
+                    TeamAscore = predictionTypeDto.TeamAscore,
+                    TeamBscore = predictionTypeDto.TeamBscore,
+                    PredictTotal = predictionTypeDto.PredictTotal,
+                    half = predictionTypeDto.half,
                 };
+
                 _dbContext.Predictions.Add(predict);
                 await _dbContext.SaveChangesAsync();
+
                 return new TournamentResponeDto
                 {
                     ErrorCode = 0,
@@ -48,10 +70,9 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                     ErrorCode = 1,
                     Data = null
                 };
-
             }
-            
         }
+
         public async Task<TournamentResponeDto> DeletePredict(int predictionID)
         {
             try
@@ -131,10 +152,15 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                     };
                 }
                 predict.MinigameID = updatePredictDto.MinigameID;
-                predict.MatchID = updatePredictDto.MatchID;
+
+                predict.OddEven = updatePredictDto.OddEven;
                 predict.UserID = updatePredictDto.UserID;
-                predict.Prediction = updatePredictDto.Prediction;
                 predict.PredictionDate = updatePredictDto.PredictionDate;
+                predict.TeamAscore = updatePredictDto.TeamAscore;
+                predict.TeamBscore = updatePredictDto.TeamBscore;
+                predict.PredictTotal = updatePredictDto.PredictTotal;
+                predict.half = updatePredictDto.half;
+
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
                 {
@@ -241,7 +267,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                 };
             }
         }
-         
+
 
 
 

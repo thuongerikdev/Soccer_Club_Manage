@@ -11,5 +11,6 @@ namespace SM.Auth.ApplicationService.UserModule.Abtracts
     public interface IAuthLoginService
     {
         public Task<AuthResponeDto> AuthLogin(LoginUserDto loginUserDto);
+        public Task<AuthResponeDto> AuthLoginWithGoogle(string googleToken); // Đăng nhập bằng Google
     }
 }

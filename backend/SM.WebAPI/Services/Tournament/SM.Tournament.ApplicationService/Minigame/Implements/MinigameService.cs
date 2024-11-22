@@ -29,7 +29,11 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                     StartDates = createMinigameDto.StartDates,
                     EndDates = createMinigameDto.EndDates,
                     Name = createMinigameDto.Name,
-                    Description = createMinigameDto.Description
+                    Description = createMinigameDto.Description,
+                    Handicap = createMinigameDto.Handicap,
+                    MinigameRewardID = createMinigameDto.MinigameRewardID,
+                    MatchesID = createMinigameDto.MatchesID,
+                    
                 };
                 _dbContext.Minigames.Add(minigame);
                 await _dbContext.SaveChangesAsync();
@@ -70,6 +74,10 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                 minigame.EndDates = updateMinigameDto.EndDates;
                 minigame.Name = updateMinigameDto.Name;
                 minigame.Description = updateMinigameDto.Description;
+                minigame.Handicap = updateMinigameDto.Handicap;
+                minigame.MinigameRewardID = updateMinigameDto.MinigameRewardID;
+                minigame.MatchesID = updateMinigameDto.MatchesID;
+
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
                 {

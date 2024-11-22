@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
 using SM.Tournament.Domain.Match;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MatchDto.MatchesStatistic;
+using SM.Tournament.Dtos.MatchDto.MatchesStatistic.SM.Tournament.Dtos.MatchDto.MatchesStatistic;
 using SM.Tournament.Infrastructure;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,49 +24,91 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Ma
 
         public async Task<TournamentResponeDto> getStatisTic(ReadMatchesStatisticDto readMatchesStatisticDto)
         {
-            var matchstat = _dbContext.Matches.FirstOrDefault(Matches => Matches.MatchesID == readMatchesStatisticDto.MatchesID);
-
-            var teamAStats = _dbContext.MatchesStatistics
-                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamA)
-                .ToList();
-
-            var teamBStats = _dbContext.MatchesStatistics
-                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamB)
-                .ToList();
-
-
-            // Map MatchesStatistic to CaculateStatisticDto
-            var teamAStatsDto = _matchStatBase.MapToCaculateStatisticDto(teamAStats);
-            var teamBStatsDto = _matchStatBase.MapToCaculateStatisticDto(teamBStats);
-
-            // Calculate statistics using the base class
-            var resultTeamA = _matchStatBase.caculateStat(teamAStatsDto);
-            var resultTeamB = _matchStatBase.caculateStat(teamBStatsDto);
-
-            // Chuyển đổi Data thành CaculateStatisticDto
-            var teamAData = resultTeamA.Data as CaculateStatisticDto;
-            var teamBData = resultTeamB.Data as CaculateStatisticDto;
-
-            var result = new ScoreStatisticDto
+            var matchstat = await _dbContext.Matches.FirstOrDefaultAsync(m => m.MatchesID == readMatchesStatisticDto.MatchesID);
+            if (matchstat == null)
             {
-                TeamA = new CaculateStatisticDto
+                return new TournamentResponeDto
                 {
-                   Goal = teamAData.Goal,
-                   Pass = teamAData.Pass,
-                   Shot = teamAData.Shot,
-                    YellowCard = teamAData.YellowCard,
-                    RedCard = teamAData.RedCard,
-                    Fouls = teamAData.Fouls,
-                   
+                    ErrorCode = 1,
+                    ErrorMessage = "Match not found",
+                    Data = null
+                };
+            }
+
+            // Lấy thống kê cho Hiệp 1
+            var teamAStatsHalf1 = await _dbContext.MatchesStatistics
+                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamA && x.half == 1)
+                .ToListAsync();
+
+            var teamBStatsHalf1 = await _dbContext.MatchesStatistics
+                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamB && x.half == 1)
+                .ToListAsync();
+
+            // Lấy thống kê cho Hiệp 2
+            var teamAStatsHalf2 = await _dbContext.MatchesStatistics
+                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamA && x.half == 2)
+                .ToListAsync();
+
+            var teamBStatsHalf2 = await _dbContext.MatchesStatistics
+                .Where(x => x.MatchesID == readMatchesStatisticDto.MatchesID && x.ClubID == matchstat.TeamB && x.half == 2)
+                .ToListAsync();
+
+            // Tính toán thống kê cho Hiệp 1
+            var teamAStatsDtoHalf1 = _matchStatBase.MapToCaculateStatisticDto(teamAStatsHalf1);
+            var teamBStatsDtoHalf1 = _matchStatBase.MapToCaculateStatisticDto(teamBStatsHalf1);
+            var resultTeamAHalf1 = _matchStatBase.caculateStat(teamAStatsDtoHalf1);
+            var resultTeamBHalf1 = _matchStatBase.caculateStat(teamBStatsDtoHalf1);
+
+            // Tính toán thống kê cho Hiệp 2
+            var teamAStatsDtoHalf2 = _matchStatBase.MapToCaculateStatisticDto(teamAStatsHalf2);
+            var teamBStatsDtoHalf2 = _matchStatBase.MapToCaculateStatisticDto(teamBStatsHalf2);
+            var resultTeamAHalf2 = _matchStatBase.caculateStat(teamAStatsDtoHalf2);
+            var resultTeamBHalf2 = _matchStatBase.caculateStat(teamBStatsDtoHalf2);
+
+            // Tạo đối tượng thống kê cho cả hai hiệp
+            var matchStatistics = new MatchStatisticsDto
+            {
+                Half1 = new HalfStatisticDto
+                {
+                    TeamA = new CaculateStatisticDto
+                    {
+                        Goal = resultTeamAHalf1.Data is CaculateStatisticDto teamADataHalf1 ? teamADataHalf1.Goal : 0,
+                        Pass = teamAStatsDtoHalf1.Sum(x => x.Pass),
+                        Shot = teamAStatsDtoHalf1.Sum(x => x.Shot),
+                        YellowCard = teamAStatsDtoHalf1.Sum(x => x.YellowCard),
+                        RedCard = teamAStatsDtoHalf1.Sum(x => x.RedCard),
+                        Fouls = teamAStatsDtoHalf1.Sum(x => x.Fouls)
+                    },
+                    TeamB = new CaculateStatisticDto
+                    {
+                        Goal = resultTeamBHalf1.Data is CaculateStatisticDto teamBDataHalf1 ? teamBDataHalf1.Goal : 0,
+                        Pass = teamBStatsDtoHalf1.Sum(x => x.Pass),
+                        Shot = teamBStatsDtoHalf1.Sum(x => x.Shot),
+                        YellowCard = teamBStatsDtoHalf1.Sum(x => x.YellowCard),
+                        RedCard = teamBStatsDtoHalf1.Sum(x => x.RedCard),
+                        Fouls = teamBStatsDtoHalf1.Sum(x => x.Fouls)
+                    }
                 },
-                TeamB = new CaculateStatisticDto
+                Half2 = new HalfStatisticDto
                 {
-                    Goal = teamBData.Goal,
-                    Pass = teamBData.Pass,
-                    Shot = teamBData.Shot,
-                    YellowCard = teamBData.YellowCard,
-                    RedCard = teamBData.RedCard,
-                    Fouls = teamBData.Fouls,
+                    TeamA = new CaculateStatisticDto
+                    {
+                        Goal = resultTeamAHalf2.Data is CaculateStatisticDto teamADataHalf2 ? teamADataHalf2.Goal : 0,
+                        Pass = teamAStatsDtoHalf2.Sum(x => x.Pass),
+                        Shot = teamAStatsDtoHalf2.Sum(x => x.Shot),
+                        YellowCard = teamAStatsDtoHalf2.Sum(x => x.YellowCard),
+                        RedCard = teamAStatsDtoHalf2.Sum(x => x.RedCard),
+                        Fouls = teamAStatsDtoHalf2.Sum(x => x.Fouls)
+                    },
+                    TeamB = new CaculateStatisticDto
+                    {
+                        Goal = resultTeamBHalf2.Data is CaculateStatisticDto teamBDataHalf2 ? teamBDataHalf2.Goal : 0,
+                        Pass = teamBStatsDtoHalf2.Sum(x => x.Pass),
+                        Shot = teamBStatsDtoHalf2.Sum(x => x.Shot),
+                        YellowCard = teamBStatsDtoHalf2.Sum(x => x.YellowCard),
+                        RedCard = teamBStatsDtoHalf2.Sum(x => x.RedCard),
+                        Fouls = teamBStatsDtoHalf2.Sum(x => x.Fouls)
+                    }
                 }
             };
 
@@ -73,11 +116,8 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements.Statistic.Ma
             {
                 ErrorCode = 0,
                 ErrorMessage = "Get Match Statistics Success",
-                Data = result
+                Data = matchStatistics
             };
         }
-
-        // Mapping method to convert MatchesStatistic to CaculateStatisticDto
-      
     }
 }

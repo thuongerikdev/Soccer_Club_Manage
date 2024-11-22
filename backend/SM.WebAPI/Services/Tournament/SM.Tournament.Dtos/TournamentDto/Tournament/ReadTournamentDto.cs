@@ -11,6 +11,7 @@ namespace SM.Tournament.Dtos.TournamentDto.Tournament
         public int TournamentID { get; set; }
         public string TournamentName { get; set; }
         public decimal TournamentPrice { get; set; }
+        public int UserID { get; set; }
 
         public string TournamentDescription { get; set; }
 
@@ -21,5 +22,6 @@ namespace SM.Tournament.Dtos.TournamentDto.Tournament
         public string TournamentLocation { get; set; }
         public string TournamentOrganizer { get; set; }
         public string TournamentContact { get; set; }
+        public int numberMember { get; set; }
     }
 }

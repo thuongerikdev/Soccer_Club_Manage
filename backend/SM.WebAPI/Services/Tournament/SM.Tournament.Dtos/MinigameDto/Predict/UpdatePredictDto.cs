@@ -10,9 +10,12 @@ namespace SM.Tournament.Dtos.MinigameDto.Predict
     {
         public int PredictionID { get; set; }
         public int MinigameID { get; set; }
-        public int MatchID { get; set; }
         public int UserID { get; set; }
-        public string Prediction { get; set; }
-        public DateTime PredictionDate { get; set; }
+        public int TeamAscore { get; set; }
+        public int TeamBscore { get; set; }
+        public int PredictTotal { get; set; }
+        public bool OddEven { get; set; }
+        public int half { get; set; }
+       public DateTime PredictionDate { get; set; }
     }
 }

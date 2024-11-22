@@ -6,6 +6,7 @@ using SM.Tournament.Domain.Club.ClubFund;
 using SM.Tournament.Domain.LineUp;
 using SM.Tournament.Domain.Match;
 using SM.Tournament.Domain.Minigame;
+using SM.Tournament.Domain.Minigame.Predicts;
 using SM.Tournament.Domain.Orders;
 using SM.Tournament.Domain.Player;
 using SM.Tournament.Domain.Tournament;
@@ -151,10 +152,10 @@ namespace SM.Tournament.Infrastructure
         .WithMany()
         .HasForeignKey(p => p.MinigameID)
         .OnDelete(DeleteBehavior.Restrict);
-    modelBuilder.Entity<Predictions>()
+    modelBuilder.Entity<Minigames>()
         .HasOne<Matches>()
         .WithMany()
-        .HasForeignKey(p => p.MatchID)
+        .HasForeignKey(p => p.MatchesID)
         .OnDelete(DeleteBehavior.Restrict);
     modelBuilder.Entity<Predictions>()
         .HasOne<ClubPlayers>()

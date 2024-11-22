@@ -16,6 +16,7 @@ namespace SM.Tournament.Domain.Tournament
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TournamentID { get; set; }
         [MaxLength(50)]
+        public int UserID { get; set; }
         public string TournamentName { get; set; }
         public decimal TournamentPrice { get; set; }
         [MaxLength(50)]
@@ -32,6 +33,7 @@ namespace SM.Tournament.Domain.Tournament
         public string TournamentOrganizer { get; set; }
         [MaxLength(50)]
         public string TournamentContact { get; set; }
+        public int numberMember { get; set; }
 
     }
   

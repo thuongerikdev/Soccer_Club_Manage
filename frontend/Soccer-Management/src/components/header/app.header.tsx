@@ -65,6 +65,8 @@ const AppHeader = ({ userRole, loading }: AppHeaderProps) => {
                 )}
                 <Link href={'/yourclub'} className='nav-link'> Your Club</Link>
                 <Link href={'/otherClub'} className='nav-link'>Other Club</Link>
+                <Link href={'/google'} className='nav-link'>Google</Link>
+                
               </>
             )}
           </Nav>

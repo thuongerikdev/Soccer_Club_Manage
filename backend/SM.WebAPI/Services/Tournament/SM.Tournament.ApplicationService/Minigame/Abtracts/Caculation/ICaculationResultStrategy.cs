@@ -9,6 +9,6 @@ namespace SM.Tournament.ApplicationService.Minigame.Abtracts.Caculation
 {
     public interface ICaculationResultStrategy
     {
-        public Task <TournamentResponeDto> MinigameResult(int minigameID);
+        public Task <TournamentResponeDto> MinigameResult(string type ,int minigameID);
     }
 }
