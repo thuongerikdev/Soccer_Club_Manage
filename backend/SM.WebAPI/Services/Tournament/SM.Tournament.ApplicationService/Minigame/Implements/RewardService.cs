@@ -27,6 +27,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                 RewardType = createRewardDto.RewardType,
                 RewardValue = createRewardDto.RewardValue,
                 createDate = createRewardDto.createDate,
+                Rank = createRewardDto.Rank
 
             };
 
@@ -115,6 +116,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
             reward.RewardType = updateRewardDto.RewardType;
             reward.RewardValue = updateRewardDto.RewardValue;
             reward.createDate = updateRewardDto.createDate;
+            reward.Rank = updateRewardDto.Rank;
             await _dbContext.SaveChangesAsync();
             return new TournamentResponeDto
             {

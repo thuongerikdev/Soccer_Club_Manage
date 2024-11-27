@@ -14,5 +14,6 @@ namespace SM.Tournament.Dtos.MinigameDto.Reward
         public string RewardType { get; set; }
         public int RewardValue { get; set; }
         public DateTime createDate { get; set; }
+        public int Rank { get; set; }
     }
 }

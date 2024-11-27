@@ -27,5 +27,6 @@ namespace SM.Tournament.Domain.Orders
         [MaxLength(50)]
         public string PaymentMethod { get; set; }
         public int TournamentID { get; set; }
+        public string PaymentID { get; set; }
     }
 }

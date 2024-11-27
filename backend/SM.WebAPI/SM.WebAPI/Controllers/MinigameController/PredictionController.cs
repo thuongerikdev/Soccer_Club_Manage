@@ -34,7 +34,7 @@ namespace SM.WebAPI.Controllers.MinigameController
                 {
                     return BadRequest(new TournamentResponeDto
                     {
-                        ErrorMessage = "Invalid credentials.",
+                        ErrorMessage = result.ErrorMessage,
                         ErrorCode = 1,
                         Data = null
                     });

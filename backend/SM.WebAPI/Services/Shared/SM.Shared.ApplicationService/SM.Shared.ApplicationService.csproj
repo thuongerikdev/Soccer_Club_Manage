@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Auth\SM.Auth.Dtos\SM.Auth.Dtos.csproj" />
+  </ItemGroup>
+
 </Project>

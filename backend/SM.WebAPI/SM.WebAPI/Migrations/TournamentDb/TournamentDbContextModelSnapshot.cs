@@ -276,8 +276,17 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MatchesID"));
 
+                    b.Property<int?>("AwayScore")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("HomeScore")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsFinish")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MatchesDescription")
                         .IsRequired()
@@ -287,6 +296,9 @@ namespace SM.WebAPI.Migrations.TournamentDb
                     b.Property<string>("MatchesName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int");
 
                     b.Property<string>("Stadium")
                         .IsRequired()
@@ -355,6 +367,9 @@ namespace SM.WebAPI.Migrations.TournamentDb
                     b.Property<int>("YellowCard")
                         .HasColumnType("int");
 
+                    b.Property<int>("half")
+                        .HasColumnType("int");
+
                     b.HasKey("MatchesStatisticID");
 
                     b.HasIndex("LineUpID");
@@ -364,6 +379,40 @@ namespace SM.WebAPI.Migrations.TournamentDb
                     b.HasIndex("PlayerID");
 
                     b.ToTable("MatchesStatistic", "tournament");
+                });
+
+            modelBuilder.Entity("SM.Tournament.Domain.Minigame.MinigameReward", b =>
+                {
+                    b.Property<int>("MinigameRewardID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MinigameRewardID"));
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RewardDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RewardName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RewardType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RewardValue")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MinigameRewardID");
+
+                    b.ToTable("MinigameReward", "tournament");
                 });
 
             modelBuilder.Entity("SM.Tournament.Domain.Minigame.Minigames", b =>
@@ -381,6 +430,15 @@ namespace SM.WebAPI.Migrations.TournamentDb
                     b.Property<DateTime>("EndDates")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Handicap")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchesID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinigameRewardID")
+                        .HasColumnType("int");
+
                     b.Property<string>("MinigameType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -397,6 +455,10 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
                     b.HasKey("MinigameID");
 
+                    b.HasIndex("MatchesID");
+
+                    b.HasIndex("MinigameRewardID");
+
                     b.HasIndex("TournamentID");
 
                     b.ToTable("Minigames", "tournament");
@@ -410,48 +472,75 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PredictionID"));
 
-                    b.Property<string>("ClubWin")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MatchID")
-                        .HasColumnType("int");
-
                     b.Property<int>("MinigameID")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlayerID")
-                        .HasColumnType("int");
+                    b.Property<bool?>("OddEven")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Prediction")
+                    b.Property<int?>("PredictTotal")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PredictionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ScoreA")
+                    b.Property<int?>("TeamAscore")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScoreB")
+                    b.Property<int?>("TeamBscore")
                         .HasColumnType("int");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.HasKey("PredictionID");
+                    b.Property<int?>("half")
+                        .HasColumnType("int");
 
-                    b.HasIndex("MatchID");
+                    b.HasKey("PredictionID");
 
                     b.HasIndex("MinigameID");
 
-                    b.HasIndex("PlayerID");
-
-                    b.HasIndex("UserID");
-
                     b.ToTable("Predictions", "tournament");
+                });
+
+            modelBuilder.Entity("SM.Tournament.Domain.Minigame.Predicts.PredictionRanking", b =>
+                {
+                    b.Property<int>("PredictionRankingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PredictionRankingID"));
+
+                    b.Property<int>("MinigameID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinigameRewardID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PredictionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PredictionID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PredictionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("PredictionRankingID");
+
+                    b.HasIndex("MinigameID");
+
+                    b.HasIndex("MinigameRewardID");
+
+                    b.HasIndex("PredictionID");
+
+                    b.ToTable("PredictionRanking", "tournament");
                 });
 
             modelBuilder.Entity("SM.Tournament.Domain.Minigame.Votes", b =>
@@ -466,12 +555,6 @@ namespace SM.WebAPI.Migrations.TournamentDb
                         .HasColumnType("int");
 
                     b.Property<int>("MinigameID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Points")
                         .HasColumnType("int");
 
                     b.Property<string>("Selection")
@@ -490,11 +573,42 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
                     b.HasIndex("MinigameID");
 
-                    b.HasIndex("PlayerID");
-
-                    b.HasIndex("UserID");
-
                     b.ToTable("Votes", "tournament");
+                });
+
+            modelBuilder.Entity("SM.Tournament.Domain.Orders.Invoices", b =>
+                {
+                    b.Property<int>("InvoiceID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceID"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TransactionID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("InvoiceID");
+
+                    b.ToTable("Invoices", "tournament");
                 });
 
             modelBuilder.Entity("SM.Tournament.Domain.Orders.Orders", b =>
@@ -515,6 +629,10 @@ namespace SM.WebAPI.Migrations.TournamentDb
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PaymentID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -699,8 +817,7 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
                     b.Property<string>("TournamentName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TournamentOrganizer")
                         .IsRequired()
@@ -720,6 +837,13 @@ namespace SM.WebAPI.Migrations.TournamentDb
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("UserID")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
+
+                    b.Property<int>("numberMember")
+                        .HasColumnType("int");
+
                     b.HasKey("TournamentID");
 
                     b.ToTable("TournamentBase", "tournament");
@@ -737,6 +861,12 @@ namespace SM.WebAPI.Migrations.TournamentDb
                         .HasColumnType("int");
 
                     b.Property<int>("Drawn")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalFor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoatGet")
                         .HasColumnType("int");
 
                     b.Property<int>("Lost")
@@ -919,6 +1049,18 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
             modelBuilder.Entity("SM.Tournament.Domain.Minigame.Minigames", b =>
                 {
+                    b.HasOne("SM.Tournament.Domain.Match.Matches", null)
+                        .WithMany()
+                        .HasForeignKey("MatchesID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SM.Tournament.Domain.Minigame.MinigameReward", null)
+                        .WithMany()
+                        .HasForeignKey("MinigameRewardID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("SM.Tournament.Domain.Tournament.TournamentBase", null)
                         .WithMany()
                         .HasForeignKey("TournamentID")
@@ -928,27 +1070,30 @@ namespace SM.WebAPI.Migrations.TournamentDb
 
             modelBuilder.Entity("SM.Tournament.Domain.Minigame.Predictions", b =>
                 {
-                    b.HasOne("SM.Tournament.Domain.Match.Matches", null)
+                    b.HasOne("SM.Tournament.Domain.Minigame.Minigames", null)
                         .WithMany()
-                        .HasForeignKey("MatchID")
+                        .HasForeignKey("MinigameID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
 
+            modelBuilder.Entity("SM.Tournament.Domain.Minigame.Predicts.PredictionRanking", b =>
+                {
                     b.HasOne("SM.Tournament.Domain.Minigame.Minigames", null)
                         .WithMany()
                         .HasForeignKey("MinigameID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SM.Tournament.Domain.Player.ClubPlayers", null)
+                    b.HasOne("SM.Tournament.Domain.Minigame.MinigameReward", null)
                         .WithMany()
-                        .HasForeignKey("PlayerID")
+                        .HasForeignKey("MinigameRewardID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SM.Tournament.Domain.Player.ClubPlayers", null)
+                    b.HasOne("SM.Tournament.Domain.Minigame.Predictions", null)
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("PredictionID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -964,18 +1109,6 @@ namespace SM.WebAPI.Migrations.TournamentDb
                     b.HasOne("SM.Tournament.Domain.Minigame.Minigames", null)
                         .WithMany()
                         .HasForeignKey("MinigameID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SM.Tournament.Domain.Player.ClubPlayers", null)
-                        .WithMany()
-                        .HasForeignKey("PlayerID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SM.Tournament.Domain.Player.ClubPlayers", null)
-                        .WithMany()
-                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

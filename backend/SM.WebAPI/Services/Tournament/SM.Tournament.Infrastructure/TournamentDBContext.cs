@@ -38,6 +38,8 @@ namespace SM.Tournament.Infrastructure
         public DbSet<PlayerLineUp> PlayerLineUps { get; set; }
         public DbSet<TournamentBase> Tournaments { get; set; }
         public DbSet<TournamentClub> TournamentClubs { get; set; }
+        public DbSet<PredictionRanking> PredictionRankings { get; set; }
+        public DbSet<Invoices> Invoices { get; set; }
 
         public DbSet<MinigameReward> MinigameRewards {  get; set; }
 
@@ -76,6 +78,22 @@ namespace SM.Tournament.Infrastructure
         .WithMany()
         .HasForeignKey(e => e.MinigameRewardID)
         .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<PredictionRanking>()
+            .HasOne<Predictions>()
+            .WithMany()
+            .HasForeignKey(e => e.PredictionID)
+            .OnDelete(DeleteBehavior.Restrict);
+    modelBuilder.Entity<PredictionRanking>()
+            .HasOne<MinigameReward>()
+            .WithMany()
+            .HasForeignKey(e => e.MinigameRewardID)
+            .OnDelete(DeleteBehavior.Restrict);
+
+    modelBuilder.Entity<PredictionRanking>()
+            .HasOne<Minigames>()
+            .WithMany()
+            .HasForeignKey(e => e.MinigameID)
+            .OnDelete(DeleteBehavior.Restrict);
 
     // CelebrateEvent
     modelBuilder.Entity<CelebrateEvent>()
@@ -157,11 +175,6 @@ namespace SM.Tournament.Infrastructure
         .WithMany()
         .HasForeignKey(p => p.MatchesID)
         .OnDelete(DeleteBehavior.Restrict);
-    modelBuilder.Entity<Predictions>()
-        .HasOne<ClubPlayers>()
-        .WithMany()
-        .HasForeignKey(p => p.UserID)
-        .OnDelete(DeleteBehavior.Restrict);
 
     // Votes
     modelBuilder.Entity<Votes>()
@@ -175,11 +188,7 @@ namespace SM.Tournament.Infrastructure
         .WithMany()
         .HasForeignKey(v => v.MatchID)
         .OnDelete(DeleteBehavior.Restrict);
-    modelBuilder.Entity<Votes>()
-        .HasOne<ClubPlayers>()
-        .WithMany()
-        .HasForeignKey(v => v.UserID)
-        .OnDelete(DeleteBehavior.Restrict);
+  
 
     // Orders
     modelBuilder.Entity<Orders>()

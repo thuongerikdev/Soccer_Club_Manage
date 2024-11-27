@@ -23,6 +23,8 @@ namespace SM.Tournament.Domain.Tournament
         public int Won { get; set; }
         public int Drawn { get; set; }
         public int Lost { get; set; }
+        public int GoalFor { get; set; }
+        public int GoatGet { get; set; }
 
     }
 }

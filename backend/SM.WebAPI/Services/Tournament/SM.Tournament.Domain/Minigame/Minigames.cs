@@ -26,6 +26,8 @@ namespace SM.Tournament.Domain.Minigame
         public string Description { get; set; }
         public int Handicap { get; set; }
 
+        
+
 
     }
 }

@@ -4,7 +4,7 @@ using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
 using SM.Tournament.ApplicationService.Minigame.Abtracts;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Caculation;
-using SM.Tournament.ApplicationService.Minigame.Implements.Predict.PredictMatches;
+//using SM.Tournament.ApplicationService.Minigame.Implements.Predict.PredictMatches;
 using SM.Tournament.Domain.Player;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MinigameDto;
@@ -24,7 +24,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Vote
         {
             _voteService = voteService;
         }
-        public async Task<TournamentResponeDto> MinigameResult(int minigameID)
+        public async Task<TournamentResponeDto> MinigameResult(int minigameID, int half , string type , string topic)
 
         {
             var listPlayerJoinResponse = await _voteService.GetListPlayerVote(minigameID);

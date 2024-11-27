@@ -3,6 +3,7 @@ using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
 using SM.Tournament.ApplicationService.Minigame.Abtracts;
 using SM.Tournament.Dtos.MatchDto.MatchesStatistic;
 using SM.Tournament.Dtos;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Caculation;
 
 namespace SM.WebAPI.Controllers.MinigameController
 {
@@ -11,12 +12,14 @@ namespace SM.WebAPI.Controllers.MinigameController
     public class MinigameCaculateResultController : Controller
     {
         private readonly IMinigameUse _minigameuse;
-        public MinigameCaculateResultController(IMinigameUse minigameuse)
+       
+        public MinigameCaculateResultController(IMinigameUse minigameuse )
         {
             _minigameuse = minigameuse;
+
         }
-        [HttpGet("minigameResult/{type}/{MiniGameID}")]
-        public async Task <IActionResult> getMiniGameResult (string type ,int MiniGameID)
+        [HttpGet("minigameResult/{type}/{MiniGameID}/{half}/{topic}")]
+        public async Task <IActionResult> getMiniGameResult ( int MiniGameID , int half , string type, string topic)
         {
             try
             {
@@ -29,9 +32,11 @@ namespace SM.WebAPI.Controllers.MinigameController
                         Data = null
                     });
                 }
-                var service = _minigameuse.chooseType(type);
+                var minigame =  _minigameuse.chooseType(type);
 
-                var result = await service.MinigameResult(MiniGameID);
+                var result = await minigame.MinigameResult(half, MiniGameID, type , topic);
+
+                
                 if (result.ErrorCode != 0)
                 {
                     return BadRequest(new TournamentResponeDto

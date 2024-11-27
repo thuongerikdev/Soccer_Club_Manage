@@ -21,5 +21,7 @@ namespace SM.Tournament.Domain.Minigame
         public string RewardType {  get; set; }
         public int RewardValue { get; set; }
         public DateTime createDate { get; set; }
+        public int Rank { get; set; }
+
     }
 }

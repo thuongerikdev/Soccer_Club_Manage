@@ -44,6 +44,7 @@ namespace SM.Tournament.ApplicationService.TourModule.Implements
 
             var tour = new TournamentBase
             {
+                UserID = createTournamentDto.UserID,
                 TournamentContact = createTournamentDto.TournamentContact,
                 TournamentDescription = createTournamentDto.TournamentDescription,
                 TournamentLocation = createTournamentDto.TournamentLocation,
@@ -54,7 +55,9 @@ namespace SM.Tournament.ApplicationService.TourModule.Implements
                 TournamentPrice = TourPrice,
                 StartDate = createTournamentDto.StartDate,
                 EndDate = createTournamentDto.EndDate,
-                numberMember = createTournamentDto.numberMember
+                numberMember = createTournamentDto.numberMember,
+           
+                
                 
             };
 
@@ -74,7 +77,8 @@ namespace SM.Tournament.ApplicationService.TourModule.Implements
                 PaymentStatus = "Pending",
                 TournamentID = tournamentId, // Gán ID của Tournament vào đơn hàng
                 UserID = createTournamentDto.UserID,
-                
+                PaymentID = ""
+
             };
             await _orderService.CreateOrder(ord);
 

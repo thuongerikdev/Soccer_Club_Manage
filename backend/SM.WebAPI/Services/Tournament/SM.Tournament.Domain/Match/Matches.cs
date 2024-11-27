@@ -25,6 +25,10 @@ namespace SM.Tournament.Domain.Match
         public string Stadium { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public bool IsFinish { get; set; }
+        public int Round { get; set; }
+        public int? HomeScore { get; set; } // Điểm của đội nhà
+        public int? AwayScore { get; set; } // Điểm của đội khách
 
 
 

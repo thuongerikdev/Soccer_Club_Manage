@@ -19,5 +19,6 @@ namespace SM.Tournament.Dtos.MatchDto.MatchesStatistic
         public int YellowCard { get; set; }         // Số thẻ vàng
         public int Assist { get; set; }             // Số lần kiến tạo
         public int Goal { get; set; }               // Số bàn thắng
+        public int half { get; set; }               // Hiệp đấu
     }
 }

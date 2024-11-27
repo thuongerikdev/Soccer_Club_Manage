@@ -11,33 +11,37 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
 {
     public  class MinigameUse : IMinigameUse
     {
-        private readonly ICaculationResultStrategy _matchesScore;
-        private readonly ICaculationResultStrategy _numberOfFouls;
-        private readonly ICaculationResultStrategy _numberOfPass;
-        private readonly ICaculationResultStrategy _numberOfShot;
-        private readonly ICaculationResultStrategy _playerVote;
+
+        private readonly ICaculationResultStrategy _goal;
+        private readonly ICaculationResultStrategy _pass;
+        private readonly ICaculationResultStrategy _shot;
+        private readonly ICaculationResultStrategy _fouls;
+
+
         public MinigameUse(
-            [FromKeyedServices("matchScore")] ICaculationResultStrategy matchesScore,
-            [FromKeyedServices("numberOfFouls")] ICaculationResultStrategy numberOfFouls,
-            [FromKeyedServices("numberOfPass")] ICaculationResultStrategy numberOfPass,
-            [FromKeyedServices("numberOfShot")] ICaculationResultStrategy numberOfShot,
-            [FromKeyedServices("playerVote")] ICaculationResultStrategy playerVote)
+            [FromKeyedServices("goal")] ICaculationResultStrategy goal,
+            [FromKeyedServices("pass")] ICaculationResultStrategy pass,
+            [FromKeyedServices("shot")] ICaculationResultStrategy shot,
+            [FromKeyedServices("fouls")] ICaculationResultStrategy fouls
+
+
+
+            )
         {
-            _matchesScore = matchesScore;
-            _numberOfFouls = numberOfFouls;
-            _numberOfPass = numberOfPass;
-            _numberOfShot = numberOfShot;
-            _playerVote = playerVote;
+            
+            _goal = goal;
+            _pass = pass;
+            _shot = shot;
+            _fouls = fouls;
         }
         public ICaculationResultStrategy chooseType (string type)
         {
             return type switch
             {
-                "MatchesScore" => _matchesScore,
-                "NumberOfFouls" => _numberOfFouls,
-                "NumberOfPass" => _numberOfPass,
-                "NumberOfShot" => _numberOfShot,
-                "PlayerVote" => _playerVote,
+                "goal" => _goal,
+                "pass" => _pass,
+                "shot" => _shot,
+                "fouls" => _fouls,
                 _ => throw new ArgumentException("Invalid service type", nameof(type)),
             };
         }

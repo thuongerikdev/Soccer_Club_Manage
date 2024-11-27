@@ -8,12 +8,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\SM.Constant\SM.Constant.csproj" />
+    <ProjectReference Include="..\..\Shared\SM.Shared.ApplicationService\SM.Shared.ApplicationService.csproj" />
     <ProjectReference Include="..\SM.Tournament.Domain\SM.Tournament.Domain.csproj" />
     <ProjectReference Include="..\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj" />
     <ProjectReference Include="..\SM.Tournament.Infrastructure\SM.Tournament.Infrastructure.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="MailKit" Version="4.8.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="RestSharp" Version="112.1.0" />
+	
 	</ItemGroup>
 
 	

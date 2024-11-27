@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace SM.Tournament.ApplicationService.OrderModule.Implements
 {
-    public class OrderService: TournamentServiceBase , IOrderService 
+    public class OrderService : TournamentServiceBase, IOrderService
     {
-        public OrderService (ILogger<OrderService> logger , TournamentDbContext dbContext) : base (logger , dbContext)
+        public OrderService(ILogger<OrderService> logger, TournamentDbContext dbContext) : base(logger, dbContext)
         {
 
         }
@@ -31,7 +31,8 @@ namespace SM.Tournament.ApplicationService.OrderModule.Implements
                     UserID = createOrderDto.UserID,
                     TournamentID = createOrderDto.TournamentID,
                     PaymentMethod = createOrderDto.PaymentMethod,
-                    PaymentStatus = createOrderDto.PaymentStatus
+                    PaymentStatus = createOrderDto.PaymentStatus,
+                    PaymentID = createOrderDto.PaymentID
 
 
                 };
@@ -75,6 +76,7 @@ namespace SM.Tournament.ApplicationService.OrderModule.Implements
                 order.TournamentID = updateOrderDto.TournamentID;
                 order.PaymentMethod = updateOrderDto.PaymentMethod;
                 order.PaymentStatus = updateOrderDto.PaymentStatus;
+                order.PaymentID = updateOrderDto.PaymentID;
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
                 {
@@ -178,6 +180,55 @@ namespace SM.Tournament.ApplicationService.OrderModule.Implements
                     Data = null
                 };
             }
+        }
+        public async Task<TournamentResponeDto> ConfirmOrder(string PaymentID, int TournamentID, string PaymentMethod)
+        {
+            try
+            {
+
+                var existOrer = _dbContext.Orders.FirstOrDefault(x => x.TournamentID == TournamentID);
+                existOrer.OrderStatus = "Confirmed";
+                existOrer.PaymentStatus = "Confirmed";
+                existOrer.PaymentID = PaymentID;
+                existOrer.PaymentMethod = PaymentMethod;
+
+                await _dbContext.SaveChangesAsync();
+
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = "Order List",
+                    Data = existOrer
+                };
+            }
+            catch (Exception ex)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorMessage = ex.Message,
+                    ErrorCode = 1,
+                    Data = null
+                };
+            }
+        }
+        public async Task<TournamentResponeDto> getOrderByTour(int tournamentID)
+        {
+            var ord = _dbContext.Orders.FirstOrDefault(x => x.TournamentID == tournamentID);
+            if (ord == null)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = "Order not found",
+                    Data = null
+                };
+            }
+            return new TournamentResponeDto
+            {
+                ErrorCode = 0,
+                ErrorMessage = "Get Order Success",
+                Data = ord
+            };
         }
     }
 }

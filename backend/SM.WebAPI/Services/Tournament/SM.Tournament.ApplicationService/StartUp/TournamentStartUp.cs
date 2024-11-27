@@ -47,12 +47,21 @@ using SM.Tournament.ApplicationService.OrderModule.Abtracts;
 using SM.Tournament.ApplicationService.OrderModule.Implements;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
 using SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPredict;
+using SM.Tournament.ApplicationService.Minigame.Implements.Predict.Prediction;
+using SM.Tournament.ApplicationService.Minigame.Services;
+using SM.Tournament.ApplicationService.TourModule.Implements.TourMatches;
+using SM.Tournament.Dtos.OrderDto.OrderModel.Momo;
+using SM.Tournament.ApplicationService.NotificationModule.Abtracts;
+using SM.Tournament.ApplicationService.NotificationModule.Implements;
+using SM.Tournament.Domain.Notification;
+using SM.Shared.ApplicationService.User;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
     {
         public static void ConfigureTournament(this WebApplicationBuilder builder, string? assemblyName)
         {
+           
 
             builder.Services.AddDbContext<TournamentDbContext>(
                 options =>
@@ -71,6 +80,10 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
                 },
                 ServiceLifetime.Scoped
             );
+
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.AddTransient<IEmailService, EmailService>();
+
             builder.Services.AddScoped<IClubService, ClubService>();
 
             //builder.Services.AddScoped<EventFactorySerivce>();
@@ -129,11 +142,16 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfShot>("numberOfShot");
             //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfPass>("numberOfPass");
             //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfFouls>("numberOfFouls");
-            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("playerVote");
-            //builder.Services.AddKeyedScoped<IChooseTypePredict, halfChoose>("halfOrFullTime");
-            //builder.Services.AddKeyedScoped<IChooseTypePredict, PredictionType>("predictionType");
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("playerVote");
+            builder.Services.AddKeyedScoped<IChooseTypePredict, halfChoose>("halfOrFullTime");
+            builder.Services.AddKeyedScoped<IChooseTypePredict, PredictionType>("predictionType");
 
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, GoalPredict>("goal");
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, PassPredict>("pass");
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, ShotPredict>("shot");
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, FoulsPredict>("fouls");
 
+            builder.Services.AddScoped<IReceiveAwardService, ReceiveAwardService>();
 
             // Thêm các chiến lược khác nếu cần.
 
@@ -144,6 +162,7 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddScoped<IPredictService, PredictSerivce>();
             builder.Services.AddScoped<IVoteService, VoteService>();
             builder.Services.AddScoped<IRewardService ,RewardService>();
+            //builder.Services.AddScoped<IMinigameResultType, MinigameResultType>();
 
 
 
@@ -161,8 +180,16 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             //tournament
             builder.Services.AddScoped<ITournamentService, TournamentService>();
             builder.Services.AddScoped<ITournamentClubService, TournamentClubService>();
+            builder.Services.AddScoped<ITourMatchStrategy, OneColumType>();
 
 
+
+            builder.Services.AddScoped<IInvoiceService , InvoiceService>();
+            builder.Services.AddScoped<IVnPayService, VnPayService>();
+            builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+            builder.Services.AddScoped<IMomoService, MomoService>();
+
+            //builder.Services.AddScoped<IUserInforSerivce, UserInforService>();
 
 
 

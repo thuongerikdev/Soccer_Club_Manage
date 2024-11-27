@@ -15,5 +15,7 @@ namespace SM.Tournament.ApplicationService.OrderModule.Abtracts
         public Task<TournamentResponeDto> DeleteOrder(int orderID);
         public Task<TournamentResponeDto> GetOrder(int orderID);
         public Task<TournamentResponeDto> GetOrders();
+        public Task<TournamentResponeDto> ConfirmOrder(string OrderID , int tournamentID ,  string PaymentMethod);
+        public Task<TournamentResponeDto> getOrderByTour(int tournamentID);
     }
 }

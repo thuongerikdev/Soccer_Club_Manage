@@ -36,7 +36,8 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                     RedCard = createMatchesStatisticDto.RedCard,
                     YellowCard = createMatchesStatisticDto.YellowCard,
                     Assist = createMatchesStatisticDto.Assist,
-                    Shot = createMatchesStatisticDto.Shot
+                    Shot = createMatchesStatisticDto.Shot,
+                    half = createMatchesStatisticDto.half
 
 
                 };
@@ -84,6 +85,7 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                 matchesStatistic.YellowCard = updateMatchesStatisticDto.YellowCard;
                 matchesStatistic.Assist = updateMatchesStatisticDto.Assist;
                 matchesStatistic.Shot = updateMatchesStatisticDto.Shot;
+                matchesStatistic.half = updateMatchesStatisticDto.half;
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
                 {

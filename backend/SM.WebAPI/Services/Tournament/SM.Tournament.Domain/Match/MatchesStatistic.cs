@@ -28,5 +28,6 @@ namespace SM.Tournament.Domain.Match
         public int Assist { get; set; }             // Số lần kiến tạo
         public int Goal { get; set; }               // Số bàn thắng
 
+
     }
 }

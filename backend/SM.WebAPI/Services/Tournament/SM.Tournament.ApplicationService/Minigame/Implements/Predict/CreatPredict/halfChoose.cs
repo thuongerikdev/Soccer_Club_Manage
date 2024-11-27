@@ -17,10 +17,10 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
                 // Xử lý khi chọn hiệp hoặc toàn trận
                 switch (type)
                 {
-                    case "Half-1":
+                    case "H-1":
                         createPredictDto.half = 1;  // Ví dụ chọn hiệp đầu
                         break;
-                    case "Half-2":
+                    case "H-2":
                         createPredictDto.half = 2;  // Ví dụ chọn toàn trận
                         break;
                     case "Full":

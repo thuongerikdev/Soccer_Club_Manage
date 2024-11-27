@@ -32,7 +32,11 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                     Stadium = createMatchesDto.Stadium,
                     TeamA = createMatchesDto.TeamA,
                     TeamB = createMatchesDto.TeamB,
-                    TournamentID = createMatchesDto.TournamentID
+                    TournamentID = createMatchesDto.TournamentID,
+                    IsFinish = false,
+                    Round = createMatchesDto.Round,
+                    HomeScore = 0,
+                    AwayScore = 0
 
                 };
                 _dbContext.Matches.Add(match);
@@ -68,6 +72,9 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                 match.TeamA = updateMatchesDto.TeamA;
                 match.TeamB = updateMatchesDto.TeamB;
                 match.TournamentID = updateMatchesDto.TournamentID;
+                match.IsFinish = updateMatchesDto.IsFinsh;
+                match.Round = updateMatchesDto.Round;
+
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
                 {
