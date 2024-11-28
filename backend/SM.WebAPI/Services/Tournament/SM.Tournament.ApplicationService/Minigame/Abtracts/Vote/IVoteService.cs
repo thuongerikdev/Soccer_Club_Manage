@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.Tournament.ApplicationService.Minigame.Abtracts
+namespace SM.Tournament.ApplicationService.Minigame.Abtracts.Vote
 {
     public interface IVoteService
     {
@@ -16,7 +16,8 @@ namespace SM.Tournament.ApplicationService.Minigame.Abtracts
         public Task<TournamentResponeDto> GetVotesByMinigame(int minigameID);
         public Task<TournamentResponeDto> GetVotebyID(int voteID);
         public Task<TournamentResponeDto> GetAllVotes();
+        public Task<TournamentResponeDto> ListPlayerCanVote(int minigameID);
 
-        public Task<TournamentResponeDto> GetListPlayerVote (int minigameID );
+        public Task<TournamentResponeDto> GetListPlayerVote(int minigameID);
     }
 }

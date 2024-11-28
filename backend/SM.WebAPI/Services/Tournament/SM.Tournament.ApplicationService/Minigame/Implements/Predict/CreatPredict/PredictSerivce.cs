@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SM.Tournament.ApplicationService.Common;
+using SM.Tournament.ApplicationService.MatchesModule.Abtracts;
+using SM.Tournament.ApplicationService.Minigame.Abtracts;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
+using SM.Tournament.Domain.Match;
 using SM.Tournament.Domain.Minigame;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MinigameDto.Predict;
@@ -18,14 +21,21 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
     {
         private readonly IChooseTypePredict _chooseHalfOrFullTime;
         private readonly IChooseTypePredict _choosePredictionType;
+        private readonly IMatchesService _matchesService;
+        private readonly IMinigameService _minigameService;
 
         public PredictSerivce(ILogger<PredictSerivce> logger, TournamentDbContext dbContext,
             [FromKeyedServices("halfOrFullTime")] IChooseTypePredict chooseHalfOrFullTime,
-            [FromKeyedServices("predictionType")] IChooseTypePredict choosePredictionType)
+
+            [FromKeyedServices("predictionType")] IChooseTypePredict choosePredictionType,
+            IMatchesService matchesService,
+            IMinigameService minigameService)
             : base(logger, dbContext)
         {
             _chooseHalfOrFullTime = chooseHalfOrFullTime;
             _choosePredictionType = choosePredictionType;
+            _matchesService = matchesService;
+            _minigameService = minigameService;
         }
 
         public async Task<TournamentResponeDto> CreatePredict(CreatePredictDto createPredictDto)
@@ -37,6 +47,32 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
 
                 // Bước 2: Chọn thể loại dự đoán
                 var predictionTypeDto = await _choosePredictionType.chooseType(createPredictDto.PredictionType, halfOrFullTimeDto);
+                var minigame = await _minigameService.GetMinigame(predictionTypeDto.MinigameID);
+               
+                if (minigame.ErrorCode != 0)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Minigame not found",
+                        Data = null
+                    };
+                }
+                var minigameData = minigame.Data as Minigames;
+                var minigameEndTime = minigameData.EndDates;
+
+                var match= await _matchesService.GetMatches(minigameData.MatchesID);
+                var matchData = match.Data as Matches;
+                var endTime = matchData.EndTime;
+                if (DateTime.Now > endTime || DateTime.Now > minigameEndTime)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Time to predict has expired",
+                        Data = null
+                    };
+                }   
 
 
                 // Lưu dự đoán vào cơ sở dữ liệu

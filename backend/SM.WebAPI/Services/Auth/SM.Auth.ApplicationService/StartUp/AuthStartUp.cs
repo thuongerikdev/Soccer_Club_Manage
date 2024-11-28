@@ -16,6 +16,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SM.Auth.ApplicationService.RoleModule.Abtracts;
 using SM.Auth.ApplicationService.RoleModule.Implements;
 using SM.Shared.ApplicationService.User;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace SM.Auth.ApplicationService.StartUp
 {
@@ -59,7 +64,17 @@ namespace SM.Auth.ApplicationService.StartUp
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             })
+                .AddCookie()
+                .AddGoogle( GoogleDefaults.AuthenticationScheme ,   googleOptions =>
+                {
+                    googleOptions.ClientId = builder.Configuration.GetSection("Google:ClientId").Value;
+                    googleOptions.ClientSecret = builder.Configuration.GetSection("Google:ClientSecret").Value;
+
+                })
+
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -71,13 +86,8 @@ namespace SM.Auth.ApplicationService.StartUp
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
-            })
-            .AddGoogle(googleOptions =>
-                {
-                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-                    googleOptions.CallbackPath = "/signin-google"; // Đường dẫn này phải khớp với URI trong Google API Console
-                });
+            });
+
 
 
         }

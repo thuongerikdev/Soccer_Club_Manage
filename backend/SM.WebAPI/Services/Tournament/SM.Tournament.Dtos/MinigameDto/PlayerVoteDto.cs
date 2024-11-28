@@ -9,6 +9,6 @@ namespace SM.Tournament.Dtos.MinigameDto
     public class PlayerVoteDto
     {
         public int count { get; set; }
-        public string selection { get; set; }
+        public int selection { get; set; }
     }
 }

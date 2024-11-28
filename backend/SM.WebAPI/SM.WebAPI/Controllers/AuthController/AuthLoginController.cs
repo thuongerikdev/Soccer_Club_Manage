@@ -1,17 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using SM.Auth.ApplicationService.UserModule.Abtracts;
 using SM.Auth.ApplicationService.UserModule.Implements;
 using SM.Auth.Dtos;
 using SM.Auth.Dtos.CRUDModule;
 using SM.Auth.Dtos.LoginModule;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SM.WebAPI.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : Controller
     {
         private readonly IAuthService _authService;
         private readonly IAuthLoginService _authLoginService;
@@ -64,24 +68,32 @@ namespace SM.WebAPI.Controllers
                 });
             }
         }
-        [HttpPost("login/google")]
-        public async Task<IActionResult> AuthLoginWithGoogle([FromBody] string googleToken)
-        {
-            if (string.IsNullOrEmpty(googleToken))
-            {
-                return BadRequest(new { Message = "Google Token is required" });
-            }
+        //[HttpGet("login-google")]
+        //public IActionResult GetGoogleLoginUrl()
+        //{
+        //    var redirectUrl = Url.Action("GoogleResponse", "YourControllerName", null, Request.Scheme);
+        //    var googleLoginUrl = $"{GoogleDefaults.AuthorizationEndpoint}?client_id={"811958613194-aq0eag0lc78brobjetprjdvoikpv0c3m.apps.googleusercontent.com"}&redirect_uri={redirectUrl}&response_type=code&scope=email%20profile";
 
-            var result = await _authLoginService.AuthLoginWithGoogle(googleToken);
+        //    return Ok(new { loginUrl = googleLoginUrl });
+        //}
 
-            if (result.EC != 0)
-            {
-                return Unauthorized(result);
-            }
 
-            return Ok(result);
-        }
-
+        //[HttpGet("google-callback")]
+        //public async Task<IActionResult> GoogleResponse()
+        //{
+        //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        //    var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(
+        //            claims => new
+        //            {
+        //                claims.Issuer,
+        //                claims.OriginalIssuer,
+        //                claims.Type,
+        //                claims.Value
+        //            }
+        //        );
+        //    TempData["success"] = "Login success";
+        //    return RedirectToAction("Index", "Home");
+        //}
         [HttpPost("register")]
         public async Task<IActionResult> Register(AuthRegisterDto authRegisterDto)
         {

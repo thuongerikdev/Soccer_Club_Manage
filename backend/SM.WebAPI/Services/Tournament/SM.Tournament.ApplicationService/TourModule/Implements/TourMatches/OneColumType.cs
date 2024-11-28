@@ -15,23 +15,40 @@ using SM.Tournament.ApplicationService.TourModule.Abtracts;
 using SM.Tournament.Dtos.MatchDto.MatchesStatistic.SM.Tournament.Dtos.MatchDto.MatchesStatistic;
 using SM.Tournament.Dtos;
 using SM.Tournament.Infrastructure;
+using SM.Tournament.ApplicationService.OrderModule.Abtracts;
+using SM.Tournament.Dtos.OrderDto;
 
 namespace SM.Tournament.ApplicationService.TourModule.Implements.TourMatches
 {
     public class OneColumType : TournamentServiceBase, ITourMatchStrategy
     {
         private readonly IMatchesStatisticStrategy _matches;
+        private readonly IOrderService _orderService;
 
         public OneColumType(ILogger<OneColumType> logger, TournamentDbContext dbContext,
+            IOrderService orderService,
             [FromKeyedServices("matches")] IMatchesStatisticStrategy matches)
             : base(logger, dbContext)
         {
             _matches = matches;
+            _orderService = orderService;
         }
 
         public async Task<TournamentResponeDto> CreateTournamentMatch(int tournamentID)
         {
-            var listClub = await _dbContext.TournamentClubs
+            var order = await _orderService.getOrderByTour(tournamentID);
+            var orderData = order.Data as CreateOrderDto;
+            if (orderData.PaymentStatus == "Pending" && orderData.OrderStatus == "Pending")
+            {
+                return new TournamentResponeDto
+                {
+                    Data = null,
+                    ErrorCode = 1,
+                    ErrorMessage = "Order is pending"
+                };
+            }
+
+                var listClub = await _dbContext.TournamentClubs
                 .Where(x => x.TournamentID == tournamentID)
                 .ToListAsync();
 

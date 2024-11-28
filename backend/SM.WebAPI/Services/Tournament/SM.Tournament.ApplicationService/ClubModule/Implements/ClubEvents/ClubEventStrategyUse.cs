@@ -11,9 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents.Statistic
+namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
 {
-    public class ClubEventStrategyUse :  IEventStrategyUse
+    public class ClubEventStrategyUse : IEventStrategyUse
     {
         private IEventStatisticStrategy _eventStatisticStrategy;
         private readonly IClubEventService _celebrate;

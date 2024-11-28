@@ -15,7 +15,6 @@ using SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts;
 using SM.Tournament.ApplicationService.ClubModule.Implements;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund;
-using SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents;
 using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund;
 using SM.Tournament.ApplicationService.LineUpModule.Abtracts;
 using SM.Tournament.ApplicationService.LineUpModule.Implements;
@@ -55,6 +54,7 @@ using SM.Tournament.ApplicationService.NotificationModule.Abtracts;
 using SM.Tournament.ApplicationService.NotificationModule.Implements;
 using SM.Tournament.Domain.Notification;
 using SM.Shared.ApplicationService.User;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Vote;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -142,7 +142,7 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfShot>("numberOfShot");
             //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfPass>("numberOfPass");
             //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfFouls>("numberOfFouls");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("playerVote");
+          
             builder.Services.AddKeyedScoped<IChooseTypePredict, halfChoose>("halfOrFullTime");
             builder.Services.AddKeyedScoped<IChooseTypePredict, PredictionType>("predictionType");
 
@@ -150,6 +150,8 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddKeyedScoped<ICaculationResultStrategy, PassPredict>("pass");
             builder.Services.AddKeyedScoped<ICaculationResultStrategy, ShotPredict>("shot");
             builder.Services.AddKeyedScoped<ICaculationResultStrategy, FoulsPredict>("fouls");
+            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("vote");
+            builder.Services.AddKeyedScoped<ICaculateVote, PlayerVote>("playerVote");
 
             builder.Services.AddScoped<IReceiveAwardService, ReceiveAwardService>();
 

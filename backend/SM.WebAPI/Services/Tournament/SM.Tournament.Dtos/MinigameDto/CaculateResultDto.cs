@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace SM.Tournament.Dtos.MinigameDto
 {
-    internal class CaculateResult
+    public  class CaculateResultDto
     {
+        public int MinigameID { get; set; }
+        public int half { get; set; }
+        public string topic { get; set; }
     }
 }

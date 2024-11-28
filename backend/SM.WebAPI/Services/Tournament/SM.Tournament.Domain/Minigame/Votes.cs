@@ -19,7 +19,7 @@ namespace SM.Tournament.Domain.Minigame
         public int MinigameID { get; set; }
         public int MatchID { get; set; }
         public int UserID { get; set; }
-        public string  Selection { get; set; }
+        public int  Selection { get; set; }
         public DateTime VoteDate { get; set; }
 
     }
