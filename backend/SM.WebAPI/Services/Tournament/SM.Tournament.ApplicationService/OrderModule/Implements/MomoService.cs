@@ -9,29 +9,49 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using SM.Tournament.Dtos.OrderDto.OrderModel.Momo;
+using Microsoft.Extensions.Logging;
+using SM.Tournament.Infrastructure;
+using SM.Tournament.ApplicationService.Common;
 
 namespace SM.Tournament.ApplicationService.OrderModule.Implements
 {
-    public class MomoService : IMomoService
+    public class MomoService : TournamentServiceBase , IMomoService
     {
         private readonly IOptions<MomoOptionModel> _options;
 
-        public MomoService(IOptions<MomoOptionModel> options)
+        public MomoService(IOptions<MomoOptionModel> options , ILogger<MomoService> logger , TournamentDbContext dbContext ) : base(logger, dbContext)
         {
             _options = options;
         }
 
-        public async Task<MomoCreatePaymentResponseModel> CreatePaymentAsync(OrderInfoModel model)
+        public async Task<CreatePaymentResponseModel> CreatePaymentAsync(int TournamentID)
         {
-            model.OrderId = DateTime.UtcNow.Ticks.ToString();
-            model.OrderInfo = "Khách hàng: " + model.FullName + ". Nội dung: " + model.OrderInfo;
+            var order = _dbContext.Orders.FirstOrDefault(x => x.TournamentID == TournamentID);
+            if (order == null)
+            {
+                return null;
+            }
+            if (order.PaymentStatus == "Confirmed" && order.OrderStatus == "Confirmed")
+            {
+                return new CreatePaymentResponseModel()
+                {
+                    Message = "Đơn hàng đã được thanh toán"
+                };
+            }
+            var orderID = DateTime.UtcNow.Ticks.ToString();
+            int amount = (int)order.OrderAmount;
+            var infor = "thanh toán hóa đơn cho giải đấu " + " với số tiền " + amount + " VNĐ" + " cho giải đấu " + TournamentID;
+            var orderType = "other";
+
+            //model.OrderId = DateTime.UtcNow.Ticks.ToString();
+            //model.OrderInfo = "Khách hàng: " + model.FullName + ". Nội dung: " + model.OrderInfo;
             var rawData =
                 $"partnerCode={_options.Value.PartnerCode}" +
                 $"&accessKey={_options.Value.AccessKey}" +
-                $"&requestId={model.OrderId}" +
-                $"&amount={model.Amount}" +
-                $"&orderId={model.OrderId}" +
-                $"&orderInfo={model.OrderInfo}" +
+                $"&requestId={orderID}" +
+                $"&amount={amount}" +
+                $"&orderId={orderID}" +
+                $"&orderInfo={infor}" +
                 $"&returnUrl={_options.Value.ReturnUrl}" +
                 $"&notifyUrl={_options.Value.NotifyUrl}" +
                 $"&extraData=";
@@ -50,10 +70,10 @@ namespace SM.Tournament.ApplicationService.OrderModule.Implements
                 requestType = _options.Value.RequestType,
                 notifyUrl = _options.Value.NotifyUrl,
                 returnUrl = _options.Value.ReturnUrl,
-                orderId = model.OrderId,
-                amount = model.Amount.ToString(),
-                orderInfo = model.OrderInfo,
-                requestId = model.OrderId,
+                orderId = orderID,
+                amount = amount.ToString(),
+                orderInfo = infor,
+                requestId = orderID,
                 extraData = "",
                 signature = signature
             };
@@ -61,7 +81,7 @@ namespace SM.Tournament.ApplicationService.OrderModule.Implements
             request.AddParameter("application/json", JsonConvert.SerializeObject(requestData), ParameterType.RequestBody);
 
             var response = await client.ExecuteAsync(request);
-            var momoResponse = JsonConvert.DeserializeObject<MomoCreatePaymentResponseModel>(response.Content);
+            var momoResponse = JsonConvert.DeserializeObject<CreatePaymentResponseModel>(response.Content);
             return momoResponse;
 
         }

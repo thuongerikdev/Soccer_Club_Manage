@@ -1,15 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents.Statistic;
-using SM.Tournament.ApplicationService.Common;
-using SM.Tournament.Dtos;
-using SM.Tournament.Dtos.PlayerDto.PlayerEvent;
-using SM.Tournament.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
 {

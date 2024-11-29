@@ -11,18 +11,22 @@ using System.Threading.Tasks;
 using SM.Tournament.Domain.Club.Club;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts;
 using Microsoft.EntityFrameworkCore;
+using SM.Shared.ApplicationService.User;
 
 namespace SM.Tournament.ApplicationService.ClubModule.Implements
 {
     public class ClubService : TournamentServiceBase, IClubService
     {
-        public ClubService(ILogger<ClubService> logger, TournamentDbContext dbContext) : base(logger, dbContext)
+        private readonly IUserInforSerivce  _userInforSerivce;
+        public ClubService(ILogger<ClubService> logger, IUserInforSerivce userInforSerivce ,TournamentDbContext dbContext) : base(logger, dbContext)
         {
+            _userInforSerivce = userInforSerivce;
         }
         public async Task<TournamentResponeDto> CreateClubTeam(CreateClubDto createClubTeamDto)
         {
             try
             {
+                var checkUser = await _userInforSerivce.GetUserInforAsync(createClubTeamDto.UserID);
                 var club = new ClubTeam
                 {
                     ClubName = createClubTeamDto.ClubName,

@@ -11,6 +11,6 @@ namespace SM.Tournament.ApplicationService.OrderModule.Abtracts
     public interface IMomoService
     {
         public MomoExecuteResponseModel PaymentExecuteAsync(IQueryCollection collection);
-        public Task<MomoCreatePaymentResponseModel> CreatePaymentAsync(OrderInfoModel model);
+        public Task<CreatePaymentResponseModel> CreatePaymentAsync(int TournamentID);
     }
 }

@@ -27,7 +27,7 @@ namespace SM.Tournament.ApplicationService.TourModule.Implements
             var TourPrice = 0;
             if (createTournamentDto.TournamentType == "amateur" && createTournamentDto.numberMember <= 6)
             {
-                 TourPrice = 0;
+                 TourPrice = 5000;
             }
             else if (createTournamentDto.TournamentType == "amateur" && createTournamentDto.numberMember > 6)
             {

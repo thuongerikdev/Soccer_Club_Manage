@@ -33,6 +33,10 @@ namespace SM.Tournament.ApplicationService.OrderModule.Implements
             {
                 return null;
             }
+            if (order.PaymentStatus == "Confirmed" && order.OrderStatus == "Confirmed")
+            {
+                return "Đơn hàng đã được thanh toán";
+            }
             var orderID = order.OrderID;
             var amount = order.OrderAmount;
             var infor = "thanh toán hóa đơn cho giải đấu " + " với số tiền " + amount + " VNĐ" + " cho giải đấu " +TournamentID;

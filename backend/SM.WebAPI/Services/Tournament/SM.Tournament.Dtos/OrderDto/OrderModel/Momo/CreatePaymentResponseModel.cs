@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SM.Tournament.Dtos.OrderDto.OrderModel.Momo
 {
-    public class MomoCreatePaymentResponseModel
+    public class CreatePaymentResponseModel
     {
         public string RequestId { get; set; }
         public int ErrorCode { get; set; }

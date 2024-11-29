@@ -11,5 +11,6 @@ namespace SM.Shared.ApplicationService.User
     public interface IUserInforSerivce
     {
         public Task<getUserDto> GetUserInforAsync(int userId);
+
     }
 }

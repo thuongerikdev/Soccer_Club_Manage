@@ -17,6 +17,7 @@ using SM.Tournament.Dtos;
 using SM.Tournament.Infrastructure;
 using SM.Tournament.ApplicationService.OrderModule.Abtracts;
 using SM.Tournament.Dtos.OrderDto;
+using SM.Tournament.Dtos.TournamentDto.Tournament;
 
 namespace SM.Tournament.ApplicationService.TourModule.Implements.TourMatches
 {
@@ -24,14 +25,17 @@ namespace SM.Tournament.ApplicationService.TourModule.Implements.TourMatches
     {
         private readonly IMatchesStatisticStrategy _matches;
         private readonly IOrderService _orderService;
+        private readonly ITournamentService _tournamentService;
 
         public OneColumType(ILogger<OneColumType> logger, TournamentDbContext dbContext,
             IOrderService orderService,
+            ITournamentService tournamentService,
             [FromKeyedServices("matches")] IMatchesStatisticStrategy matches)
             : base(logger, dbContext)
         {
             _matches = matches;
             _orderService = orderService;
+            _tournamentService = tournamentService;
         }
 
         public async Task<TournamentResponeDto> CreateTournamentMatch(int tournamentID)
@@ -47,11 +51,22 @@ namespace SM.Tournament.ApplicationService.TourModule.Implements.TourMatches
                     ErrorMessage = "Order is pending"
                 };
             }
+            
 
                 var listClub = await _dbContext.TournamentClubs
                 .Where(x => x.TournamentID == tournamentID)
                 .ToListAsync();
-
+            var tournament = await _tournamentService.getTournament(tournamentID);
+            var tournamentData = tournament.Data as CreateTournamentDto;
+            if (listClub.Count < tournamentData.numberMember)
+            {
+                return new TournamentResponeDto
+                {
+                    Data = null,
+                    ErrorCode = 1,
+                    ErrorMessage = "Not enough clubs to create matches"
+                };
+            }
             var clubTeams = new List<ClubTeam>();
             foreach (var team in listClub)
             {

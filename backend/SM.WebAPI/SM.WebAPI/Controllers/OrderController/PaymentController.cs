@@ -28,10 +28,10 @@ public class PaymentController : Controller
     }
 
     [HttpPost("momo/payment")]
-    public async Task<IActionResult> CreatePaymentUrl(OrderInfoModel model)
+    public async Task<IActionResult> CreatePaymentUrl(int TournamentID )
     {
-        var response = await _momoService.CreatePaymentAsync(model);
-        return Ok(new { PayUrl = response.PayUrl });
+        var response = await _momoService.CreatePaymentAsync(TournamentID);
+        return Ok(new { PayUrl = response });
     }
 
     [HttpGet("momo/PaymentExecute")]
