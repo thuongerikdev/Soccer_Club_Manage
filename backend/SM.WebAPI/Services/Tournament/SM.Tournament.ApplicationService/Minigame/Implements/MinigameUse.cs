@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.Minigame.Abtracts;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Caculation;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Vote;
@@ -21,11 +22,11 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
 
 
         public MinigameUse(
-            [FromKeyedServices("goal")] ICaculationResultStrategy goal,
-            [FromKeyedServices("pass")] ICaculationResultStrategy pass,
-            [FromKeyedServices("shot")] ICaculationResultStrategy shot,
-            [FromKeyedServices("fouls")] ICaculationResultStrategy fouls,
-            [FromKeyedServices("playerVote")] ICaculateVote vote
+            [FromKeyedServices(TourConst.PredictGoal)] ICaculationResultStrategy goal,
+            [FromKeyedServices(TourConst.PredictPass)] ICaculationResultStrategy pass,
+            [FromKeyedServices(TourConst.PredictShot)] ICaculationResultStrategy shot,
+            [FromKeyedServices(TourConst.PredictFoul)] ICaculationResultStrategy fouls,
+            [FromKeyedServices(TourConst.PlayerVote)] ICaculateVote vote
 
 
 
@@ -42,10 +43,10 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
         {
             return type switch
             {
-                "goal" => _goal,
-                "pass" => _pass,
-                "shot" => _shot,
-                "fouls" => _fouls,
+                TourConst.PredictGoal => _goal,
+                TourConst.PredictPass => _pass,
+                TourConst.PredictShot => _shot,
+                TourConst.PredictFoul => _fouls,
                 //"vote" => _vote,
                 _ => throw new ArgumentException("Invalid service type", nameof(type)),
             };
@@ -54,7 +55,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
         {
             return type switch
             {
-                "playerVote" => _vote,
+                TourConst.PlayerVote => _vote,
                 _ => throw new ArgumentException("Invalid service type", nameof(type)),
             };
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.LineUpModule.Implements;
 using SM.Tournament.ApplicationService.MatchesModule.Abtracts;
@@ -41,6 +42,58 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
 
 
                 };
+                var LineUp = await _dbContext.LineUps.FirstOrDefaultAsync(x => x.LineUpID == createMatchesStatisticDto.LineUpID
+                                                                            && x.ClubID == matchesStatistic.ClubID);
+                var player = await _dbContext.PlayerLineUps.FirstOrDefaultAsync(x => x.PlayerID == createMatchesStatisticDto.PlayerID 
+                                                                            && x.LineUpID == createMatchesStatisticDto.LineUpID);
+                var club = await _dbContext.Matches.FirstOrDefaultAsync(x => x.TeamA == createMatchesStatisticDto.ClubID 
+                                                                            || x.TeamB == createMatchesStatisticDto.ClubID);
+                if (club == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Club not found in Matches",
+                        Data = null
+                    };
+                }
+                if (player == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Player not found in LineUP",
+                        Data = null
+                    };
+                }
+                if (LineUp == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "LineUp not found in club",
+                        Data = null
+                    };
+                }
+                if (createMatchesStatisticDto.Goal > createMatchesStatisticDto.Shot)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Goal must be less than Shot",
+                        Data = null
+                    };
+                }
+                if (createMatchesStatisticDto.Fouls < createMatchesStatisticDto.YellowCard + createMatchesStatisticDto.RedCard)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Fouls must be more  than YellowCard + RedCard",
+                        Data = null
+                    };
+                }
+
                 _dbContext.MatchesStatistics.Add(matchesStatistic);
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
@@ -72,6 +125,57 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
                     {
                         ErrorCode = 1,
                         ErrorMessage = "Match Statistic Not Found",
+                        Data = null
+                    };
+                }
+                var LineUp = await _dbContext.LineUps.FirstOrDefaultAsync(x => x.LineUpID == updateMatchesStatisticDto.LineUpID
+                                                                          && x.ClubID == matchesStatistic.ClubID);
+                var player = await _dbContext.PlayerLineUps.FirstOrDefaultAsync(x => x.PlayerID == updateMatchesStatisticDto.PlayerID
+                                                                            && x.LineUpID == updateMatchesStatisticDto.LineUpID);
+                var club = await _dbContext.Matches.FirstOrDefaultAsync(x => x.TeamA == updateMatchesStatisticDto.ClubID
+                                                                            || x.TeamB == updateMatchesStatisticDto.ClubID);
+                if (club == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Club not found in Matches",
+                        Data = null
+                    };
+                }
+                if (player == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Player not found in LineUP",
+                        Data = null
+                    };
+                }
+                if (LineUp == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "LineUp not found in club",
+                        Data = null
+                    };
+                }
+                if (updateMatchesStatisticDto.Goal > updateMatchesStatisticDto.Shot)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Goal must be less than Shot",
+                        Data = null
+                    };
+                }
+                if (updateMatchesStatisticDto.Fouls < updateMatchesStatisticDto.YellowCard + updateMatchesStatisticDto.RedCard)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Fouls must be more  than YellowCard + RedCard",
                         Data = null
                     };
                 }

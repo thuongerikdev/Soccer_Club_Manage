@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.PlayerStatistic.SpecificFund
+namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.PlayerStatistic
 {
     public class PlayerSpecificTypeStatistic : TournamentServiceBase, IFundStatisticStrategy
     {

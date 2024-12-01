@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund.Caculate;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.Domain.Club.ClubFund;
@@ -16,15 +18,40 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Cacula
     public class CaculateFundsService : TournamentServiceBase, ICaculateService
 
     {
-        private readonly FundFactoryService _fundFactoryService;
-        public CaculateFundsService(ILogger<CaculateFundsService> logger, TournamentDbContext dbContext, FundFactoryService fundFactoryService) : base(logger, dbContext)
+        private readonly IFundStrategyUse _fundStrategyUse;
+        public CaculateFundsService(ILogger<CaculateFundsService> logger, TournamentDbContext dbContext, IFundStrategyUse fundStrategyUse) : base(logger, dbContext)
         {
-            _fundFactoryService = fundFactoryService;
+            _fundStrategyUse = fundStrategyUse;
         }
         public async Task<TournamentResponeDto> CaculateFunds(CreateActionFundDto createActionFundDto)
         {
-            var strategy = _fundFactoryService.Create(createActionFundDto.FundActionType);
+            var strategy = _fundStrategyUse.Create(createActionFundDto.FundActionType);
             var fund = await _dbContext.ClubFunds.FindAsync(createActionFundDto.FundID);
+            var clubID = fund.ClubID;
+            var club = await _dbContext.ClubTeams.FirstOrDefaultAsync(X => X.ClubID == clubID);
+
+            var player = await _dbContext.ClubPlayers.FirstOrDefaultAsync( x => x.ClubID == clubID && x.PlayerID == createActionFundDto.PlayerID);
+            if (club == null)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1 ,
+                    ErrorMessage = "Club không tồn tại.",
+                    Data = null
+
+                };
+            }
+            if (player == null)
+            {
+                return new TournamentResponeDto
+                {
+                    ErrorCode = 1,
+                    ErrorMessage = "Player không tồn tại trong club.",
+                    Data = null
+
+                };
+            }
+
             if (fund == null) throw new ArgumentException("Quỹ không tồn tại.");
 
             var command = new FundActionCommand(strategy, fund, createActionFundDto.Amount);

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.PlayerModule.Abtracts;
 using SM.Tournament.Domain.Player;
@@ -37,6 +38,16 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Implements
                     weight = createPlayerDto.weight,
                     Shirtnumber = createPlayerDto.Shirtnumber,
                 };
+                var playerNumber = await _dbContext.ClubPlayers.FirstOrDefaultAsync ( x => x.Shirtnumber == createPlayerDto.Shirtnumber);
+                if ( playerNumber != null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Shirt Number is already exist",
+                        Data = null
+                    };
+                }
                 _dbContext.ClubPlayers.Add(player);
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto

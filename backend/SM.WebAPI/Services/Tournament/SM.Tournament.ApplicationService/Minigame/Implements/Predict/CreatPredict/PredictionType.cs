@@ -1,4 +1,5 @@
-﻿using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
+﻿using SM.Constant.Tournament;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
 using SM.Tournament.Dtos.MinigameDto.Predict;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
             // Chọn thể loại dự đoán
             return predictionType switch
             {
-                "MatchScore" => CreatePredictDtoForMatchScore(createPredictDto),
-                "Total" => CreatePredictDtoForTotal(createPredictDto),
-                "OddEven" => CreatePredictDtoForOddEven(createPredictDto),
+                TourConst.MatchScore => CreatePredictDtoForMatchScore(createPredictDto),
+                TourConst.Total => CreatePredictDtoForTotal(createPredictDto),
+                TourConst.OddEven => CreatePredictDtoForOddEven(createPredictDto),
                 _ => throw new ArgumentException("Invalid prediction type", nameof(predictionType)),
             };
         }

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
+using SM.Constant.Tournament;
 
 namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.Prediction
 {
@@ -27,7 +28,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.Predictio
         public BasePredict(
             ILogger <BasePredict> logger,
             TournamentDbContext dbContext,
-            [FromKeyedServices("matches")] IMatchesStatisticStrategy matches,
+            [FromKeyedServices(TourConst.MatchStat)] IMatchesStatisticStrategy matches,
             IReceiveAwardService receiveAwardService
           
         ) : base(logger, dbContext)
@@ -77,13 +78,13 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.Predictio
             }
 
             // Fetch statistics for each type (Goal, Pass, Shot, Fouls)
-            int teamAStatH1 = GetTeamStatistic(teamData, 1, "TeamA", type);
-            int teamBStatH1 = GetTeamStatistic(teamData, 1, "TeamB", type);
+            int teamAStatH1 = GetTeamStatistic(teamData, 1, TourConst.TeamA, type);
+            int teamBStatH1 = GetTeamStatistic(teamData, 1, TourConst.TeamB, type);
 
 
 
-            int teamAStatH2 = GetTeamStatistic(teamData, 2, "TeamA", type);
-            int teamBStatH2 = GetTeamStatistic(teamData, 2, "TeamB", type);
+            int teamAStatH2 = GetTeamStatistic(teamData, 2, TourConst.TeamA, type);
+            int teamBStatH2 = GetTeamStatistic(teamData, 2, TourConst.TeamB, type);
 
             int totalStatAH1 = teamAStatH1 + (handicap > 0 ? handicap : 0);
             int totalStatBH1 = teamBStatH1 + (handicap < 0 ? -handicap : 0);

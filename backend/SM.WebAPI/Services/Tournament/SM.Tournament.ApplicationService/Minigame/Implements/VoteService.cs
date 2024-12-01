@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Vote;
 using SM.Tournament.Domain.Minigame;
@@ -28,12 +29,23 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                     MinigameID = createVoteDto.MinigameID,
                     UserID = createVoteDto.UserID,
                     VoteDate = createVoteDto.VoteDate,
-
                     MatchID = createVoteDto.MatchID,
                     Selection = createVoteDto.Selection,
 
 
                 };
+                var minigame = _dbContext.Minigames.Where(x => x.MinigameID == createVoteDto.MinigameID 
+                                                           && x.MinigameType == TourConst.Vote ).FirstOrDefault();
+                if (minigame == null)
+                {
+                    return new TournamentResponeDto
+                    {
+                        ErrorCode = 1,
+                        ErrorMessage = "Minigame not found",
+                        Data = null
+                    };
+                }
+
                 var exits = _dbContext.Votes.Where(x => x.MinigameID == createVoteDto.MinigameID && x.UserID == createVoteDto.UserID).FirstOrDefault();
                 if (exits != null)
                 {
@@ -44,6 +56,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements
                         Data = null
                     };
                 }
+
 
                 _dbContext.Votes.Add(vote);
                 await _dbContext.SaveChangesAsync();

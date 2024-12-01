@@ -15,7 +15,7 @@ namespace SM.WebAPI.Controllers.ClubController.ClubFundController
         {
             _caculateService = caculateService;
         }
-        [HttpPost("caculateFund/{createActionFundDto.FundActionType}")]
+        [HttpPost("caculateFund")]
         public async Task<IActionResult> AddContribution(CreateActionFundDto createActionFundDto)
         {
             if (!ModelState.IsValid)

@@ -55,6 +55,8 @@ using SM.Tournament.ApplicationService.NotificationModule.Implements;
 using SM.Tournament.Domain.Notification;
 using SM.Shared.ApplicationService.User;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Vote;
+using SM.Constant.Tournament;
+using SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statistic.PlayerStatistic;
 namespace SM.Tournament.ApplicationService.Module.StartUp
 {
     public static class TournamentStartUp
@@ -93,65 +95,61 @@ namespace SM.Tournament.ApplicationService.Module.StartUp
             builder.Services.AddScoped<IEventStrategyUse, ClubEventStrategyUse>();
 
            
-            builder.Services.AddKeyedScoped<IClubEventService,CelebrateService>("celebrate");
-            builder.Services.AddKeyedScoped< IClubEventService,TeamMeetingService>("teamMeeting");
-            builder.Services.AddKeyedScoped<IClubEventService, TrainingService>("training");
+            builder.Services.AddKeyedScoped<IClubEventService,CelebrateService>(TourConst.Celebrate);
+            builder.Services.AddKeyedScoped< IClubEventService,TeamMeetingService>(TourConst.TeamMeeting);
+            builder.Services.AddKeyedScoped<IClubEventService, TrainingService>(TourConst.Training);
 
 
-            builder.Services.AddKeyedScoped<IEventStatisticStrategy , ListEventOfPlayer>("listEventofplayer");
-            builder.Services.AddKeyedScoped<IEventStatisticStrategy,ListPlayerOf1EventType>("listplayerofevent");
+            builder.Services.AddKeyedScoped<IEventStatisticStrategy , ListEventOfPlayer>(TourConst.EventPlayer);
+            builder.Services.AddKeyedScoped<IEventStatisticStrategy,ListPlayerOf1EventType>(TourConst.EventPlayerType);
 
 
 
             //Club Fund
+            builder.Services.AddScoped<IFundStrategyUse, FundStrategyUse>();
             builder.Services.AddScoped<IClubFundService, ClubFundService>();
-            builder.Services.AddScoped<FundFactoryService>();
             builder.Services.AddScoped<ICaculateService, CaculateFundsService>();
             builder.Services.AddScoped<IFundStatisticService, FundStatisticService>();
 
-            builder.Services.AddKeyedScoped<IFundStatisticStrategy, DayStatistic>("Day");
-            builder.Services.AddKeyedScoped<IFundStatisticStrategy, MonthStatistic>("Month");
-            builder.Services.AddKeyedScoped<IFundStatisticStrategy, WeekStatistic>("Week");
-            builder.Services.AddKeyedScoped<IFundStatisticStrategy, YearStatistic>("Year");
-            builder.Services.AddKeyedScoped<IFundStatisticStrategy, PlayerFundRank>("Rank");
+            // Keyed services for IFundStatisticStrategy
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, DayStatistic>(TourConst.FundStatDay);
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, MonthStatistic>(TourConst.FundStatMonth);
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, WeekStatistic>(TourConst.FundStatWeek);
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, YearStatistic>(TourConst.FundStatYear);
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, PlayerFundRank>(TourConst.FundPlayerRank);
 
-            builder.Services.AddKeyedScoped<IFundCalculationStrategy , ContributeFundCaculation>("Contribute");
-            builder.Services.AddKeyedScoped<IFundCalculationStrategy, DebtFundCalculation>("Debt");
-            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ExpenseFundCalculation>("Expense");
-            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ContributeFundCaculation>("ContributeTax");
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, PlayerFundTypeStatistic>(TourConst.FundPlayerType);
+            builder.Services.AddKeyedScoped<IFundStatisticStrategy, PlayerSpecificTypeStatistic>(TourConst.FundPlayerSpecific);
+
+
+            // Keyed services for IFundCalculationStrategy
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ContributeFundCaculation>(TourConst.FundContribute);
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, DebtFundCalculation>(TourConst.FundDebt);
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ExpenseFundCalculation>(TourConst.FundExpense);
+            builder.Services.AddKeyedScoped<IFundCalculationStrategy, ContributeWithTax>(TourConst.FundContributeTax);
 
 
             //matches
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, ClubMatchStatService>("clubMatch");
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, MatchesStatService>("matches");
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, PlayerMatchStatService>("playerMatch");
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, PlayerMatchStatService>("player");
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentMatchStatService>("tournamentMatch");
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentClubMatchStatService>("tournamentClub");
-            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentMatchService>("tournament");
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, ClubMatchStatService>(TourConst.MatchClubStat);
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, MatchesStatService>(TourConst.MatchStat);
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, PlayerMatchStatService>(TourConst.MatchPlayerMatchStat);
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, PlayerStatService>(TourConst.MatchPlayerStat);
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentMatchStatService>(TourConst.MatchTournamentMatchStat);
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentClubMatchStatService>(TourConst.MatchTournamentClubStat);
+            builder.Services.AddKeyedScoped<IMatchesStatisticStrategy, TournamentMatchService>(TourConst.MatchTournamentStat);
 
             builder.Services.AddScoped<IMatchesService, MatchesService>();
             builder.Services.AddScoped<IMatchesStatisticService, MatchesStatisticService>();
             builder.Services.AddScoped<IMatchStatisticUse, MatchStrategyUse>();
+      
+            builder.Services.AddKeyedScoped<IChooseTypePredict, halfChoose>(TourConst.HalfOrFullTime);
+            builder.Services.AddKeyedScoped<IChooseTypePredict, PredictionType>(TourConst.PredictType);
 
-
-
-
-            ////minigame
-            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, MatchScore>("matchScore");
-            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfShot>("numberOfShot");
-            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfPass>("numberOfPass");
-            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, NumberOfFouls>("numberOfFouls");
-          
-            builder.Services.AddKeyedScoped<IChooseTypePredict, halfChoose>("halfOrFullTime");
-            builder.Services.AddKeyedScoped<IChooseTypePredict, PredictionType>("predictionType");
-
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, GoalPredict>("goal");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, PassPredict>("pass");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, ShotPredict>("shot");
-            builder.Services.AddKeyedScoped<ICaculationResultStrategy, FoulsPredict>("fouls");
-            //builder.Services.AddKeyedScoped<ICaculationResultStrategy, PlayerVote>("vote");
-            builder.Services.AddKeyedScoped<ICaculateVote, PlayerVote>("playerVote");
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, GoalPredict>(TourConst.PredictGoal);
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, PassPredict>(TourConst.PredictPass);
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, ShotPredict>(TourConst.PredictShot);
+            builder.Services.AddKeyedScoped<ICaculationResultStrategy, FoulsPredict>(TourConst.PredictFoul);
+            builder.Services.AddKeyedScoped<ICaculateVote, PlayerVote>(TourConst.PlayerVote);
 
             builder.Services.AddScoped<IReceiveAwardService, ReceiveAwardService>();
 

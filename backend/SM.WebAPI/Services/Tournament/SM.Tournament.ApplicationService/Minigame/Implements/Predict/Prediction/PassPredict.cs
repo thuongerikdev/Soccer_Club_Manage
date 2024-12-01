@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Caculation;
 using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
@@ -18,7 +19,7 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.Predictio
         public PassPredict(
              ILogger<FoulsPredict> logger,
             TournamentDbContext dbContext,
-            [FromKeyedServices("matches")] IMatchesStatisticStrategy matches,
+            [FromKeyedServices(TourConst.MatchStat)] IMatchesStatisticStrategy matches,
             IReceiveAwardService receiveAwardService
          
         ) : base(logger, dbContext, matches, receiveAwardService)
@@ -28,12 +29,12 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.Predictio
         }
         protected override int GetTeamStatistic(MatchStatisticsDto teamData, int half, string teamName, string statType)
         {
-            if (statType.ToLower() == "pass")
+            if (statType.ToLower() == TourConst.PredictPass)
             {
                 return half switch
                 {
-                    1 => teamName == "TeamA" ? teamData.Half1.TeamA.Pass : teamData.Half1.TeamB.Pass,
-                    2 => teamName == "TeamA" ? teamData.Half2.TeamA.Pass : teamData.Half2.TeamB.Pass,
+                    1 => teamName == TourConst.TeamA ? teamData.Half1.TeamA.Pass : teamData.Half1.TeamB.Pass,
+                    2 => teamName == TourConst.TeamB ? teamData.Half2.TeamA.Pass : teamData.Half2.TeamB.Pass,
                     _ => 0
                 };
             }

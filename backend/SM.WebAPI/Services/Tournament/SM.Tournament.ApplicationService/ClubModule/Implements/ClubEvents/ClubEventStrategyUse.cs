@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents;
 using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubEvents.Statistic;
 
@@ -6,7 +7,6 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
 {
     public class ClubEventStrategyUse : IEventStrategyUse
     {
-        private IEventStatisticStrategy _eventStatisticStrategy;
         private readonly IClubEventService _celebrate;
         private readonly IClubEventService _training;
         private readonly IClubEventService _teamMeeting;
@@ -15,11 +15,11 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
         private readonly IEventStatisticStrategy _listPlayerOf1EventType;
 
         public ClubEventStrategyUse(
-            [FromKeyedServices("celebrate")] IClubEventService celebrate,
-            [FromKeyedServices("training")] IClubEventService training,
-            [FromKeyedServices("teamMeeting")] IClubEventService teamMeeting,
-            [FromKeyedServices("listEventofplayer")] IEventStatisticStrategy listEventOfPlayer,
-            [FromKeyedServices("listplayerofevent")] IEventStatisticStrategy listPlayerOf1EventType
+            [FromKeyedServices(TourConst.Celebrate)] IClubEventService celebrate,
+            [FromKeyedServices(TourConst.Training)] IClubEventService training,
+            [FromKeyedServices(TourConst.TeamMeeting)] IClubEventService teamMeeting,
+            [FromKeyedServices(TourConst.EventPlayer)] IEventStatisticStrategy listEventOfPlayer,
+            [FromKeyedServices(TourConst.EventPlayerType)] IEventStatisticStrategy listPlayerOf1EventType
             )
         {
             _celebrate = celebrate;
@@ -29,18 +29,15 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
             _listPlayerOf1EventType = listPlayerOf1EventType;
         }
 
-        //public async Task<TournamentResponeDto> EventStatistic(ReadPlayerEventDto readPlayerEventDto)
-        //{
-        //    return await _eventStatisticStrategy.EventStatistic(readPlayerEventDto);
-        //}
-
+     
         public IClubEventService CreateEventsService(string serviceType)
         {
+           
             return serviceType switch
             {
-                "Celebrate" => _celebrate, //_serviecProvider
-                "Training" => _training,
-                "TeamMeeting" => _teamMeeting,
+                TourConst.Celebrate => _celebrate, //_serviecProvider
+                TourConst.Training => _training,
+                TourConst.TeamMeeting => _teamMeeting,
                 _ => throw new ArgumentException("Invalid service type", nameof(serviceType)),
             };
         }
@@ -49,8 +46,8 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubEvents
         {
             return type switch
             {
-                "ListEventOfPlayer" => _listEventOfPlayer,
-                "ListPlayerOf1EventType" => _listPlayerOf1EventType,
+                TourConst.EventPlayer => _listEventOfPlayer,
+                TourConst.EventPlayerType => _listPlayerOf1EventType,
                 _ => throw new ArgumentException("Invalid event type", nameof(type)),
             };
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.MatchesModule.Abtracts;
 using SM.Tournament.ApplicationService.Minigame.Abtracts;
@@ -8,6 +9,7 @@ using SM.Tournament.Domain.Match;
 using SM.Tournament.Domain.Minigame;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MinigameDto.Predict;
+using SM.Tournament.Dtos.MinigameDto.Vote;
 using SM.Tournament.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -25,9 +27,9 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
         private readonly IMinigameService _minigameService;
 
         public PredictSerivce(ILogger<PredictSerivce> logger, TournamentDbContext dbContext,
-            [FromKeyedServices("halfOrFullTime")] IChooseTypePredict chooseHalfOrFullTime,
+            [FromKeyedServices(TourConst.HalfOrFullTime)] IChooseTypePredict chooseHalfOrFullTime,
+            [FromKeyedServices(TourConst.PredictType)] IChooseTypePredict choosePredictionType,
 
-            [FromKeyedServices("predictionType")] IChooseTypePredict choosePredictionType,
             IMatchesService matchesService,
             IMinigameService minigameService)
             : base(logger, dbContext)
@@ -42,14 +44,9 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
         {
             try
             {
-                // Bước 1: Chọn hiệp hoặc toàn trận
-                var halfOrFullTimeDto = await _chooseHalfOrFullTime.chooseType(createPredictDto.HalfOrFull, createPredictDto);
-
-                // Bước 2: Chọn thể loại dự đoán
-                var predictionTypeDto = await _choosePredictionType.chooseType(createPredictDto.PredictionType, halfOrFullTimeDto);
-                var minigame = await _minigameService.GetMinigame(predictionTypeDto.MinigameID);
-               
-                if (minigame.ErrorCode != 0)
+                var minigame = _dbContext.Minigames.Where(x => x.MinigameID == createPredictDto.MinigameID
+                                                          && x.MinigameType == TourConst.Predict).FirstOrDefault();
+                if (minigame == null)
                 {
                     return new TournamentResponeDto
                     {
@@ -58,10 +55,15 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
                         Data = null
                     };
                 }
-                var minigameData = minigame.Data as Minigames;
-                var minigameEndTime = minigameData.EndDates;
+                // Bước 1: Chọn hiệp hoặc toàn trận
+                var halfOrFullTimeDto = await _chooseHalfOrFullTime.chooseType(createPredictDto.HalfOrFull, createPredictDto);
 
-                var match= await _matchesService.GetMatches(minigameData.MatchesID);
+                // Bước 2: Chọn thể loại dự đoán
+                var predictionTypeDto = await _choosePredictionType.chooseType(createPredictDto.PredictionType, halfOrFullTimeDto);
+     
+                var minigameEndTime = minigame.EndDates;
+
+                var match= await _matchesService.GetMatches(minigame.MatchesID);
                 var matchData = match.Data as Matches;
                 var endTime = matchData.EndTime;
                 if (DateTime.Now > endTime || DateTime.Now > minigameEndTime)

@@ -1,4 +1,5 @@
-﻿using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund.FundStatistic;
+﻿using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund;
+using SM.Tournament.ApplicationService.ClubModule.Abtracts.ClubFund.FundStatistic;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.ClubDto.ClubFund.ActionFundHistory;
 using System;
@@ -12,8 +13,8 @@ namespace SM.Tournament.ApplicationService.ClubModule.Implements.ClubFund.Statis
     public class FundStatisticService : IFundStatisticService
     {
 
-        private readonly FundFactoryService _fundactory;
-        public FundStatisticService( FundFactoryService fundactory) { 
+        private readonly IFundStrategyUse _fundactory;
+        public FundStatisticService(IFundStrategyUse fundactory) { 
             _fundactory = fundactory;
         }
         public async Task<TournamentResponeDto> FundStatistic(string strategyType, ReadActionFundDto readActionFundDto)

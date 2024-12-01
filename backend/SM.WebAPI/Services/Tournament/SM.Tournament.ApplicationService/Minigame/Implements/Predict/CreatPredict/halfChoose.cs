@@ -1,4 +1,5 @@
-﻿using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
+﻿using SM.Constant.Tournament;
+using SM.Tournament.ApplicationService.Minigame.Abtracts.Predict;
 using SM.Tournament.Dtos;
 using SM.Tournament.Dtos.MinigameDto.Predict;
 using System;
@@ -17,13 +18,13 @@ namespace SM.Tournament.ApplicationService.Minigame.Implements.Predict.CreatPred
                 // Xử lý khi chọn hiệp hoặc toàn trận
                 switch (type)
                 {
-                    case "H-1":
+                    case TourConst.H1:
                         createPredictDto.half = 1;  // Ví dụ chọn hiệp đầu
                         break;
-                    case "H-2":
+                    case TourConst.H2:
                         createPredictDto.half = 2;  // Ví dụ chọn toàn trận
                         break;
-                    case "Full":
+                    case TourConst.Full:
                         createPredictDto.half = null;  // Ví dụ chọn toàn trận
                         break;
                     default:

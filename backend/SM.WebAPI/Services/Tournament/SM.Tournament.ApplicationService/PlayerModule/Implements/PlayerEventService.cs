@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.Common;
 using SM.Tournament.ApplicationService.PlayerModule.Abtracts;
 using SM.Tournament.Domain.Player;
@@ -30,6 +32,49 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Implements
                     JoinDate = createPlayerEventDto.JoinDate,
                     Position = createPlayerEventDto.Position
                 };
+                if (createPlayerEventDto.EventType == TourConst.Celebrate)
+                {
+                    var celebrate = await  _dbContext.CelebrateEvents.FirstOrDefaultAsync(x => x.EventID == createPlayerEventDto.EventID);
+                    var clubPlayer = await _dbContext.ClubPlayers.FirstOrDefaultAsync(x => x.PlayerID == createPlayerEventDto.PlayerID);
+                    if (celebrate.ClubID != clubPlayer.ClubID)
+                    {
+                        return new TournamentResponeDto
+                        {
+                            ErrorCode = 1,
+                            ErrorMessage = "Event is not in this club",
+                            Data = null
+                        };
+                    }
+                }
+                if (createPlayerEventDto.EventType == TourConst.Training)
+                {
+                    var training = await _dbContext.TrainingEvents.FirstOrDefaultAsync(x => x.EventID == createPlayerEventDto.EventID);
+                    var clubPlayer = await _dbContext.ClubPlayers.FirstOrDefaultAsync(x => x.PlayerID == createPlayerEventDto.PlayerID);
+                    if (training.ClubID !=  clubPlayer.ClubID)
+                    {
+                        return new TournamentResponeDto
+                        {
+                            ErrorCode = 1,
+                            ErrorMessage = "Event is not in this club",
+                            Data = null
+                        };
+                    }
+                }
+                if (createPlayerEventDto.EventType == TourConst.TeamMeeting)
+                {
+                    var teamMeeting = await _dbContext.TeamMeetingEvents.FirstOrDefaultAsync(x => x.EventID == createPlayerEventDto.EventID);
+                    var clubPlayer = await _dbContext.ClubPlayers.FirstOrDefaultAsync(x => x.PlayerID == createPlayerEventDto.PlayerID);
+                    if (teamMeeting.ClubID != clubPlayer.ClubID)
+                    {
+                        return new TournamentResponeDto
+                        {
+                            ErrorCode = 1,
+                            ErrorMessage = "Event is not in this club",
+                            Data = null
+                        };
+                    }
+                }
+
                 _dbContext.PlayerEvents.Add(playerEvent);
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
@@ -68,6 +113,48 @@ namespace SM.Tournament.ApplicationService.PlayerModule.Implements
                 playerEvent.EventType = updatePlayerEventDto.EventType;
                 playerEvent.JoinDate = updatePlayerEventDto.JoinDate;
                 playerEvent.Position = updatePlayerEventDto.Position;
+                if (updatePlayerEventDto.EventType == TourConst.Celebrate)
+                {
+                    var celebrate = await _dbContext.CelebrateEvents.FirstOrDefaultAsync(x => x.EventID == updatePlayerEventDto.EventID);
+                    var clubPlayer = await _dbContext.ClubPlayers.FirstOrDefaultAsync(x => x.PlayerID == updatePlayerEventDto.PlayerID);
+                    if (celebrate.ClubID != clubPlayer.ClubID)
+                    {
+                        return new TournamentResponeDto
+                        {
+                            ErrorCode = 1,
+                            ErrorMessage = "Event is not in this club",
+                            Data = null
+                        };
+                    }
+                }
+                if (updatePlayerEventDto.EventType == TourConst.Training)
+                {
+                    var training = await _dbContext.TrainingEvents.FirstOrDefaultAsync(x => x.EventID == updatePlayerEventDto.EventID);
+                    var clubPlayer = await _dbContext.ClubPlayers.FirstOrDefaultAsync(x => x.PlayerID == updatePlayerEventDto.PlayerID);
+                    if (training.ClubID != clubPlayer.ClubID)
+                    {
+                        return new TournamentResponeDto
+                        {
+                            ErrorCode = 1,
+                            ErrorMessage = "Event is not in this club",
+                            Data = null
+                        };
+                    }
+                }
+                if (updatePlayerEventDto.EventType == TourConst.TeamMeeting)
+                {
+                    var teamMeeting = await _dbContext.TeamMeetingEvents.FirstOrDefaultAsync(x => x.EventID == updatePlayerEventDto.EventID);
+                    var clubPlayer = await _dbContext.ClubPlayers.FirstOrDefaultAsync(x => x.PlayerID == updatePlayerEventDto.PlayerID);
+                    if (teamMeeting.ClubID != clubPlayer.ClubID)
+                    {
+                        return new TournamentResponeDto
+                        {
+                            ErrorCode = 1,
+                            ErrorMessage = "Event is not in this club",
+                            Data = null
+                        };
+                    }
+                }
                 await _dbContext.SaveChangesAsync();
                 return new TournamentResponeDto
                 {

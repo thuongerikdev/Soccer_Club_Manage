@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SM.Constant.Tournament;
 using SM.Tournament.ApplicationService.MatchesModule.Abtracts.Statistic;
 using System;
 
@@ -15,13 +16,13 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
         private readonly IMatchesStatisticStrategy _tournamentClub;
 
         public MatchStrategyUse(
-            [FromKeyedServices("matches")] IMatchesStatisticStrategy matches,
-            [FromKeyedServices("player")] IMatchesStatisticStrategy player,
-            [FromKeyedServices("playerMatch")] IMatchesStatisticStrategy playerMatch,
-            [FromKeyedServices("clubMatch")] IMatchesStatisticStrategy clubMatch,
-            [FromKeyedServices("tournament")] IMatchesStatisticStrategy tournament,
-            [FromKeyedServices("tournamentMatch")] IMatchesStatisticStrategy tournamentMatch,
-            [FromKeyedServices("tournamentClub")] IMatchesStatisticStrategy tournamentClub)
+            [FromKeyedServices(TourConst.MatchStat)] IMatchesStatisticStrategy matches,
+            [FromKeyedServices(TourConst.MatchPlayerStat)] IMatchesStatisticStrategy player,
+            [FromKeyedServices(TourConst.MatchPlayerMatchStat)] IMatchesStatisticStrategy playerMatch,
+            [FromKeyedServices(TourConst.MatchClubStat)] IMatchesStatisticStrategy clubMatch,
+            [FromKeyedServices(TourConst.MatchTournamentStat)] IMatchesStatisticStrategy tournament,
+            [FromKeyedServices(TourConst.MatchTournamentMatchStat)] IMatchesStatisticStrategy tournamentMatch,
+            [FromKeyedServices(TourConst.MatchTournamentClubStat)] IMatchesStatisticStrategy tournamentClub)
         {
             _matches = matches;
             _player = player;
@@ -36,13 +37,13 @@ namespace SM.Tournament.ApplicationService.MatchesModule.Implements
         {
             return type switch
             {
-                "matches" => _matches,
-                "player" => _player,
-                "playerMatch" => _playerMatch,
-                "clubMatch" => _clubMatch,
-                "tournament" => _tournament,
-                "tournamentMatch" => _tournamentMatch,
-                "tournamentClub" => _tournamentClub,
+                TourConst.MatchStat => _matches,
+                TourConst.MatchPlayerStat => _player,
+                TourConst.MatchPlayerMatchStat => _playerMatch,
+                TourConst.MatchClubStat => _clubMatch,
+                TourConst.MatchTournamentStat => _tournament,
+                TourConst.MatchTournamentMatchStat => _tournamentMatch,
+                TourConst.MatchTournamentClubStat => _tournamentClub,
                 _ => throw new ArgumentException("Invalid statistic type", nameof(type)),
             };
         }
