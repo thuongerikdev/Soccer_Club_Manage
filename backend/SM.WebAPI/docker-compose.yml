@@ -1,0 +1,31 @@
+services:
+  sm.webapi:
+    image: ${DOCKER_REGISTRY-}smwebapi
+    build:
+      context: .
+      dockerfile: SM.WebAPI/Dockerfile
+    depends_on:
+          - sqlserver
+    networks :
+          - sm
+    restart: on-failure
+ 
+
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2019-CU15-ubuntu-20.04"
+    environment:
+      SA_PASSWORD: "NguyenXuanThuong12a1@gmail.com"
+      ACCEPT_EULA: "Y"
+    ports:
+    - "1335:1433"
+    networks :
+      - sm
+    restart: on-failure
+    volumes:
+      - sqlvolume:/var/opt/mssql
+networks:
+  sm: 
+volumes:
+  sqlvolume:
+
+

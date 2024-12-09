@@ -1,5 +1,6 @@
 ﻿using SM.Auth.ApplicationService.StartUp;
 using SM.Tournament.ApplicationService.Module.StartUp;
+using DotNetEnv;
 
 namespace SM.WebAPI { 
 public class Program

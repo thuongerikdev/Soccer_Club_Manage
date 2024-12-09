@@ -66,7 +66,7 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-appsettings.json
+
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
@@ -369,6 +369,3 @@ FodyWeavers.xsd
 
 # Bỏ theo dõi thư mục .next
 .next/
-/backend/SM.WebAPI/SM.WebAPI/appsettings.json
-/backend/SM.WebAPI/SM.WebAPI/appsettings.json
-/backend/SM.WebAPI/SM.WebAPI/appsettings.json

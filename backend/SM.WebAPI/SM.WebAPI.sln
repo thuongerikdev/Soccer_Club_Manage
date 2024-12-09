@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Tournament.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SM.Tournament.Dtos", "Services\Tournament\SM.Tournament.Dtos\SM.Tournament.Dtos.csproj", "{306A1067-8F28-434C-8A89-38C59FE4CDC9}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FC89F6FB-700B-425A-B15E-F8E4A46F012F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{306A1067-8F28-434C-8A89-38C59FE4CDC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC89F6FB-700B-425A-B15E-F8E4A46F012F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC89F6FB-700B-425A-B15E-F8E4A46F012F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC89F6FB-700B-425A-B15E-F8E4A46F012F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC89F6FB-700B-425A-B15E-F8E4A46F012F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

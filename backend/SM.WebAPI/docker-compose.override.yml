@@ -1,0 +1,15 @@
+﻿services:
+  sm.webapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=NguyenXuanThuong12a1
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - "8080"  # Map cổng 8080 trên host tới container
+      - "8001"  # Map cổng 8001 trên host tới container
+    volumes:
+      - "${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"
+      - "C:/Users/admin/.aspnet/https:/https/"
