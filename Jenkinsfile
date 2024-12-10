@@ -1,7 +1,7 @@
-pipline {
+pipeline {
     agent any 
     stages {
-        stage('Clone'){
+        stage('Clone') {
             steps {
                 git 'https://github.com/thuongerikdev/Soccer_Club_Manage.git'
             }
