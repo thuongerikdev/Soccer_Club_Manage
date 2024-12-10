@@ -57,8 +57,8 @@ namespace SM.Auth.ApplicationService.StartUp
             builder.Services.AddScoped<IUserInforSerivce, UserInforService>();
 
 
-            var secretKey = builder.Configuration["Jwt:SecretKey"] ?? "A_very_long_and_secure_secret_key_1234567890";
-            var key = Encoding.UTF8.GetBytes(secretKey);
+            var secretKey = builder.Configuration["Jwt:SecretKey"]    ?? "A_very_long_and_secure_secret_key_1234567890";
+            var key = Encoding.UTF8.GetBytes(secretKey);    
             // Thay đổi secret key của bạn
 
             builder.Services.AddAuthentication(options =>
@@ -69,12 +69,12 @@ namespace SM.Auth.ApplicationService.StartUp
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
             })
                 .AddCookie()
-                .AddGoogle( GoogleDefaults.AuthenticationScheme ,   googleOptions =>
-                {
-                    googleOptions.ClientId = builder.Configuration.GetSection("Google:ClientId").Value ?? "811958613194 - aq0eag0lc78brobjetprjdvoikpv0c3m.apps.googleusercontent.com";
-                    googleOptions.ClientSecret = builder.Configuration.GetSection("Google:ClientSecret").Value ?? "GOCSPX - sKsTl1MtmbXot_J3MUnX - TZxdM5o";
+                //.AddGoogle( GoogleDefaults.AuthenticationScheme ,   googleOptions =>
+                //{
+                //    googleOptions.ClientId = builder.Configuration.GetSection("Google:ClientId").Value ?? "811958613194 - aq0eag0lc78brobjetprjdvoikpv0c3m.apps.googleusercontent.com";
+                //    googleOptions.ClientSecret = builder.Configuration.GetSection("Google:ClientSecret").Value ?? "GOCSPX - sKsTl1MtmbXot_J3MUnX - TZxdM5o";
 
-                })
+                //})
 
             .AddJwtBearer(options =>
             {
