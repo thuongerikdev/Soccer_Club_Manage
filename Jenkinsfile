@@ -1,11 +1,13 @@
 pipeline {
-    agent any 
+    agent any
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/thuongerikdev/Soccer_Club_Manage.git'
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/master']],  // Chỉ định nhánh master
+                    userRemoteConfigs: [[url: 'https://github.com/thuongerikdev/Soccer_Club_Manage.git']]
+                ])
             }
         }
-       
     }
 }
