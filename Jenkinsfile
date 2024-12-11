@@ -13,7 +13,8 @@ pipeline {
                     
                     withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
                         bat """
-                            docker build -f backend/SM.WebAPI/Dockerfile -t ${dockerImageName} .
+                            cd backend/SM.WebAPI
+                            docker build -t ${dockerImageName} .
                             docker push ${dockerImageName}
                         """
                     }
