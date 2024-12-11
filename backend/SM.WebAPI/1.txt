@@ -1,32 +1,20 @@
-csdfs
-ccccc
-**/.classpath
-**/.dockerignore
-**/.env
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/.vscode
-**/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/azds.yaml
-**/bin
-**/charts
-**/docker-compose*
-**/Dockerfile*
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-LICENSE
-README.md
-!**/.gitignore
-!.git/HEAD
-!.git/config
-!.git/packed-refs
-!.git/refs/heads/**
+pipeline {
+    agent any 
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/thuongerikdev/Soccer_Club_Manage.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
+                    sh '''
+                        docker build -f backend/SM.WebAPI/Dockerfile -t emyeuaidayy/sm-soccer-ver1 .
+                        docker push emyeuaidayy/sm-soccer-ver1
+                    '''
+                }
+            }
+        }
+    }
+}
