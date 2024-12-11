@@ -1,21 +1,24 @@
 pipeline {
-    agent any
+    agent any 
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                checkout([$class: 'GitSCM',
-                    branches: [[name: '*/master']],  // Chỉ định nhánh master
-                    userRemoteConfigs: [[url: 'https://github.com/thuongerikdev/Soccer_Club_Manage.git']]
-                ])
+                git 'https://github.com/thuongerikdev/Soccer_Club_Manage.git'
             }
         }
         stage('Build') {
             steps {
-                withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
-                    sh '''
-                        docker build -f backend/SM.WebAPI/Dockerfile -t emyeuaidayy/sm-soccer-ver1 .
-                        docker push emyeuaidayy/sm-soccer-ver1
-                    '''
+                script {
+                    // Use Windows-style commands
+                    def dockerImageName = "emyeuaidayy/sm-soccer-ver1"
+                    
+                    // Authenticate with Docker Hub
+                    withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
+                        bat '''
+                            docker build -f backend/SM.WebAPI/Dockerfile -t %dockerImageName% .
+                            docker push %dockerImageName%
+                        '''
+                    }
                 }
             }
         }
