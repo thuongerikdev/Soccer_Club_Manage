@@ -10,9 +10,9 @@ pipeline {
             steps {
                 script {
                     def dockerImageName = "emyeuaidayy/sm-soccer-ver1"
-                    def dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                    def dateFormat = new java.text.SimpleDateFormat("yyMMddHHmm") // No separators
                     def currentDate = dateFormat.format(new Date())
-                    def dockerTag = "${currentDate}" // Tag containing the current date and time
+                    def dockerTag = "${currentDate}" // Tag with concatenated date and time
                     
                     withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
                         bat """
