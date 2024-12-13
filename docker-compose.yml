@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   sm.webapi:
-    image: emyeuaidayy/sm-soccer-ver1:${IMAGE_TAG}
+    image: emyeuaidayy/sm-soccer-ver1:2412121230
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
@@ -15,7 +15,7 @@ services:
       - "8001:8001"
     volumes:
       - "${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"
-      #- "C:/Users/admin/.aspnet/https:/https/"
+      - "C:/Users/admin/.aspnet/https:/https/"
     depends_on:
       - sqlserver
     networks:
