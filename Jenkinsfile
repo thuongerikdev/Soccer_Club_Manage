@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                        docker-compose up -d
+                        docker-compose up
                     """
                 }
             }
