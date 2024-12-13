@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   sm.webapi:
-    image: emyeuaidayy/sm-soccer-ver1:${VERSION} # Sử dụng thẻ phiên bản từ biến môi trường
+    image: emyeuaidayy/sm-soccer-ver1:${VERSION}
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
@@ -14,13 +12,12 @@ services:
       - "8000:8000"
       - "8001:8001"
     volumes:
-      - "${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"
-      - "C:/Users/admin/.aspnet/https:/https/"
+      - "${USERPROFILE}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"  # Use USERPROFILE instead of APPDATA
+      - "${USERPROFILE}/.aspnet/https:/https/"  # Use USERPROFILE for https certificates
     depends_on:
       - sqlserver
     networks:
       - sm
-    restart: on-failure
 
   sqlserver:
     image: "emyeuaidayy/sqlserver:latest"
@@ -37,7 +34,6 @@ services:
 
 networks:
   sm:
-
 
 volumes:
   sqlserver:
