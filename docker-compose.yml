@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   sm.webapi:
-    image: emyeuaidayy/sm-soccer-ver1:2412121230
+    image: emyeuaidayy/sm-soccer-ver1:${IMAGE_TAG} # Use dynamic tag
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
@@ -14,9 +14,8 @@ services:
       - "8000:8000"
       - "8001:8001"
     volumes:
-    - "C:/ProgramData/UserSecrets:/home/app/.microsoft/usersecrets:ro"
-    - "C:/ProgramData/.aspnet/https:/https/"
-
+      - "${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"
+      - "C:/Users/admin/.aspnet/https:/https/"
     depends_on:
       - sqlserver
     networks:
@@ -38,7 +37,6 @@ services:
 
 networks:
   sm:
-
 
 volumes:
   sqlserver:
