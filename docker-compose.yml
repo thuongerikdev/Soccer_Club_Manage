@@ -15,7 +15,7 @@ services:
       - "8001:8001"
     volumes:
       - "${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"
-      - "C:/Users/admin/.aspnet/https:/https/"
+      #- "C:/Users/admin/.aspnet/https:/https/"
     depends_on:
       - sqlserver
     networks:
@@ -37,6 +37,7 @@ services:
 
 networks:
   sm:
+
 
 volumes:
   sqlserver:
