@@ -1,47 +1,37 @@
 pipeline {
     agent any 
     stages {
-        stage('Clone Repository') {
+        stage('Clone') {
             steps {
                 git 'https://github.com/thuongerikdev/Soccer_Club_Manage.git'
             }
         }
-        stage('Build and Push Docker Image') {
+        stage('Build') {
             steps {
                 script {
                     def dockerImageName = "emyeuaidayy/sm-soccer-ver1"
-                    def dateFormat = new java.text.SimpleDateFormat("yyMMddHHmm") // Định dạng thời gian
+                    def dateFormat = new java.text.SimpleDateFormat("yyMMddHHmm") // No separators
                     def currentDate = dateFormat.format(new Date())
-                    def dockerTag = "${currentDate}" // Thẻ với thời gian hiện tại
+                    env.IMAGE_TAG = "${currentDate}" // Set the image tag as environment variable
                     
                     withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
                         bat """
                             cd backend/SM.WebAPI
-                            docker build -t ${dockerImageName}:${dockerTag} .
-                            docker push ${dockerImageName}:${dockerTag}
+                            docker build -t ${dockerImageName}:${env.IMAGE_TAG} .
+                            docker push ${dockerImageName}:${env.IMAGE_TAG}
                         """
                     }
-                    
-                    // Cài đặt biến môi trường cho docker-compose
-                    env.VERSION = dockerTag
                 }
             }
         }
-        stage('Deploy with Docker Compose') {
+        stage('Run') {
             steps {
                 script {
                     bat """
-                        docker-compose up -d --build
+                        set IMAGE_TAG=${env.IMAGE_TAG}
+                        docker-compose up -d
                     """
                 }
-            }
-        }
-    }
-    post {
-        always {
-            script {
-                // Dọn dẹp nếu cần thiết
-                bat 'docker-compose down'
             }
         }
     }

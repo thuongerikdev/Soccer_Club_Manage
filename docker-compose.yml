@@ -1,6 +1,8 @@
+version: '3.8'
+
 services:
   sm.webapi:
-    image: emyeuaidayy/sm-soccer-ver1:${VERSION}
+    image: emyeuaidayy/sm-soccer-ver1:${IMAGE_TAG}
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
@@ -12,12 +14,13 @@ services:
       - "8000:8000"
       - "8001:8001"
     volumes:
-      - "${USERPROFILE}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"  # Use USERPROFILE instead of APPDATA
-      - "${USERPROFILE}/.aspnet/https:/https/"  # Use USERPROFILE for https certificates
+      - "${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro"
+      - "C:/Users/admin/.aspnet/https:/https/"
     depends_on:
       - sqlserver
     networks:
       - sm
+    restart: on-failure
 
   sqlserver:
     image: "emyeuaidayy/sqlserver:latest"
