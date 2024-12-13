@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                        set IMAGE_TAG=${env.DOCKER_TAG}
+                        #set IMAGE_TAG=${env.DOCKER_TAG}
                         docker-compose -f docker-compose.yml up -d
                     """
                 }
