@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   sm.webapi:
-    image: emyeuaidayy/sm-soccer-ver1:2412121230
+    image: emyeuaidayy/sm-soccer-ver1:${DOCKER_TAG}  # Use the dynamic tag
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
@@ -37,7 +37,6 @@ services:
 
 networks:
   sm:
-
 
 volumes:
   sqlserver:
