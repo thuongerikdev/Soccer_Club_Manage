@@ -1,18 +1,18 @@
 pipeline {
     agent any 
     stages {
-        stage('Clone') {
+        stage('Clone Repository') {
             steps {
                 git 'https://github.com/thuongerikdev/Soccer_Club_Manage.git'
             }
         }
-        stage('Build') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
                     def dockerImageName = "emyeuaidayy/sm-soccer-ver1"
-                    def dateFormat = new java.text.SimpleDateFormat("yyMMddHHmm") // No separators
+                    def dateFormat = new java.text.SimpleDateFormat("yyMMddHHmm") // Định dạng thời gian
                     def currentDate = dateFormat.format(new Date())
-                    def dockerTag = "${currentDate}" // Tag with concatenated date and time
+                    def dockerTag = "${currentDate}" // Thẻ với thời gian hiện tại
                     
                     withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
                         bat """
@@ -21,16 +21,27 @@ pipeline {
                             docker push ${dockerImageName}:${dockerTag}
                         """
                     }
+                    
+                    // Cài đặt biến môi trường cho docker-compose
+                    env.VERSION = dockerTag
                 }
             }
         }
-        stage('Run') {
+        stage('Deploy with Docker Compose') {
             steps {
                 script {
                     bat """
-                        docker-compose up
+                        docker-compose up -d --build
                     """
                 }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // Dọn dẹp nếu cần thiết
+                bat 'docker-compose down'
             }
         }
     }

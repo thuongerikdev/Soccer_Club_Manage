@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   sm.webapi:
-    image: emyeuaidayy/sm-soccer-ver1:2412121230
+    image: emyeuaidayy/sm-soccer-ver1:${VERSION} # Sử dụng thẻ phiên bản từ biến môi trường
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
