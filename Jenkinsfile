@@ -23,7 +23,15 @@ pipeline {
                     }
                 }
             }
-	    
+        }
+        stage('Run') {
+            steps {
+                script {
+                    bat """
+                        docker-compose up -d
+                    """
+                }
+            }
         }
     }
 }
